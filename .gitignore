@@ -14,3 +14,5 @@ tmp
 test-result
 eclipse
 server.pid
+target
+.target
