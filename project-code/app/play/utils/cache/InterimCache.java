@@ -19,7 +19,7 @@ public class InterimCache<T> {
 
 	private static ALogger log = Logger.of(InterimCache.class);
 
-	private final String pre;
+	private final String prefix;
 
 	private final int timeout;
 
@@ -32,9 +32,22 @@ public class InterimCache<T> {
 	 *            cache timeout
 	 */
 	public InterimCache(Class<T> type, int timeout) {
-		this.timeout = timeout;
-		this.pre = type.getName();
+		this(type.getName(), timeout);
 	}
+	
+	/**
+	 * Public constructor
+	 * 
+	 * @param cacheKey
+	 *            unique cache key
+	 * @param timeout
+	 *            cache timeout
+	 */
+	public InterimCache(String cacheKey, int timeout) {
+		this.timeout = timeout;
+		this.prefix = cacheKey;
+	}
+	
 
 	/**
 	 * Creates and caches the page with the given creator
@@ -47,7 +60,7 @@ public class InterimCache<T> {
 	 *         caches it.
 	 */
 	public Page<T> page(String id, Callable<Page<T>> pageCreator) {
-		String key = pre + id;
+		String key = prefix + id;
 		if (Logger.isDebugEnabled())
 			Logger.debug("key : " + key);
 		try {
@@ -58,6 +71,52 @@ public class InterimCache<T> {
 		} catch (Exception e) {
 			log.error("exception occured while retrieving from cache", e);
 			return null;
+		}
+	}
+
+	/**
+	 * Creates and caches the page with the given creator
+	 * 
+	 * @param id
+	 *            unique cache id
+	 * @param creator
+	 *            page creator callback object
+	 * @return the cached page if one exists, otherwise creates a new one and
+	 *         caches it.
+	 */
+	public T get(String id, Callable<T> creator) {
+		String key = prefix + id;
+		if (Logger.isDebugEnabled())
+			Logger.debug("key : " + key);
+		try {
+			T t = Cache.getOrElse(key, creator, timeout);
+			if (Logger.isDebugEnabled())
+				Logger.debug("t : " + t);
+			return t;
+		} catch (Exception e) {
+			log.error("exception occured while retrieving from cache", e);
+			return null;
+		}
+	}
+
+	/**
+	 * Creates and caches the page with the given creator
+	 * 
+	 * @param id
+	 *            unique cache id
+	 * @param creator
+	 *            page creator callback object
+	 * @return the cached page if one exists, otherwise creates a new one and
+	 *         caches it.
+	 */
+	public void set(String id, T value) {
+		String key = prefix + id;
+		if (Logger.isDebugEnabled())
+			Logger.debug("key : " + key);
+		try {
+			Cache.set(key, value);
+		} catch (Exception e) {
+			log.error("exception occured while retrieving from cache", e);
 		}
 	}
 
