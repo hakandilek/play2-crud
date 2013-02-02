@@ -56,7 +56,7 @@ public abstract class CRUDController<K, M> extends
 			log.debug("newForm() <-");
 
 		return ok(templateForForm(),
-				with(Long.class, null).and(Form.class, form));
+				with(keyClass, null).and(Form.class, form));
 	}
 
 	public Result create() {
