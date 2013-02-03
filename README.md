@@ -23,3 +23,25 @@ Define a CachedFinder like any Finder in your project:
 public static CachedFinder<Long, Task> find = new CachedFinder<Long, Task>(Long.class, Task.class);
 ```
 
+## Use with CRUD operations
+
+TODO
+
+## Use page() methods
+
+TODO
+
+# InterimCache
+
+InterimCache stores key/value pairs for a limited time. Items will be cleared and reloaded upon recall when timeout is reached.
+
+## Create an InterimCache with timeout
+
+TODO
+
+## store/retrieve values
+
+TODO
+## store/retrieve a whole Page object
+
+TODO
