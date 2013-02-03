@@ -13,9 +13,9 @@ HOW-TO
 
 Follow these steps to use play2-cache in your projects
 
-# CachedFinder
+# [CachedFinder](https://github.com/hakandilek/play2-cache/blob/master/project-code/app/play/utils/cache/CachedFinder.java)
 
-## Define a CachedFinder 
+### Define a CachedFinder 
 
 Define a CachedFinder like any Finder in your project:
 
@@ -23,25 +23,25 @@ Define a CachedFinder like any Finder in your project:
 public static CachedFinder<Long, Task> find = new CachedFinder<Long, Task>(Long.class, Task.class);
 ```
 
-## Use with CRUD operations
+### Use with CRUD operations
 
 TODO
 
-## Use page() methods
+### Use page() methods
 
 TODO
 
-# InterimCache
+# [InterimCache](https://github.com/hakandilek/play2-cache/blob/master/project-code/app/play/utils/cache/InterimCache.java)
 
 InterimCache stores key/value pairs for a limited time. Items will be cleared and reloaded upon recall when timeout is reached.
 
-## Create an InterimCache with timeout
+### Create an InterimCache with timeout
 
 TODO
 
-## store/retrieve values
+### store/retrieve values
 
 TODO
-## store/retrieve a whole Page object
+### store/retrieve a whole Page object
 
 TODO
