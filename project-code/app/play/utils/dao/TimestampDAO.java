@@ -22,7 +22,8 @@ public class TimestampDAO<K, M extends TimestampModel<K>> implements DAO<K, M> {
 		Date now = new Date();
 		m.setCreatedOn(now);
 		m.setUpdatedOn(now);
-		return delegateDAO.create(m);
+		K key = delegateDAO.create(m);
+		return key;
 	}
 
 	public void remove(K key) throws EntityNotFoundException {
@@ -43,4 +44,7 @@ public class TimestampDAO<K, M extends TimestampModel<K>> implements DAO<K, M> {
 		return delegateDAO.find();
 	}
 
+	public void addListener(DAOListener<K, M> l) {
+		delegateDAO.addListener(l);
+	}
 }

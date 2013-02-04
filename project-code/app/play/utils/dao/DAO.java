@@ -18,4 +18,5 @@ public interface DAO<K, M> {
 
 	Finder<K, M> find();
 
+	void addListener(DAOListener<K, M> l);
 }
