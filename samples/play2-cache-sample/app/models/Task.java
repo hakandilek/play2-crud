@@ -11,7 +11,7 @@ import com.avaje.ebean.Page;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
-import play.cache.*;
+import play.utils.cache.CachedFinder;
 
 @Entity
 @SuppressWarnings("serial")
