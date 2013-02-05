@@ -53,6 +53,10 @@ public class CachedDAO<K, M extends BasicModel<K>> implements DAO<K, M> {
 		return find;
 	}
 
+	public CachedFinder<K, M> cacheFind() {
+		return find;
+	}
+	
 	@Override
 	public void addListener(DAOListener<K, M> l) {
 		listeners.add(l);
