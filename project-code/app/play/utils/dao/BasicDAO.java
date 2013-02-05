@@ -10,9 +10,12 @@ public class BasicDAO<K, M extends BasicModel<K>> implements DAO<K, M> {
 	
 	private Listeners<K, M> listeners = new Listeners<K, M>();
 
-	public BasicDAO(Class<K> keyClass, Class<M> modelClass) {
+	public BasicDAO(Finder<K, M> finder) {
 		super();
-		this.find = new Finder<K, M>(keyClass, modelClass);
+		this.find = finder;
+	}
+	public BasicDAO(Class<K> keyClass, Class<M> modelClass) {
+		this(new Finder<K, M>(keyClass, modelClass));
 	}
 
 	public List<M> all() {
