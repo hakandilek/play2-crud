@@ -1,12 +1,12 @@
 package play.utils.crud;
 
-import java.util.List;
-
 import play.data.Form;
 import play.mvc.Call;
 import play.mvc.Result;
 import play.utils.dao.DAO;
 import play.utils.dao.EntityNotFoundException;
+
+import com.avaje.ebean.Page;
 
 public abstract class CRUDController<K, M> extends
 		DynamicTemplateController {
@@ -19,12 +19,18 @@ public abstract class CRUDController<K, M> extends
 
 	private final Class<M> modelClass;
 
+	private String orderBy;
+
+	private int pageSize;
+
 	public CRUDController(DAO<K, M> dao, Form<M> form, Class<K> keyClass,
-			Class<M> modelClass) {
+			Class<M> modelClass, int pagesize, String orderBy) {
 		this.dao = dao;
 		this.form = form;
 		this.keyClass = keyClass;
 		this.modelClass = modelClass;
+		this.pageSize = pagesize;
+		this.orderBy = orderBy;
 	}
 
 	public DAO<K, M> getDao() {
@@ -35,12 +41,17 @@ public abstract class CRUDController<K, M> extends
 		return form;
 	}
 
-	public Result listAll() {
-		if (log.isDebugEnabled())
-			log.debug("list <-");
+	public Result list(int page) {
+		Page<M> p = dao.page(page, pageSize(), orderBy());
+		return ok(templateForList(), with(Page.class, p));
+	}
 
-		final List<M> all = dao.all();
-		return ok(templateForList(), with(List.class, all));
+	protected String orderBy() {
+		return orderBy;
+	}
+
+	protected int pageSize(){
+		return pageSize;
 	}
 
 	protected abstract String templateForList();

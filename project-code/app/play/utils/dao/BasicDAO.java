@@ -2,6 +2,8 @@ package play.utils.dao;
 
 import java.util.List;
 
+import com.avaje.ebean.Page;
+
 import play.db.ebean.Model.Finder;
 
 public class BasicDAO<K, M extends BasicModel<K>> implements DAO<K, M> {
@@ -55,6 +57,20 @@ public class BasicDAO<K, M extends BasicModel<K>> implements DAO<K, M> {
 	@Override
 	public void addListener(DAOListener<K, M> l) {
 		listeners.add(l);
+	}
+	
+	@Override
+	public Page<M> page(int page, int pageSize, String orderBy) {
+		return find.where().orderBy(orderBy).findPagingList(pageSize)
+				.getPage(page);
+	}
+	
+	@Override
+	public <F> Page<M> page(int page, int pageSize, String orderBy,
+			String filterField, F filterValue) {
+		return find.where().eq(filterField, filterValue)
+				.orderBy(orderBy).findPagingList(pageSize)
+				.getPage(page);
 	}
 
 }

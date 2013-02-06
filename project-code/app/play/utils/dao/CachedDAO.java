@@ -2,6 +2,8 @@ package play.utils.dao;
 
 import java.util.List;
 
+import com.avaje.ebean.Page;
+
 import play.db.ebean.Model.Finder;
 import play.utils.cache.CachedFinder;
 
@@ -62,4 +64,15 @@ public class CachedDAO<K, M extends BasicModel<K>> implements DAO<K, M> {
 		listeners.add(l);
 	}
 
+	@Override
+	public Page<M> page(int page, int pageSize, String orderBy) {
+		return find.page(page, pageSize, orderBy);
+	}
+
+	@Override
+	public <F> Page<M> page(int page, int pageSize, String orderBy,
+			String filterField, F filterValue) {
+		return find.page(page, pageSize, orderBy, filterField, filterValue);
+	}
+	
 }
