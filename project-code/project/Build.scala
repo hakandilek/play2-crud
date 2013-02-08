@@ -5,7 +5,7 @@ import PlayProject._
 object ApplicationBuild extends Build {
 
     val appName         = "play2-crud"
-    val appVersion      = "0.2.0-SNAPSHOT"
+    val appVersion      = "0.2.1-SNAPSHOT"
 
     val appDependencies = Seq(
         "play2-cache" % "play2-cache_2.9.1" % "0.3.0-SNAPSHOT"
