@@ -5,10 +5,10 @@ import PlayProject._
 object ApplicationBuild extends Build {
 
     val appName         = "play2-crud"
-    val appVersion      = "0.2.1-SNAPSHOT"
+    val appVersion      = "0.2.2-SNAPSHOT"
 
     val appDependencies = Seq(
-        "play2-cache" % "play2-cache_2.9.1" % "0.3.0-SNAPSHOT"
+        "play2-cache" % "play2-cache_2.9.1" % "0.3.1-SNAPSHOT"
     )
 
     val main = PlayProject(appName, appVersion, appDependencies, mainLang = JAVA).settings(

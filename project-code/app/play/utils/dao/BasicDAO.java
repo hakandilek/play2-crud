@@ -2,6 +2,7 @@ package play.utils.dao;
 
 import java.util.List;
 
+import com.avaje.ebean.Expression;
 import com.avaje.ebean.Page;
 
 import play.db.ebean.Model.Finder;
@@ -72,5 +73,13 @@ public class BasicDAO<K, M extends BasicModel<K>> implements DAO<K, M> {
 				.orderBy(orderBy).findPagingList(pageSize)
 				.getPage(page);
 	}
+
+	public Page<M> page(int page, int pageSize, String orderBy,
+			String cacheKey, Expression expression) {
+		return find.where().add(expression)
+				.orderBy(orderBy).findPagingList(pageSize)
+				.getPage(page);
+	}
+	
 
 }
