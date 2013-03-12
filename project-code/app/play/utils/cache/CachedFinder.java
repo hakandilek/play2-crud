@@ -10,6 +10,8 @@ import play.Logger.ALogger;
 import play.cache.Cache;
 import play.db.ebean.Model.Finder;
 
+import com.avaje.ebean.Ebean;
+import com.avaje.ebean.Expression;
 import com.avaje.ebean.Page;
 
 public class CachedFinder<K, T> extends Finder<K, T> {
@@ -148,6 +150,24 @@ public class CachedFinder<K, T> extends Finder<K, T> {
 		} catch (Exception e) {
 			log.error("exception occured while retrieving from cache", e);
 			return where().eq(filterField, filterValue).orderBy(orderBy)
+					.findPagingList(pageSize).getPage(page);
+		}
+	}
+	
+	public Page<T> page(final int page, final int pageSize, final String orderBy, String cacheKey, final Expression expression) {
+		String key = prePage + page + "." + cacheKey;
+		try {
+			Page<T> p = Cache.getOrElse(key, new Callable<Page<T>>() {
+				public Page<T> call() throws Exception {
+					return where().add(expression).orderBy(orderBy)
+							.findPagingList(pageSize).getPage(page);
+				}
+			}, EXPIRATION);
+			pages.add(key);
+			return p;
+		} catch (Exception e) {
+			log.error("exception occured while retrieving from cache", e);
+			return where().add(expression).orderBy(orderBy)
 					.findPagingList(pageSize).getPage(page);
 		}
 	}
