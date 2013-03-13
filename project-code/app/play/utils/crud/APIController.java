@@ -5,6 +5,7 @@ import static play.libs.Json.toJson;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.OptimisticLockException;
@@ -157,6 +158,18 @@ public abstract class APIController<K, M> extends Controller {
 		return value;
 	}
 
+	protected List<String> jsonTextList(String name) {
+		JsonNode json = request().body().asJson();
+		JsonNode node = json.get(name);
+		if (node == null)
+			return null;
+		List<String> list = new ArrayList<String>();
+		for (Iterator<JsonNode> elems = node.getElements(); elems.hasNext();) {
+			JsonNode elem = elems.next();
+			list.add(elem.asText());
+		}
+		return list;
+	}	
 	protected Result checkRequired(String... params) {
 		List<String> missing = new ArrayList<String>(); 
 		for (String param : params) {
