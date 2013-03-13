@@ -10,7 +10,6 @@ import play.Logger.ALogger;
 import play.cache.Cache;
 import play.db.ebean.Model.Finder;
 
-import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Expression;
 import com.avaje.ebean.Page;
 
