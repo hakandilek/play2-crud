@@ -6,5 +6,6 @@ public interface BasicModel<K> {
 	void save();
 	void delete();
 	void update(Object key);
+	void saveManyToManyAssociations(String association);
 	
 }

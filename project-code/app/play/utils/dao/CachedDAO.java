@@ -80,4 +80,11 @@ public class CachedDAO<K, M extends BasicModel<K>> implements DAO<K, M> {
 			String cacheKey, Expression expression) {
 		return find.page(page, pageSize, orderBy, cacheKey, expression);
 	}
+
+	@Override
+	public void saveAssociation(M c, String association) {
+		c.saveManyToManyAssociations(association);
+		K key = c.getKey();
+		cacheFind().clean(key);
+	}
 }

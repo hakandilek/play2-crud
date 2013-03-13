@@ -80,6 +80,9 @@ public class BasicDAO<K, M extends BasicModel<K>> implements DAO<K, M> {
 				.orderBy(orderBy).findPagingList(pageSize)
 				.getPage(page);
 	}
-	
+	@Override
+	public void saveAssociation(M c, String association) {
+		c.saveManyToManyAssociations(association);
+	}
 
 }
