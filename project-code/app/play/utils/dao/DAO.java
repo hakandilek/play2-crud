@@ -2,8 +2,6 @@ package play.utils.dao;
 
 import java.util.List;
 
-import play.db.ebean.Model.Finder;
-
 import com.avaje.ebean.Expression;
 import com.avaje.ebean.Page;
 
@@ -18,8 +16,6 @@ public interface DAO<K, M> {
 	M get(K key);
 
 	void update(K key, M c);
-
-	Finder<K, M> find();
 
 	void addListener(DAOListener<K, M> l);
 	

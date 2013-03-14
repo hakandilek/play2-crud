@@ -52,14 +52,10 @@ public class CachedDAO<K, M extends BasicModel<K>> implements DAO<K, M> {
 		listeners.afterUpdate(key, m);
 	}
 
-	public Finder<K, M> find() {
+	protected CachedFinder<K, M> find() {
 		return find;
 	}
 
-	public CachedFinder<K, M> cacheFind() {
-		return find;
-	}
-	
 	@Override
 	public void addListener(DAOListener<K, M> l) {
 		listeners.add(l);

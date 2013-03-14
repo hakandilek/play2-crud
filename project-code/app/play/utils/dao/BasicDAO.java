@@ -51,7 +51,7 @@ public class BasicDAO<K, M extends BasicModel<K>> implements DAO<K, M> {
 		listeners.afterUpdate(key, m);
 	}
 
-	public Finder<K, M> find() {
+	protected Finder<K, M> find() {
 		return find;
 	}
 
