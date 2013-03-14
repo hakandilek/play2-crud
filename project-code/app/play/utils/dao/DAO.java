@@ -2,8 +2,6 @@ package play.utils.dao;
 
 import java.util.List;
 
-import models.User;
-
 import play.db.ebean.Model.Finder;
 
 import com.avaje.ebean.Expression;
