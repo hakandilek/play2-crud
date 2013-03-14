@@ -1,17 +1,18 @@
 import sbt._
 import Keys._
-import PlayProject._
+import play.Project._
 
 object ApplicationBuild extends Build {
 
     val appName         = "play2-cache"
-    val appVersion      = "0.3.1-SNAPSHOT"
+    val appVersion      = "0.4.0-SNAPSHOT"
 
     val appDependencies = Seq(
-        // no dependencies
+       	javaCore, javaJdbc, javaEbean
     )
 
-    val main = PlayProject(appName, appVersion, appDependencies, mainLang = JAVA).settings(
+    val main = play.Project(appName, appVersion, appDependencies).settings(
+        publishArtifact in(Compile, packageDoc) := false
     )
 
 }
