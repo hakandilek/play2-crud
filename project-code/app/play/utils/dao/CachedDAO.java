@@ -81,6 +81,6 @@ public class CachedDAO<K, M extends BasicModel<K>> implements DAO<K, M> {
 	public void saveAssociation(M c, String association) {
 		c.saveManyToManyAssociations(association);
 		K key = c.getKey();
-		cacheFind().clean(key);
+		find().clean(key);
 	}
 }
