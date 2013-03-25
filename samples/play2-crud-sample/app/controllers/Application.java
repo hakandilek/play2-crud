@@ -14,7 +14,7 @@ public class Application extends Controller {
 	}
 
 	public static Result sampleList() {
-		return sampleController.listAll();
+		return sampleController.list(0);
 	}
 
 	public static Result sampleNewForm() {
