@@ -9,9 +9,12 @@ simple CRUD &amp; DAO implementation for play2
    
 # HOW-TO
 
-Follow these steps to use play2-crud. You can also use it partially just for DAO or CRUD controllers
+Follow these steps to use play2-crud. You can also use it partially just for DAO or CRUD controllers. If you think any part needs further explanation, please report a new issue.
 
 ## Define model
+
+ * Model class have to implement `play.utils.dao.BasicModel` with the type parameter indicating the type of the `@Id` field.
+
 ```java
 @Entity
 public class Sample extends Model implements BasicModel<Long> {
@@ -41,7 +44,13 @@ public class Sample extends Model implements BasicModel<Long> {
 }
 ```
 
+ * Here the `Sample` model class implements `BasicModel<Long>` where `key` field indicated with `@Id` is `Long`.
+
 ## Define DAO
+
+ * DAO class extends `play.utils.dao.BasicDAO` with two type parameters: One for the key type and one for the Model type
+ * Alternatively, `play.utils.dao.CachedDAO` cn be used to cache fetched data.
+ * Classes implementing both `BasicDAO` or `CachedDAO` should override the constructor with key ad model class type parameters.
 
 ```java
 public class SampleDAO extends BasicDAO<Long, Sample> {
@@ -50,14 +59,30 @@ public class SampleDAO extends BasicDAO<Long, Sample> {
    }
 }
 ```
-
+ * Here the `SampleDAO` extends `BasicDAO<Long, Sample>` with `Long` key type, and `Sample` model type
+ * and overrides the super class constructor with `super(Long.class, Sample.class)`
+ 
 ## Define Controller
 
+ * Controller classes extend `play.utils.crud.CRUDController` with key and model type parameters as in DAO classes.
+ * Controllers should override the constructor by providing
+   * DAO implementation
+   * A Form class
+   * Key type
+   * Model type
+   * Page size (used for paging lists)
+   * Sorting field as string (might be in the form of `"fieldName [asc]/[desc]"`)
+ * Template file name prefixes for List/Form and Show pages
+ * A Call to the index page, indicating the call to return after CRUD operations
+ 
 ```java
+import static play.data.Form.*;
+import play.mvc.Call;
+
 public class SampleController extends CRUDController<Long, Sample> {
    
    public SampleController(SampleDAO dao) {
-      super(dao, form(Sample.class), Long.class, Sample.class);
+      super(dao, form(Sample.class), Long.class, Sample.class, 10, "name");
    }
 
    protected String templateForList() {

@@ -10,7 +10,7 @@ import play.utils.crud.CRUDController;
 public class SampleController extends CRUDController<Long, Sample> {
 	
 	public SampleController(SampleDAO dao) {
-		super(dao, form(Sample.class), Long.class, Sample.class, 20, "name");
+		super(dao, form(Sample.class), Long.class, Sample.class, 10, "name");
 	}
 
 	@Override
