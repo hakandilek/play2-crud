@@ -5,7 +5,6 @@ import java.util.List;
 import com.avaje.ebean.Expression;
 import com.avaje.ebean.Page;
 
-import play.db.ebean.Model.Finder;
 import play.utils.cache.CachedFinder;
 
 public class CachedDAO<K, M extends BasicModel<K>> implements DAO<K, M> {
