@@ -35,14 +35,14 @@ class Listeners<K, M> implements DAOListener<K, M>{
 	}
 
 	@Override
-	public void beforeUpdate(K key, M m) {
+	public void beforeUpdate(M m) {
 		for (DAOListener<K, M> l : list)
-			l.beforeUpdate(key, m);
+			l.beforeUpdate(m);
 	}
 
 	@Override
-	public void afterUpdate(K key, M m) {
+	public void afterUpdate(M m) {
 		for (DAOListener<K, M> l : list)
-			l.afterUpdate(key, m);
+			l.afterUpdate(m);
 	}
 }

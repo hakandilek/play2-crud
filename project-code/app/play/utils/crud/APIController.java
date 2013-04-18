@@ -93,7 +93,7 @@ public abstract class APIController<K, M> extends Controller {
 					"message", "error occured : " + e)));
 		}
 
-		dao.update(key, m);
+		dao.update( m);
 		if (log.isDebugEnabled())
 			log.debug("updated.");
 		if (log.isDebugEnabled())

@@ -44,11 +44,11 @@ public class CachedDAO<K, M extends BasicModel<K>> implements DAO<K, M> {
 		return find.byId(key);
 	}
 
-	public void update(K key, M m) {
-		listeners.beforeUpdate(key, m);
-		m.update(key);
+	public void update(M m) {
+		listeners.beforeUpdate( m);
+		m.update();
 		find.put(m.getKey(), m);
-		listeners.afterUpdate(key, m);
+		listeners.afterUpdate(m);
 	}
 
 	protected CachedFinder<K, M> find() {

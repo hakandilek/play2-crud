@@ -118,7 +118,7 @@ public abstract class CRUDController<K, M> extends
 			M model = filledForm.get();
 			if (log.isDebugEnabled())
 				log.debug("model : " + model);
-			dao.update(key, model);
+			dao.update( model);
 			if (log.isDebugEnabled())
 				log.debug("entity updated");
 

@@ -15,7 +15,7 @@ public interface DAO<K, M> {
 
 	M get(K key);
 
-	void update(K key, M c);
+	void update(M c);
 
 	void addListener(DAOListener<K, M> l);
 	

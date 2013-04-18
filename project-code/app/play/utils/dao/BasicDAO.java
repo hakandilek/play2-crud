@@ -45,10 +45,10 @@ public class BasicDAO<K, M extends BasicModel<K>> implements DAO<K, M> {
 		return find.byId(key);
 	}
 
-	public void update(K key, M m) {
-		listeners.beforeUpdate(key, m);
-		m.update(key);
-		listeners.afterUpdate(key, m);
+	public void update( M m) {
+		listeners.beforeUpdate( m);
+		m.update();
+		listeners.afterUpdate( m);
 	}
 
 	protected Finder<K, M> find() {

@@ -24,13 +24,13 @@ public class TimestampListener<K, M extends TimestampModel<K>> implements DAOLis
 	}
 
 	@Override
-	public void beforeUpdate(K key, M m) {
+	public void beforeUpdate(M m) {
 		Date now = new Date();
 		m.setUpdatedOn(now);
 	}
 
 	@Override
-	public void afterUpdate(K key, M m) {
+	public void afterUpdate(M m) {
 	}
 
 }
