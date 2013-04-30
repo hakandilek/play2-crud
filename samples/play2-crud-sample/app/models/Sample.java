@@ -34,4 +34,9 @@ public class Sample extends Model implements BasicModel<Long> {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	@Override
+	public String toString() {
+		return "Sample [key=" + key + ", name=" + name + "]";
+	}
 }

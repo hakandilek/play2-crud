@@ -5,11 +5,11 @@ import play.Project._
 object ApplicationBuild extends Build {
 
     val appName         = "play2-crud-sample"
-    val appVersion      = "0.4.1-SNAPSHOT"
+    val appVersion      = "0.5.0-SNAPSHOT"
 
     val appDependencies = Seq(
         javaCore, javaJdbc, javaEbean,
-        "play2-crud" % "play2-crud_2.10" % "0.4.1-SNAPSHOT"
+        "play2-crud" % "play2-crud_2.10" % "0.5.0-SNAPSHOT"
     )
 
     val main = play.Project(appName, appVersion, appDependencies).settings(

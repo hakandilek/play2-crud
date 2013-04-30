@@ -3,12 +3,13 @@ package play.utils.crud;
 import play.data.Form;
 import play.mvc.Call;
 import play.mvc.Result;
+import play.utils.dao.BasicModel;
 import play.utils.dao.DAO;
 import play.utils.dao.EntityNotFoundException;
 
 import com.avaje.ebean.Page;
 
-public abstract class CRUDController<K, M> extends
+public abstract class CRUDController<K, M extends BasicModel<K>> extends
 		DynamicTemplateController {
 
 	private final DAO<K, M> dao;
@@ -107,7 +108,8 @@ public abstract class CRUDController<K, M> extends
 		if (log.isDebugEnabled())
 			log.debug("update() <-" + key);
 
-		Form<M> filledForm = form.bindFromRequest();
+		M original = dao.get(key);
+		Form<M> filledForm = form.fill(original).bindFromRequest();
 		if (filledForm.hasErrors()) {
 			if (log.isDebugEnabled())
 				log.debug("validation errors occured");
@@ -116,9 +118,10 @@ public abstract class CRUDController<K, M> extends
 					with(keyClass, key).and(Form.class, filledForm));
 		} else {
 			M model = filledForm.get();
+			model.setKey(key);
 			if (log.isDebugEnabled())
 				log.debug("model : " + model);
-			dao.update( model);
+			dao.update(model);
 			if (log.isDebugEnabled())
 				log.debug("entity updated");
 
