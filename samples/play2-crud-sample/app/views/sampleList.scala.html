@@ -1,12 +1,12 @@
-@(list: List[Sample])
+@(page: com.avaje.ebean.Page[Sample])
 @import helper._ 
 @import helper.twitterBootstrap._
 
 @main("list") {
 
-	<h3>@list.size() objects</h3>
+	<h3>@page.getTotalRowCount() objects</h3>
 	
-    @if(list.size() == 0) {
+    @if(page.getTotalRowCount() == 0) {
         
         <div class="well">
             <em>Nothing to display</em>
@@ -23,7 +23,7 @@
             </tr>
         </thead>
         <tbody>
-        @for(sample <- list) {
+        @for(sample <- page.getList()) {
             <tr>
                 <td>
                 	@sample.getName()
