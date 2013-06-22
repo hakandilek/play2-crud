@@ -10,9 +10,9 @@ simple CRUD &amp; DAO implementation with REST interface for [play framework](ht
 # HOW-TO
 
  This HOW-TO has been separated into several sections:
-  * HOW-TO use simple CRUD
-  * HOW-TO use DAO Listeners
-  * HOW-TO use REST Controllers
+  * [HOW-TO use simple CRUD](#how-to-use-simple-crud)
+  * [HOW-TO use DAO Listeners](#how-to-use-dao-listeners)
+  * [HOW-TO use REST Controllers](#how-to-use-rest-controllers)
  
 ## HOW-TO use simple CRUD
 
