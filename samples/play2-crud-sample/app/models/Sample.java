@@ -18,6 +18,9 @@ public class Sample extends Model implements BasicModel<Long> {
 	@Basic
 	@Required
 	private String name;
+	
+	@Basic
+	private int randomValue;
 
 	public Long getKey() {
 		return key;
@@ -33,6 +36,14 @@ public class Sample extends Model implements BasicModel<Long> {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public int getRandomValue() {
+		return randomValue;
+	}
+
+	public void setRandomValue(int randomValue) {
+		this.randomValue = randomValue;
 	}
 
 	@Override

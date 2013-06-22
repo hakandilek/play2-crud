@@ -7,6 +7,7 @@ public class SampleDAO extends BasicDAO<Long, Sample> {
 
 	public SampleDAO() {
 		super(Long.class, Sample.class);
+		addListener(new SampleDAOListener());
 	}
 
 }

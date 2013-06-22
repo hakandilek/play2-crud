@@ -18,6 +18,7 @@
         <thead>
             <tr>
                 <th class="header">name</th>
+                <th class="header">random value</th>
                 <th>edit</th>
                 <th>delete</th>
             </tr>
@@ -27,6 +28,9 @@
             <tr>
                 <td>
                 	@sample.getName()
+               	</td>
+                <td>
+                	@sample.getRandomValue()
                	</td>
                 <td><a class="btn btn-mini btn-danger pull-right spaced" href="@routes.Application.sampleEditForm(sample.getKey())">edit</a></td>
                	<td><a class="btn btn-mini btn-danger pull-right spaced" href="@routes.Application.sampleDelete(sample.getKey())">delete</a></td>
