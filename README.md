@@ -9,9 +9,16 @@ simple CRUD &amp; DAO implementation for [play framework](http://github.com/play
    
 # HOW-TO
 
+ This HOW-TO has been separated into several sections:
+  * HOW-TO use simple CRUD
+  * HOW-TO use DAO Listeners
+  * HOW-TO use REST Controllers
+ 
+## HOW-TO use simple CRUD
+
 Follow these steps to use play2-crud. You can also use it partially just for DAO or CRUD controllers. If you think any part needs further explanation, please report a new issue.
 
-## Define model
+### Define model
 
  * Model class have to implement `play.utils.dao.BasicModel` with the type parameter indicating the type of the `@Id` field.
 
@@ -46,7 +53,7 @@ public class Sample extends Model implements BasicModel<Long> {
 
  * Here the `Sample` model class implements `BasicModel<Long>` where `key` field indicated with `@Id` is `Long`.
 
-## Define DAO
+### Define DAO
 
  * DAO class extends `play.utils.dao.BasicDAO` with two type parameters: One for the key type and one for the Model type
  * Alternatively, `play.utils.dao.CachedDAO` cn be used to cache fetched data.
@@ -62,7 +69,7 @@ public class SampleDAO extends BasicDAO<Long, Sample> {
  * Here the `SampleDAO` extends `BasicDAO<Long, Sample>` with `Long` key type, and `Sample` model type
  * and overrides the super class constructor with `super(Long.class, Sample.class)`
  
-## Define Controller
+### Define Controller
 
  * Controller classes extend `play.utils.crud.CRUDController` with key and model type parameters as in DAO classes.
  * Controllers should override the constructor by providing
@@ -105,7 +112,7 @@ public class SampleController extends CRUDController<Long, Sample> {
 ```
 
       
-## Associate Controller
+### Associate Controller
 
 ```java
 public class Application extends Controller {
@@ -147,7 +154,7 @@ public class Application extends Controller {
 }
 ```
 
-## define routes
+### define routes
 
 ```
 # Home page
@@ -162,7 +169,7 @@ GET     /sample/:key/delete        controllers.Application.sampleDelete(key: Lon
 GET     /sample/:key               controllers.Application.sampleShow(key: Long)
 ```
 
-## define templates
+### define templates
 
  * [form](https://github.com/hakandilek/play2-crud/blob/master/samples/play2-crud-sample/app/views/sampleForm.scala.html)
  * [list](https://github.com/hakandilek/play2-crud/blob/master/samples/play2-crud-sample/app/views/sampleList.scala.html)
@@ -171,11 +178,11 @@ GET     /sample/:key               controllers.Application.sampleShow(key: Long)
 ... and voila!
 
 
-# HOW-TO use DAO Listeners
+## HOW-TO use DAO Listeners
 
 This part introduces how to use DAO listeners
 
-## Additions to the model 
+### Additions to the model 
 
  * Define an additional attribute in your Model, which will be updated by the listener. 
    * Let's define a new `int randomValue` field, that will be randomly updated on creation and when the model is updated.
@@ -201,7 +208,7 @@ public class Sample extends Model implements BasicModel<Long> {
 ...
 ```
 
-## Create a new `DAOListener`
+### Create a new `DAOListener`
 
  * Create a `DAOListener` that updates the `randomValue` field before create and update operations:
  
@@ -239,7 +246,7 @@ public class SampleDAOListener implements DAOListener<Long, Sample> {
 }
 ```
 
-## Register the `DAOListener` to the `DAO`
+### Register the `DAOListener` to the `DAO`
 
  * Add the `SampleDAOListener` in `SampleDAO` constructor: 
  
@@ -251,7 +258,106 @@ public class SampleDAOListener implements DAOListener<Long, Sample> {
 	}
 ```
 
-## Make changes in your templates
+### Make changes in your templates
 
  * Make some changes (e.g. list template) if you want to display the new field in the templates.
  
+## HOW-TO use REST Controllers
+
+This part introduces how to use DAO listeners
+
+### Define a REST controller
+
+ * Define a REST controller extending `APIController` 
+   * The REST controller has to implement the create() method for creating the entity. 
+   * There are several helper methods like `checkRequired` and `jsonText` that can be used in the REST controller.
+   
+```java
+import static play.libs.Json.toJson;
+
+import com.google.common.collect.ImmutableMap;
+
+import models.Sample;
+import models.dao.SampleDAO;
+import play.mvc.Result;
+import play.utils.crud.APIController;
+
+public class SampleRestController extends APIController<Long, Sample> {
+
+	public SampleRestController(SampleDAO dao) {
+		super(dao);
+	}
+
+	@Override
+	public Result create() {
+		Result check = checkRequired("name");
+		if (check != null) {
+			if (log.isDebugEnabled())
+				log.debug("check : " + check);
+			return check;
+		}
+
+		String name = jsonText("name");
+
+		Sample m = new Sample();
+		m.setName(name);
+		
+		Long key = dao.create(m);
+		if (log.isDebugEnabled())
+			log.debug("key : " + key);
+
+		return created(toJson(ImmutableMap.of("status", "OK", "key", key)));
+	}
+
+}
+``` 
+
+### Associate REST Controller
+ 
+ * Associate in the existing Application Controller 
+
+```java
+public class Application extends Controller {
+
+...
+
+	private static SampleRestController restController = new SampleRestController(sampleDAO);
+	
+...
+
+	public static Result restList() {
+		return restController.list();
+	}
+
+	public static Result restCreate() {
+		return restController.create();
+	}
+
+	public static Result restUpdate(Long key) {
+		return restController.update(key);
+	}
+
+	public static Result restDelete(Long key) {
+		return restController.delete(key);
+	}
+
+	public static Result restGet(Long key) {
+		return restController.get(key);
+	}
+}
+
+```
+
+
+### define routes
+
+```
+...
+
+# REST API
+GET     /api/sample                controllers.Application.restList()
+GET     /api/sample/:key           controllers.Application.restGet(key:Long)
+PUT     /api/sample/:key           controllers.Application.restUpdate(key:Long)
+POST    /api/report/        	   controllers.Application.restCreate()
+DELETE  /api/sample/:key           controllers.Application.restDelete(key:Long)
+```
