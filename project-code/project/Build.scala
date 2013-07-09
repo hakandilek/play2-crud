@@ -5,7 +5,7 @@ import play.Project._
 object ApplicationBuild extends Build {
 
     val appName         = "play2-crud"
-    val appVersion      = "0.5.0-SNAPSHOT"
+    val appVersion      = "0.6.0-SNAPSHOT"
 
     val appDependencies = Seq(
         javaCore, javaJdbc, javaEbean,
@@ -17,7 +17,15 @@ object ApplicationBuild extends Build {
         
         //maven repository
         resolvers += "release repository" at  "http://hakandilek.github.com/maven-repo/releases/",
-        resolvers += "snapshot repository" at "http://hakandilek.github.com/maven-repo/snapshots/"
+        resolvers += "snapshot repository" at "http://hakandilek.github.com/maven-repo/snapshots/",
+        
+        publishMavenStyle := true,
+        publishTo <<= version { (v: String) =>
+        	if (v.trim.endsWith("SNAPSHOT"))
+    			Some(Resolver.file("file",  new File( "../../maven-repo/snapshots" )) )
+			else
+    			Some(Resolver.file("file",  new File( "../../maven-repo/releases" )) )
+        }
     )
 
 }
