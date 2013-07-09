@@ -8,17 +8,11 @@ object ApplicationBuild extends Build {
     val appVersion      = "0.6.0-SNAPSHOT"
 
     val appDependencies = Seq(
-        javaCore, javaJdbc, javaEbean,
-        "play2-cache" % "play2-cache_2.10" % "0.4.0-SNAPSHOT"
+        javaCore, javaJdbc, javaEbean
     )
 
-    val main = play.Project(appName, appVersion, appDependencies).settings(
+    lazy val play2cache = play.Project("play2-cache", appVersion, appDependencies, path = file("modules/play2-cache/project-code")).settings(
         publishArtifact in(Compile, packageDoc) := false,
-        
-        //maven repository
-        resolvers += "release repository" at  "http://hakandilek.github.com/maven-repo/releases/",
-        resolvers += "snapshot repository" at "http://hakandilek.github.com/maven-repo/snapshots/",
-        
         publishMavenStyle := true,
         publishTo <<= version { (v: String) =>
         	if (v.trim.endsWith("SNAPSHOT"))
@@ -27,5 +21,16 @@ object ApplicationBuild extends Build {
     			Some(Resolver.file("file",  new File( "../../maven-repo/releases" )) )
         }
     )
+
+    val main = play.Project(appName, appVersion, appDependencies).settings(
+        publishArtifact in(Compile, packageDoc) := false,
+        publishMavenStyle := true,
+        publishTo <<= version { (v: String) =>
+        	if (v.trim.endsWith("SNAPSHOT"))
+    			Some(Resolver.file("file",  new File( "../../maven-repo/snapshots" )) )
+			else
+    			Some(Resolver.file("file",  new File( "../../maven-repo/releases" )) )
+        }
+    ).dependsOn(play2cache).aggregate(play2cache)
 
 }
