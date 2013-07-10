@@ -1,19 +1,21 @@
 import sbt._
 import Keys._
-import PlayProject._
+import play.Project._
 
 object ApplicationBuild extends Build {
 
     val appName         = "play2-cache-sample"
-    val appVersion      = "0.1.0-SNAPSHOT"
+    val appVersion      = "0.6.0-SNAPSHOT"
 
     val appDependencies = Seq(
-        "play2-cache" % "play2-cache_2.9.1" % "0.3.0-SNAPSHOT"
+        javaCore, javaJdbc, javaEbean,
+        "play2-crud" % "play2-crud_2.10" % "0.6.0-SNAPSHOT"
     )
 
-    val main = PlayProject(appName, appVersion, appDependencies, mainLang = JAVA).settings(
+    val main = play.Project(appName, appVersion, appDependencies).settings(
         //maven repository
         resolvers += "release repository" at  "http://hakandilek.github.com/maven-repo/releases/",
         resolvers += "snapshot repository" at "http://hakandilek.github.com/maven-repo/snapshots/"
     )
+
 }
