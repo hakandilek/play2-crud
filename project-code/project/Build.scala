@@ -5,10 +5,11 @@ import play.Project._
 object ApplicationBuild extends Build {
 
     val appName         = "play2-crud"
-    val appVersion      = "0.6.0-SNAPSHOT"
+    val appVersion      = "0.7.0-SNAPSHOT"
 
     val appDependencies = Seq(
-        javaCore, javaJdbc, javaEbean
+        javaCore, javaJdbc, javaEbean,
+        "com.google.inject" % "guice" % "3.0"
     )
 
     val main = play.Project(appName, appVersion, appDependencies).settings(

@@ -1,0 +1,8 @@
+# REST Routes
+# ~~~~
+
+GET		/:model/list		@play.utils.crud.DynamicRestController.list(model: String)
+GET		/:model/:key		@play.utils.crud.DynamicRestController.show(model: String, key: String)
+POST	/:model/create		@play.utils.crud.DynamicRestController.create(model: String)
+PUT		/:model/:key		@play.utils.crud.DynamicRestController.update(model: String, key: String)
+DELETE	/:model/:key		@play.utils.crud.DynamicRestController.delete(model: String, key: String)

@@ -9,8 +9,8 @@ import play.utils.dao.EntityNotFoundException;
 
 import com.avaje.ebean.Page;
 
-public abstract class CRUDController<K, M extends BasicModel<K>> extends
-		DynamicTemplateController {
+public abstract class CRUDController<K, M extends BasicModel<K>> extends DynamicTemplateController implements
+		CRUD<K, M> {
 
 	private final DAO<K, M> dao;
 
@@ -24,8 +24,8 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends
 
 	private int pageSize;
 
-	public CRUDController(DAO<K, M> dao, Form<M> form, Class<K> keyClass,
-			Class<M> modelClass, int pagesize, String orderBy) {
+	public CRUDController(DAO<K, M> dao, Form<M> form, Class<K> keyClass, Class<M> modelClass, int pagesize,
+			String orderBy) {
 		this.dao = dao;
 		this.form = form;
 		this.keyClass = keyClass;
@@ -36,6 +36,14 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends
 
 	public DAO<K, M> getDao() {
 		return dao;
+	}
+
+	public Class<K> getKeyClass() {
+		return keyClass;
+	}
+
+	public Class<M> getModelClass() {
+		return modelClass;
 	}
 
 	public Form<M> getForm() {
@@ -51,7 +59,7 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends
 		return orderBy;
 	}
 
-	protected int pageSize(){
+	protected int pageSize() {
 		return pageSize;
 	}
 
@@ -60,15 +68,14 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends
 	protected abstract String templateForForm();
 
 	protected abstract String templateForShow();
-	
+
 	protected abstract Call toIndex();
 
 	public Result newForm() {
 		if (log.isDebugEnabled())
 			log.debug("newForm() <-");
 
-		return ok(templateForForm(),
-				with(keyClass, null).and(Form.class, form));
+		return ok(templateForForm(), with(keyClass, null).and(Form.class, form));
 	}
 
 	public Result create() {
@@ -80,8 +87,7 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends
 			if (log.isDebugEnabled())
 				log.debug("validation errors occured");
 
-			return badRequest(templateForForm(),
-					with(keyClass, null).and(Form.class, filledForm));
+			return badRequest(templateForForm(), with(keyClass, null).and(Form.class, filledForm));
 		} else {
 			M model = filledForm.get();
 			dao.create(model);
@@ -114,8 +120,7 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends
 			if (log.isDebugEnabled())
 				log.debug("validation errors occured");
 
-			return badRequest(templateForForm(),
-					with(keyClass, key).and(Form.class, filledForm));
+			return badRequest(templateForForm(), with(keyClass, key).and(Form.class, filledForm));
 		} else {
 			M model = filledForm.get();
 			model.setKey(key);
@@ -128,7 +133,6 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends
 			return redirect(toIndex());
 		}
 	}
-
 
 	public Result show(K key) {
 		if (log.isDebugEnabled())
