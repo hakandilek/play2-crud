@@ -2,10 +2,12 @@ package play.utils.dao;
 
 import java.util.List;
 
-import com.avaje.ebean.Expression;
-import com.avaje.ebean.Page;
+import javax.persistence.PersistenceException;
 
 import play.utils.cache.CachedFinder;
+
+import com.avaje.ebean.Expression;
+import com.avaje.ebean.Page;
 
 public class CachedDAO<K, M extends BasicModel<K>> implements DAO<K, M> {
 
@@ -35,7 +37,11 @@ public class CachedDAO<K, M extends BasicModel<K>> implements DAO<K, M> {
 		listeners.beforeRemove(key);
 		M ref = find.ref(key);
 		if (ref == null) throw new EntityNotFoundException(key);
-		ref.delete();
+		try {
+			ref.delete();
+		} catch (PersistenceException e) {
+			throw new EntityNotFoundException(key, e);
+		}
 		find.clean(key);
 		listeners.afterRemove(key, ref);
 	}
