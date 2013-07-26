@@ -74,7 +74,7 @@ public abstract class APIController<K, M> extends Controller implements CRUD<K, 
 		if (log.isDebugEnabled())
 			log.debug("m : " + m);
 		if (m == null) {
-			return notFound(toJson(ImmutableMap.of("status", "OK", "key", key, "message",
+			return notFound(toJson(ImmutableMap.of("status", "NOT_FOUND", "key", key, "message",
 					"entity with the given key not found")));
 		}
 
@@ -122,7 +122,7 @@ public abstract class APIController<K, M> extends Controller implements CRUD<K, 
 	public Result get(K key) {
 		M model = dao.get(key);
 		if (model == null) {
-			return notFound(toJson(ImmutableMap.of("status", "not found", "key", key)));
+			return notFound(toJson(ImmutableMap.of("status", "NOT_FOUND", "key", key)));
 		}
 		return ok(toJson(ImmutableMap.of("status", "OK", "key", key, "data", model)));
 	}
@@ -131,9 +131,9 @@ public abstract class APIController<K, M> extends Controller implements CRUD<K, 
 		try {
 			dao.remove(key);
 		} catch (EntityNotFoundException e) {
-			return notFound(toJson(ImmutableMap.of("status", "not found", "key", key)));
+			return notFound(toJson(ImmutableMap.of("status", "NOT_FOUND", "key", key)));
 		} catch (OptimisticLockException e) {
-			return notFound(toJson(ImmutableMap.of("status", "cannot delete", "key", key)));
+			return notFound(toJson(ImmutableMap.of("status", "CANNOT_DELETE", "key", key)));
 		}
 		return ok(toJson(ImmutableMap.of("status", "OK", "key", key, "message", "deleted :" + key)));
 	}
@@ -169,7 +169,7 @@ public abstract class APIController<K, M> extends Controller implements CRUD<K, 
 			}
 		}
 		if (!missing.isEmpty()) {
-			return badRequest(toJson(ImmutableMap.of("status", "missing", "message",
+			return badRequest(toJson(ImmutableMap.of("status", "MISSING", "message",
 					"Missing parameters :" + missing.toString())));
 		}
 		return null;
@@ -178,7 +178,7 @@ public abstract class APIController<K, M> extends Controller implements CRUD<K, 
 	public static Result invalid(String res) {
 		String method = request().method();
 		String resource = request().path();
-		return notFound(toJson(ImmutableMap.of("status", "not found", "message", "resource not found:" + method + " "
+		return notFound(toJson(ImmutableMap.of("status", "NOT_FOUND", "message", "resource not found:" + method + " "
 				+ resource)));
 	}
 
