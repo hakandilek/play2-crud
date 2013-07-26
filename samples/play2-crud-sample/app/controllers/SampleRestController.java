@@ -2,6 +2,8 @@ package controllers;
 
 import static play.libs.Json.toJson;
 
+import javax.inject.Inject;
+
 import com.google.common.collect.ImmutableMap;
 
 import models.Sample;
@@ -11,8 +13,9 @@ import play.utils.crud.APIController;
 
 public class SampleRestController extends APIController<Long, Sample> {
 
+	@Inject
 	public SampleRestController(SampleDAO dao) {
-		super(dao);
+		super(dao, Long.class, Sample.class);
 	}
 
 	@Override
