@@ -3,6 +3,7 @@ package play.utils.meta;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,14 +30,16 @@ import play.Application;
 
 public class ClasspathScanningModelRegistry implements ModelRegistry {
 
-	private List<ModelMetadata> models;
+	private Map<Class<?>, ModelMetadata> models;
+	private KeyConverterRegistry converters;
 
-	public ClasspathScanningModelRegistry(Application app) {
-		models = scan(app.classloader());
+	public ClasspathScanningModelRegistry(Application app, KeyConverterRegistry converters) {
+		this.converters = converters;
+		this.models = scan(app.classloader());
 	}
 
-	private List<ModelMetadata> scan(ClassLoader classloader) {
-		List<ModelMetadata> list = Lists.newArrayList();
+	private Map<Class<?>, ModelMetadata> scan(ClassLoader classloader) {
+		Map<Class<?>, ModelMetadata> map = Maps.newHashMap();
 
 		final Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(
 				ClasspathHelper.forPackage("", classloader)).setScanners(new SubTypesScanner(),
@@ -44,10 +47,10 @@ public class ClasspathScanningModelRegistry implements ModelRegistry {
 
 		Set<Class<?>> entities = reflections.getTypesAnnotatedWith(Entity.class);
 		for (Class<?> entity : entities) {
-			list.add(getMetadata(entity));
+			map.put(entity, getMetadata(entity));
 		}
 
-		return list;
+		return map;
 	}
 
 	private ModelMetadata getMetadata(Class<?> entity) {
@@ -82,13 +85,27 @@ public class ClasspathScanningModelRegistry implements ModelRegistry {
 									}
 								}))), fieldMetadata), fieldName);
 
-		ModelMetadata metadata = new ModelMetadata(entity, fields);
+		FieldMetadata keyField = Iterables.find(fields.values(), new Predicate<FieldMetadata>() {
+			@Override
+			public boolean apply(FieldMetadata fieldInfo) {
+				return fieldInfo.isKey();
+			}
+		});
+		
+		KeyConverter keyConverter = converters.getConverter(keyField.getType());
+		
+		ModelMetadata metadata = new ModelMetadata(entity, fields, keyField, keyConverter);
 		return metadata;
 	}
 
 	@Override
-	public List<ModelMetadata> getModels() {
-		return models;
+	public Collection<ModelMetadata> getModels() {
+		return models.values();
+	}
+
+	@Override
+	public <M> ModelMetadata getModel(Class<M> modelType) {
+		return models.get(modelType);
 	}
 
 	private FieldMetadata toFieldMetadata(Field field) {

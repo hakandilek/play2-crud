@@ -6,7 +6,9 @@ import play.Logger;
 import play.Logger.ALogger;
 import play.utils.inject.InjectAdapter;
 import play.utils.meta.ClasspathScanningControllerRegistry;
+import play.utils.meta.ClasspathScanningKeyConverterRegistry;
 import play.utils.meta.ClasspathScanningModelRegistry;
+import play.utils.meta.KeyConverterRegistry;
 import play.utils.meta.CrudControllerRegistry;
 import play.utils.meta.ModelRegistry;
 
@@ -27,8 +29,9 @@ public class CrudManager {
 	public void initialize(Application app) {
 		if (log.isDebugEnabled())
 			log.debug("initialize <-");
-		CrudControllerRegistry crudControllers = new ClasspathScanningControllerRegistry(app, global);
-		ModelRegistry models = new ClasspathScanningModelRegistry(app);
+		KeyConverterRegistry converters = new ClasspathScanningKeyConverterRegistry(app);
+		ModelRegistry models = new ClasspathScanningModelRegistry(app, converters);
+		CrudControllerRegistry crudControllers = new ClasspathScanningControllerRegistry(app, global, models);
 		restController = new DynamicRestController(crudControllers, models);
 	}
 

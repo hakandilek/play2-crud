@@ -21,39 +21,49 @@ public class ClasspathScanningControllerRegistry implements CrudControllerRegist
 
 	private static ALogger log = Logger.of(ClasspathScanningControllerRegistry.class);
 
-	private Map<Class<?>, ControllerProxy> controllers;
+	private Map<Class<?>, ControllerProxy<?, ?>> controllers;
 
+	private ModelRegistry models;
 
-	public ClasspathScanningControllerRegistry(Application app, GlobalSettings global) {
+	public ClasspathScanningControllerRegistry(Application app, GlobalSettings global, ModelRegistry models) {
 		if (log.isDebugEnabled())
 			log.debug("ClasspathScanningControllerRegistry <-");
 		if (log.isDebugEnabled())
 			log.debug("app : " + app);
 		if (log.isDebugEnabled())
 			log.debug("global : " + global);
-		
-		controllers = scan(app.classloader(), global);
+
+		this.models = models;
+		this.controllers = scan(app.classloader(), global);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public <K, M> ControllerProxy getController(K keyClass, M modelClass) {
+	public <K, M> ControllerProxy<K, M> getController(K keyClass, M modelClass) throws IncompatibleControllerException {
 		if (log.isDebugEnabled())
 			log.debug("getController <- key: " + keyClass + "  model: " + modelClass);
 
-		ControllerProxy controller = controllers.get(modelClass);
-		if (log.isDebugEnabled())
-			log.debug("controller : " + controller);
+		ControllerProxy<?, ?> cp = controllers.get(modelClass);
+		
+		ControllerProxy<K, M> controller = null;
+		try {
+			controller = ((ControllerProxy<K, M>) cp);
+			if (log.isDebugEnabled())
+				log.debug("controller : " + controller);
+		} catch (Exception e) {
+			throw new IncompatibleControllerException(keyClass, modelClass, cp);
+		}
 
 		return controller;
 	}
 
-	@SuppressWarnings("rawtypes")
-	private Map<Class<?>, ControllerProxy> scan(ClassLoader classloader, GlobalSettings global) {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private Map<Class<?>, ControllerProxy<?, ?>> scan(ClassLoader classloader, GlobalSettings global) {
 		final Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(
 				ClasspathHelper.forPackage("", classloader)).setScanners(new SubTypesScanner(),
 				new TypeAnnotationsScanner()));
 
-		Map<Class<?>, ControllerProxy> map = Maps.newHashMap();
+		Map<Class<?>, ControllerProxy<?, ?>> map = Maps.newHashMap();
 		Set<Class<? extends APIController>> controllerClasses = reflections.getSubTypesOf(APIController.class);
 		for (Class<? extends APIController> controllerClass : controllerClasses) {
 			try {
@@ -64,7 +74,8 @@ public class ClasspathScanningControllerRegistry implements CrudControllerRegist
 				if (controller != null) {
 					Class modelClass = controller.getModelClass();
 					log.info("Found controller:" + controllerClass + " (" + modelClass + ")");
-					map.put(modelClass, new ControllerProxy(controller));
+					ModelMetadata model = models.getModel(modelClass);
+					map.put(modelClass, new ControllerProxy(controller, model));
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
