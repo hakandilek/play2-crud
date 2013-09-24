@@ -2,6 +2,6 @@ package play.utils.meta;
 
 public interface KeyConverterRegistry {
 
-	KeyConverter getConverter(Class<?> type);
+	<K> KeyConverter<K> getConverter(Class<K> type);
 
 }

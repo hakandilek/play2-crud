@@ -5,12 +5,13 @@
 @main(if(key != null) "update sample" else "new sample") {
         
 	<h3>@if(key != null) { update sample } else { new sample } </h3>
-    
-    @form(if(key != null) { routes.Application.sampleUpdate(sampleForm.get().getKey()) } 
-          else             { routes.Application.sampleCreate() }) { 
+
+    @form(if(key != null) { play.utils.crud.routes.DynamicCrudController.update("Sample", sampleForm.get().getKey() + "") } 
+          else            { play.utils.crud.routes.DynamicCrudController.create("Sample") }) { 
+        
         @inputText(sampleForm("name"), args = '_label -> "name")
         <div>
            <input type="submit" class="btn btn-success" value="@if(key != null) { Update } else { Create }">
         </div>
-    } 
+    }
 }

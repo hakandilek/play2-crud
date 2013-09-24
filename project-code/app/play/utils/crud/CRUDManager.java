@@ -12,17 +12,19 @@ import play.utils.meta.KeyConverterRegistry;
 import play.utils.meta.CrudControllerRegistry;
 import play.utils.meta.ModelRegistry;
 
-public class CrudManager {
+public class CRUDManager {
 
-	private static ALogger log = Logger.of(CrudManager.class);
-
-	DynamicRestController restController;
+	private static ALogger log = Logger.of(CRUDManager.class);
 
 	GlobalSettings global;
 
 	InjectAdapter injections = InjectAdapter.getInstance();
 
-	public CrudManager(GlobalSettings global) {
+	DynamicRestController dynamicRestController;
+
+	DynamicCrudController dynamicCrudController;
+
+	public CRUDManager(GlobalSettings global) {
 		this.global = global;
 	}
 
@@ -32,14 +34,18 @@ public class CrudManager {
 		KeyConverterRegistry converters = new ClasspathScanningKeyConverterRegistry(app);
 		ModelRegistry models = new ClasspathScanningModelRegistry(app, converters);
 		CrudControllerRegistry crudControllers = new ClasspathScanningControllerRegistry(app, global, models);
-		restController = new DynamicRestController(crudControllers, models);
+		dynamicRestController = new DynamicRestController(crudControllers, models);
+		dynamicCrudController = new DynamicCrudController(crudControllers, models);
 	}
 
 	@SuppressWarnings("unchecked")
 	public <A> A getController(Class<A> type) throws Exception {
 		if (DynamicRestController.class.equals(type))
-			return (A) restController;
-		
+			return (A) dynamicRestController;
+
+		if (DynamicCrudController.class.equals(type))
+			return (A) dynamicCrudController;
+
 		return injections.getInstance(type);
 	}
 

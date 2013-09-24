@@ -86,7 +86,7 @@ public class SampleRestControllerTest {
 
 	@Test
 	public void testGet() {
-		Result result = controller.get(42L);
+		Result result = controller.read(42L);
 		
 		assertThat(result).isNotNull();
 		RestResult res = toEntity(result, RestResult.class);

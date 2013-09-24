@@ -1,19 +1,21 @@
-package play.utils.meta;
+package play.utils.crud;
 
 import play.mvc.Controller;
 import play.mvc.Result;
-import play.utils.crud.APIController;
+import play.utils.meta.KeyConverter;
+import play.utils.meta.ModelMetadata;
 
-public class ControllerProxy<K, M> extends Controller {
+public class ControllerProxyREST<K, M> extends Controller {
 
-	private APIController<K, M> delegate;
-	private ModelMetadata model;
-	private KeyConverter keyConverter;
+	protected CRUD<K, M> delegate;
+	protected ModelMetadata model;
+	protected KeyConverter<K> keyConverter;
 
-	public ControllerProxy(APIController<K, M> delegate, ModelMetadata model) {
+	@SuppressWarnings("unchecked")
+	public ControllerProxyREST(CRUD<K, M> delegate, ModelMetadata model) {
 		this.delegate = delegate;
 		this.model = model;
-		this.keyConverter = model.getKeyConverter();
+		this.keyConverter = (KeyConverter<K>) model.getKeyConverter();
 	}
 
 	public Result list() {
@@ -26,7 +28,7 @@ public class ControllerProxy<K, M> extends Controller {
 
 	public Result show(String key) {
 		K k = keyConverter.convert(key);
-		return delegate.get(k);
+		return delegate.read(k);
 	}
 
 	public Result update(String key) {

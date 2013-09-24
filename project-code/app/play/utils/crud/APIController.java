@@ -119,7 +119,7 @@ public abstract class APIController<K, M> extends Controller implements CRUD<K, 
 		return ok(toJson(ImmutableMap.of("status", "OK", "list", list)));
 	}
 
-	public Result get(K key) {
+	public Result read(K key) {
 		M model = dao.get(key);
 		if (model == null) {
 			return notFound(toJson(ImmutableMap.of("status", "NOT_FOUND", "key", key)));

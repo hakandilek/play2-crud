@@ -92,7 +92,7 @@ public class ClasspathScanningModelRegistry implements ModelRegistry {
 			}
 		});
 		
-		KeyConverter keyConverter = converters.getConverter(keyField.getType());
+		KeyConverter<?> keyConverter = converters.getConverter(keyField.getType());
 		
 		ModelMetadata metadata = new ModelMetadata(entity, fields, keyField, keyConverter);
 		return metadata;

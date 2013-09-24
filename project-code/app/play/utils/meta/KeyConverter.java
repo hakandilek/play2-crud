@@ -1,10 +1,16 @@
 package play.utils.meta;
 
-public class KeyConverter {
+public abstract class KeyConverter<K> {
 
-	public <K> K convert(String key) {
-		// TODO Auto-generated method stub
-		return null;
+	private Class<K> keyClass;
+
+	public KeyConverter(Class<K> keyClass) {
+		this.keyClass = keyClass;
 	}
 
+	public abstract K convert(String key);
+
+	public Class<K> keyClass() {
+		return keyClass;
+	}
 }

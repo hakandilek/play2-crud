@@ -1,0 +1,9 @@
+# CRUD Routes
+# ~~~~
+
+GET		/:model/list		@play.utils.crud.DynamicCrudController.list(model: String)
+GET     /:model/new         @play.utils.crud.DynamicCrudController.newForm(model: String)
+POST	/:model/create		@play.utils.crud.DynamicCrudController.create(model: String)
+GET		/:model/:key		@play.utils.crud.DynamicCrudController.show(model: String, key: String)
+PUT		/:model/:key		@play.utils.crud.DynamicCrudController.update(model: String, key: String)
+DELETE	/:model/:key		@play.utils.crud.DynamicCrudController.delete(model: String, key: String)

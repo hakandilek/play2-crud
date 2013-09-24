@@ -10,9 +10,9 @@ public class ModelMetadata {
 
 	Map<String, FieldMetadata> fields;
 
-	KeyConverter keyConverter;
+	KeyConverter<?> keyConverter;
 
-	public ModelMetadata(Class<?> type, Map<String, FieldMetadata> allFields, FieldMetadata keyField, KeyConverter keyConverter) {
+	public ModelMetadata(Class<?> type, Map<String, FieldMetadata> allFields, FieldMetadata keyField, KeyConverter<?> keyConverter) {
 		this.type = type;
 		this.fields = allFields;
 		this.keyField = keyField;
@@ -35,7 +35,7 @@ public class ModelMetadata {
 		return fields;
 	}
 
-	public KeyConverter getKeyConverter() {
+	public KeyConverter<?> getKeyConverter() {
 		return keyConverter;
 	}
 

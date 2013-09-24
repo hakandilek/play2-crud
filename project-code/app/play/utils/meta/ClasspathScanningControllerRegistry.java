@@ -14,6 +14,10 @@ import play.GlobalSettings;
 import play.Logger;
 import play.Logger.ALogger;
 import play.utils.crud.APIController;
+import play.utils.crud.CRUD;
+import play.utils.crud.CRUDController;
+import play.utils.crud.ControllerProxyCRUD;
+import play.utils.crud.ControllerProxyREST;
 
 import com.google.common.collect.Maps;
 
@@ -21,7 +25,8 @@ public class ClasspathScanningControllerRegistry implements CrudControllerRegist
 
 	private static ALogger log = Logger.of(ClasspathScanningControllerRegistry.class);
 
-	private Map<Class<?>, ControllerProxy<?, ?>> controllers;
+	private Map<Class<?>, ControllerProxyREST<?, ?>> restControllers;
+	private Map<Class<?>, ControllerProxyCRUD<?, ?>> crudControllers;
 
 	private ModelRegistry models;
 
@@ -34,20 +39,17 @@ public class ClasspathScanningControllerRegistry implements CrudControllerRegist
 			log.debug("global : " + global);
 
 		this.models = models;
-		this.controllers = scan(app.classloader(), global);
+		this.restControllers = scanRest(app.classloader(), global, APIController.class);
+		this.crudControllers = scanCrud(app.classloader(), global, CRUDController.class);
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
-	public <K, M> ControllerProxy<K, M> getController(K keyClass, M modelClass) throws IncompatibleControllerException {
-		if (log.isDebugEnabled())
-			log.debug("getController <- key: " + keyClass + "  model: " + modelClass);
-
-		ControllerProxy<?, ?> cp = controllers.get(modelClass);
+	public <K, M> ControllerProxyREST<K, M> getRestController(K keyClass, M modelClass, Map<Class<?>, ControllerProxyREST<?, ?>> controllers) throws IncompatibleControllerException {
+		ControllerProxyREST<?, ?> cp = controllers.get(modelClass);
 		
-		ControllerProxy<K, M> controller = null;
+		ControllerProxyREST<K, M> controller = null;
 		try {
-			controller = ((ControllerProxy<K, M>) cp);
+			controller = ((ControllerProxyREST<K, M>) cp);
 			if (log.isDebugEnabled())
 				log.debug("controller : " + controller);
 		} catch (Exception e) {
@@ -55,27 +57,86 @@ public class ClasspathScanningControllerRegistry implements CrudControllerRegist
 		}
 
 		return controller;
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <K, M> ControllerProxyCRUD<K, M> getCrudController(K keyClass, M modelClass, Map<Class<?>, ControllerProxyCRUD<?, ?>> controllers) throws IncompatibleControllerException {
+		ControllerProxyCRUD<?, ?> cp = controllers.get(modelClass);
+		
+		ControllerProxyCRUD<K, M> controller = null;
+		try {
+			controller = ((ControllerProxyCRUD<K, M>) cp);
+			if (log.isDebugEnabled())
+				log.debug("controller : " + controller);
+		} catch (Exception e) {
+			throw new IncompatibleControllerException(keyClass, modelClass, cp);
+		}
+
+		return controller;
+		
+	}
+
+	@Override
+	public <K, M> ControllerProxyREST<K, M> getRestController(K keyClass, M modelClass) throws IncompatibleControllerException {
+		if (log.isDebugEnabled())
+			log.debug("getApiController <- key: " + keyClass + "  model: " + modelClass);
+		return getRestController(keyClass, modelClass, restControllers);
+	}
+
+	@Override
+	public <K, M> ControllerProxyCRUD<K, M> getCrudController(K keyClass, M modelClass) throws IncompatibleControllerException {
+		if (log.isDebugEnabled())
+			log.debug("getCrudController <- key: " + keyClass + "  model: " + modelClass);
+		return getCrudController(keyClass, modelClass, crudControllers);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Map<Class<?>, ControllerProxy<?, ?>> scan(ClassLoader classloader, GlobalSettings global) {
+	private <C extends CRUD> Map<Class<?>, ControllerProxyREST<?, ?>> scanRest(ClassLoader classloader, GlobalSettings global, Class<C> superType) {
 		final Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(
 				ClasspathHelper.forPackage("", classloader)).setScanners(new SubTypesScanner(),
 				new TypeAnnotationsScanner()));
 
-		Map<Class<?>, ControllerProxy<?, ?>> map = Maps.newHashMap();
-		Set<Class<? extends APIController>> controllerClasses = reflections.getSubTypesOf(APIController.class);
-		for (Class<? extends APIController> controllerClass : controllerClasses) {
+		Map<Class<?>, ControllerProxyREST<?, ?>> map = Maps.newHashMap();
+		Set<Class<? extends C>> controllerClasses = reflections.getSubTypesOf(superType);
+		for (Class<? extends C> controllerClass : controllerClasses) {
 			try {
 				if (log.isDebugEnabled())
 					log.debug("controllerClass : " + controllerClass);
 
-				APIController controller = global.getControllerInstance(controllerClass);
+				C controller = global.getControllerInstance(controllerClass);
 				if (controller != null) {
 					Class modelClass = controller.getModelClass();
 					log.info("Found controller:" + controllerClass + " (" + modelClass + ")");
 					ModelMetadata model = models.getModel(modelClass);
-					map.put(modelClass, new ControllerProxy(controller, model));
+					map.put(modelClass, new ControllerProxyREST(controller, model));
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return map;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private <C extends CRUD> Map<Class<?>, ControllerProxyCRUD<?, ?>> scanCrud(ClassLoader classloader, GlobalSettings global, Class<C> superType) {
+		final Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(
+				ClasspathHelper.forPackage("", classloader)).setScanners(new SubTypesScanner(),
+				new TypeAnnotationsScanner()));
+
+		Map<Class<?>, ControllerProxyCRUD<?, ?>> map = Maps.newHashMap();
+		Set<Class<? extends C>> controllerClasses = reflections.getSubTypesOf(superType);
+		for (Class<? extends C> controllerClass : controllerClasses) {
+			try {
+				if (log.isDebugEnabled())
+					log.debug("controllerClass : " + controllerClass);
+
+				C controller = global.getControllerInstance(controllerClass);
+				if (controller != null) {
+					Class modelClass = controller.getModelClass();
+					log.info("Found controller:" + controllerClass + " (" + modelClass + ")");
+					ModelMetadata model = models.getModel(modelClass);
+					map.put(modelClass, new ControllerProxyCRUD(controller, model));
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
