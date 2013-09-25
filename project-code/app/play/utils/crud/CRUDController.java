@@ -9,7 +9,7 @@ import play.utils.dao.EntityNotFoundException;
 
 import com.avaje.ebean.Page;
 
-public abstract class CRUDController<K, M extends BasicModel<K>> extends DynamicTemplateController implements
+public abstract class CRUDController<K, M extends BasicModel<K>> extends TemplateController implements
 		CRUD<K, M> {
 
 	private final DAO<K, M> dao;

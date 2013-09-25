@@ -1,5 +1,7 @@
 package play.utils.crud;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 import org.springframework.util.StringUtils;
@@ -10,6 +12,7 @@ import play.cache.Cache;
 import play.libs.F;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.utils.dyn.DynamicRestController;
 import play.utils.meta.CrudControllerRegistry;
 import play.utils.meta.IncompatibleControllerException;
 import play.utils.meta.ModelMetadata;
@@ -19,14 +22,16 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
 @SuppressWarnings("rawtypes")
-public abstract class DynamicController extends Controller {
+public abstract class RouterController extends Controller {
 	
-	private static ALogger log = Logger.of(DynamicController.class);
+	private static ALogger log = Logger.of(RouterController.class);
 
 	protected ModelRegistry modelRegistry;
 	protected CrudControllerRegistry controllerRegistry;
 
-	public DynamicController(CrudControllerRegistry controllerRegistry, ModelRegistry modelRegistry) {
+	private Map<Class<?>, ControllerProxyREST<?, ?>> dynamicControllers = new HashMap<Class<?>, ControllerProxyREST<?, ?>>();
+
+	public RouterController(CrudControllerRegistry controllerRegistry, ModelRegistry modelRegistry) {
 		this.controllerRegistry = controllerRegistry;
 		this.modelRegistry = modelRegistry;
 	}
@@ -115,17 +120,17 @@ public abstract class DynamicController extends Controller {
 
 		ModelMetadata model = modelInfo.get();
 
-		F.Option<? extends ControllerProxyREST<?,?>> crud;
+		ControllerProxyREST<?,?> crud;
 		try {
 			crud = getController(model);
 		} catch (IncompatibleControllerException e) {
 			crud = null;
 		}
 
-		if (crud == null || !crud.isDefined())
+		if (crud == null)
 			return F.Either.Right(notFound("Controller for model " + model.getType() + " not found"));
 
-		ControllerProxyREST controller = crud.get();
+		ControllerProxyREST controller = crud;
 		return F.Either.Left(controller);
 	}
 
@@ -152,12 +157,25 @@ public abstract class DynamicController extends Controller {
 		return modelInfo == null ? F.Option.<ModelMetadata> None() : F.Option.Some(modelInfo);
 	}
 
-	protected F.Option<? extends ControllerProxyREST<?,?>> getController(ModelMetadata model)
+	protected ControllerProxyREST<?,?> getController(ModelMetadata model)
 			throws IncompatibleControllerException {
 		Class<?> keyType = model.getKeyField().getType();
 		Class<?> modelType = model.getType();
 		ControllerProxyREST<?,?> crud = getControllerProxy(keyType, modelType);
-		return crud == null ? F.Option.<ControllerProxyREST<?,?>> None() : F.Option.Some(crud);
+		if (crud == null)
+			crud = getDynamicController(keyType, modelType, model);
+		return crud;
+	}
+
+	@SuppressWarnings("unchecked")
+	protected ControllerProxyREST<?, ?> getDynamicController(Class<?> keyType, Class<?> modelType, ModelMetadata model) {
+		ControllerProxyREST<?, ?> proxy = dynamicControllers.get(modelType);
+		if (proxy == null) {
+			DynamicRestController dynController = new DynamicRestController(model);
+			proxy = new ControllerProxyREST<>(dynController, model);
+			dynamicControllers.put(modelType, proxy);
+		}
+		return proxy;
 	}
 
 	protected abstract ControllerProxyREST<?, ?> getControllerProxy(Class<?> keyType, Class<?> modelType) throws IncompatibleControllerException;

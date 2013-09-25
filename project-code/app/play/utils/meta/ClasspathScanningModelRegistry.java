@@ -31,9 +31,9 @@ import play.Application;
 public class ClasspathScanningModelRegistry implements ModelRegistry {
 
 	private Map<Class<?>, ModelMetadata> models;
-	private KeyConverterRegistry converters;
+	private ConverterRegistry converters;
 
-	public ClasspathScanningModelRegistry(Application app, KeyConverterRegistry converters) {
+	public ClasspathScanningModelRegistry(Application app, ConverterRegistry converters) {
 		this.converters = converters;
 		this.models = scan(app.classloader());
 	}
@@ -92,9 +92,7 @@ public class ClasspathScanningModelRegistry implements ModelRegistry {
 			}
 		});
 		
-		KeyConverter<?> keyConverter = converters.getConverter(keyField.getType());
-		
-		ModelMetadata metadata = new ModelMetadata(entity, fields, keyField, keyConverter);
+		ModelMetadata metadata = new ModelMetadata(entity, fields, keyField);
 		return metadata;
 	}
 
@@ -109,7 +107,8 @@ public class ClasspathScanningModelRegistry implements ModelRegistry {
 	}
 
 	private FieldMetadata toFieldMetadata(Field field) {
-		return new FieldMetadata(field);
+		Converter<?> converter = converters.getConverter(field.getType());
+		return new FieldMetadata(field, converter);
 	}
 
 	private Function<Field, FieldMetadata> extractFieldMetadata() {

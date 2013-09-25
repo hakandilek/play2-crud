@@ -1,8 +1,8 @@
 package play.utils.meta.convert;
 
-import play.utils.meta.KeyConverter;
+import play.utils.meta.Converter;
 
-public class LongConverter extends KeyConverter<Long> {
+public class LongConverter extends Converter<Long> {
 
 	public LongConverter() {
 		super(Long.class);

@@ -1,8 +1,8 @@
 package play.utils.meta.convert;
 
-import play.utils.meta.KeyConverter;
+import play.utils.meta.Converter;
 
-public class DoubleConverter extends KeyConverter<Double> {
+public class DoubleConverter extends Converter<Double> {
 
 	public DoubleConverter() {
 		super(Double.class);

@@ -14,34 +14,34 @@ import play.Application;
 import play.Logger;
 import play.Logger.ALogger;
 
-public class ClasspathScanningKeyConverterRegistry implements KeyConverterRegistry {
+public class ClasspathScanningConverterRegistry implements ConverterRegistry {
 
-	private static ALogger log = Logger.of(ClasspathScanningKeyConverterRegistry.class);
+	private static ALogger log = Logger.of(ClasspathScanningConverterRegistry.class);
 
-	private Map<Class<?>, KeyConverter<?>> converters;
+	private Map<Class<?>, Converter<?>> converters;
 
-	public ClasspathScanningKeyConverterRegistry(Application app) {
+	public ClasspathScanningConverterRegistry(Application app) {
 		this.converters = scan(app.classloader());
 	}
 
 	@SuppressWarnings("rawtypes")
-	private Map<Class<?>, KeyConverter<?>> scan(ClassLoader classloader) {
+	private Map<Class<?>, Converter<?>> scan(ClassLoader classloader) {
 		final Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(
 				ClasspathHelper.forPackage("", classloader)).setScanners(new SubTypesScanner(false)));
 
-		Map<Class<?>, KeyConverter<?>> map = Maps.newHashMap();
-		Set<Class<? extends KeyConverter>> converterClasses = reflections.getSubTypesOf(KeyConverter.class);
+		Map<Class<?>, Converter<?>> map = Maps.newHashMap();
+		Set<Class<? extends Converter>> converterClasses = reflections.getSubTypesOf(Converter.class);
 		if (log.isDebugEnabled())
 			log.debug("converterClasses : " + converterClasses);
 
-		for (Class<? extends KeyConverter> converterClass : converterClasses) {
+		for (Class<? extends Converter> converterClass : converterClasses) {
 			try {
 				if (log.isDebugEnabled())
 					log.debug("converterClass : " + converterClass);
 
-				KeyConverter converter = converterClass.newInstance();
+				Converter converter = converterClass.newInstance();
 				if (converter != null) {
-					Class<?> keyClass = converter.keyClass();
+					Class<?> keyClass = converter.typeClass();
 					log.info("Converter:" + keyClass + " : " + converter);
 					map.put(keyClass, converter);
 				}
@@ -54,8 +54,8 @@ public class ClasspathScanningKeyConverterRegistry implements KeyConverterRegist
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <K> KeyConverter<K> getConverter(Class<K> type) {
-		return (KeyConverter<K>) converters.get(type);
+	public <K> Converter<K> getConverter(Class<K> type) {
+		return (Converter<K>) converters.get(type);
 	}
 
 }

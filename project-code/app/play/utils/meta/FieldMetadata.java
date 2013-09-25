@@ -8,9 +8,11 @@ public class FieldMetadata {
 
 	Field field;
 	boolean key;
+	Converter<?> converter;
 
-	public FieldMetadata(Field field) {
+	public FieldMetadata(Field field, Converter<?> converter) {
 		this.field = field;
+		this.converter = converter;
 		if (field.isAnnotationPresent(Id.class))
 			key = true;
 	}
@@ -25,6 +27,10 @@ public class FieldMetadata {
 
 	public boolean isKey() {
 		return key;
+	}
+
+	public Converter<?> getConverter() {
+		return converter;
 	}
 
 }

@@ -10,11 +10,11 @@ import play.utils.meta.ModelMetadata;
 import play.utils.meta.ModelRegistry;
 
 @SuppressWarnings("rawtypes")
-public class DynamicCrudController extends DynamicController {
+public class RouterCrudController extends RouterController {
 
-	private static ALogger log = Logger.of(DynamicCrudController.class);
+	private static ALogger log = Logger.of(RouterCrudController.class);
 	
-	public DynamicCrudController(CrudControllerRegistry controllerRegistry, ModelRegistry modelRegistry) {
+	public RouterCrudController(CrudControllerRegistry controllerRegistry, ModelRegistry modelRegistry) {
 		super(controllerRegistry, modelRegistry);
 	}
 
@@ -38,26 +38,26 @@ public class DynamicCrudController extends DynamicController {
 
 		ModelMetadata model = modelInfo.get();
 
-		F.Option<? extends ControllerProxyCRUD<?,?>> crud;
+		ControllerProxyCRUD<?,?> crud;
 		try {
 			crud = getCrudController(model);
 		} catch (IncompatibleControllerException e) {
 			crud = null;
 		}
 
-		if (crud == null || !crud.isDefined())
+		if (crud == null)
 			return F.Either.Right(notFound("Controller for model " + model.getType() + " not found"));
 
-		ControllerProxyCRUD controller = crud.get();
+		ControllerProxyCRUD controller = crud;
 		return F.Either.Left(controller);
 	}
 	
-	protected F.Option<? extends ControllerProxyCRUD<?,?>> getCrudController(ModelMetadata model)
+	protected ControllerProxyCRUD<?,?> getCrudController(ModelMetadata model)
 			throws IncompatibleControllerException {
 		Class<?> keyType = model.getKeyField().getType();
 		Class<?> modelType = model.getType();
 		ControllerProxyCRUD<?,?> crud = getControllerProxy(keyType, modelType);
-		return crud == null ? F.Option.<ControllerProxyCRUD<?,?>> None() : F.Option.Some(crud);
+		return crud;
 	}
 	
 	protected ControllerProxyCRUD<?, ?> getControllerProxy(Class<?> keyType, Class<?> modelType) throws IncompatibleControllerException {

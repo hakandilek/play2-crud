@@ -6,8 +6,8 @@
         
 	<h3>@if(key != null) { update sample } else { new sample } </h3>
 
-    @form(if(key != null) { play.utils.crud.routes.DynamicCrudController.update("Sample", sampleForm.get().getKey() + "") } 
-          else            { play.utils.crud.routes.DynamicCrudController.create("Sample") }) { 
+    @form(if(key != null) { play.utils.crud.routes.RouterCrudController.update("Sample", sampleForm.get().getKey() + "") } 
+          else            { play.utils.crud.routes.RouterCrudController.create("Sample") }) { 
         
         @inputText(sampleForm("name"), args = '_label -> "name")
         <div>

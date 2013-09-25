@@ -7,8 +7,6 @@ public interface CRUD<K, M> {
 
 	DAO<K, M> getDao();
 
-	Class<K> getKeyClass();
-
 	Class<M> getModelClass();
 
 	Result create();

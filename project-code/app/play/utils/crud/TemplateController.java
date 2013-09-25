@@ -10,7 +10,7 @@ import play.mvc.Content;
 import play.mvc.Controller;
 import play.mvc.Result;
 
-public class DynamicTemplateController extends Controller {
+public class TemplateController extends Controller {
 
 	protected final ALogger log = Logger.of(getClass());
 

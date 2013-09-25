@@ -1,5 +1,6 @@
 package play.utils.meta;
 
+import java.lang.reflect.Field;
 import java.util.Map;
 
 public class ModelMetadata {
@@ -10,13 +11,10 @@ public class ModelMetadata {
 
 	Map<String, FieldMetadata> fields;
 
-	KeyConverter<?> keyConverter;
-
-	public ModelMetadata(Class<?> type, Map<String, FieldMetadata> allFields, FieldMetadata keyField, KeyConverter<?> keyConverter) {
+	public ModelMetadata(Class<?> type, Map<String, FieldMetadata> allFields, FieldMetadata keyField) {
 		this.type = type;
 		this.fields = allFields;
 		this.keyField = keyField;
-		this.keyConverter = keyConverter;
 	}
 
 	public Class<?> getType() {
@@ -35,8 +33,16 @@ public class ModelMetadata {
 		return fields;
 	}
 
-	public KeyConverter<?> getKeyConverter() {
-		return keyConverter;
+	public Converter<?> getKeyConverter() {
+		return keyField.getConverter();
+	}
+
+	public <M> void setField(M modelObject, String fieldName, String valueStr) throws IllegalArgumentException, IllegalAccessException {
+		FieldMetadata fieldMeta = fields.get(fieldName);
+		Converter<?> converter = fieldMeta.getConverter();
+		Field field = fieldMeta.getField();
+		Object value = converter.convert(valueStr);
+		field.set(modelObject, value);
 	}
 
 }

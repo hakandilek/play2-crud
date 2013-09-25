@@ -2,20 +2,20 @@ package play.utils.crud;
 
 import play.mvc.Controller;
 import play.mvc.Result;
-import play.utils.meta.KeyConverter;
+import play.utils.meta.Converter;
 import play.utils.meta.ModelMetadata;
 
 public class ControllerProxyREST<K, M> extends Controller {
 
 	protected CRUD<K, M> delegate;
 	protected ModelMetadata model;
-	protected KeyConverter<K> keyConverter;
+	protected Converter<K> keyConverter;
 
 	@SuppressWarnings("unchecked")
 	public ControllerProxyREST(CRUD<K, M> delegate, ModelMetadata model) {
 		this.delegate = delegate;
 		this.model = model;
-		this.keyConverter = (KeyConverter<K>) model.getKeyConverter();
+		this.keyConverter = (Converter<K>) model.getKeyConverter();
 	}
 
 	public Result list() {
