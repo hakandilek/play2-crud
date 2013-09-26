@@ -2,8 +2,10 @@ package play.utils.crud;
 
 import play.Logger;
 import play.Logger.ALogger;
+import play.api.mvc.Call;
 import play.libs.F;
 import play.mvc.Result;
+import play.utils.dyn.DynamicCrudController;
 import play.utils.meta.CrudControllerRegistry;
 import play.utils.meta.IncompatibleControllerException;
 import play.utils.meta.ModelMetadata;
@@ -13,54 +15,38 @@ import play.utils.meta.ModelRegistry;
 public class RouterCrudController extends RouterController {
 
 	private static ALogger log = Logger.of(RouterCrudController.class);
+	private ClassLoader classLoader;
 	
-	public RouterCrudController(CrudControllerRegistry controllerRegistry, ModelRegistry modelRegistry) {
+	public RouterCrudController(ClassLoader classLoader, CrudControllerRegistry controllerRegistry, ModelRegistry modelRegistry) {
 		super(controllerRegistry, modelRegistry);
+		this.classLoader = classLoader;
 	}
 
 	public Result newForm(String name) {
 		if (log.isDebugEnabled())
 			log.debug("newForm <- " + name);
-		F.Either<ControllerProxyCRUD, ? extends Result> cnf = crudControllerOrNotFound(name);
+		F.Either<ControllerProxy, ? extends Result> cnf = controllerOrNotFound(name);
 		if (cnf.right.isDefined())
 			return cnf.right.get();
-		ControllerProxyCRUD controller = cnf.left.get();
+		ControllerProxyCRUD controller = (ControllerProxyCRUD) cnf.left.get();
 		if (controller == null) {
 			return controllerNotFound(name);
 		}
 		return controller.newForm();
 	}
 	
-	protected F.Either<ControllerProxyCRUD, ? extends Result> crudControllerOrNotFound(final String name) {
-		F.Option<ModelMetadata> modelInfo = getModel(name);
-		if (!modelInfo.isDefined())
-			return F.Either.Right(notFound("Model with name " + name + " not found!"));
-
-		ModelMetadata model = modelInfo.get();
-
-		ControllerProxyCRUD<?,?> crud;
-		try {
-			crud = getCrudController(model);
-		} catch (IncompatibleControllerException e) {
-			crud = null;
+	@SuppressWarnings("unchecked")
+	protected ControllerProxy<?, ?> getDynamicController(Class<?> keyType, Class<?> modelType, ModelMetadata model) {
+		ControllerProxy<?, ?> proxy = dynamicCrudControllers.get(modelType);
+		if (proxy == null) {
+			DynamicCrudController dynController = new DynamicCrudController(classLoader, model, new Call("GET", "/"));
+			proxy = new ControllerProxyCRUD<>(dynController, model);
+			dynamicCrudControllers.put(modelType, proxy);
 		}
-
-		if (crud == null)
-			return F.Either.Right(notFound("Controller for model " + model.getType() + " not found"));
-
-		ControllerProxyCRUD controller = crud;
-		return F.Either.Left(controller);
+		return proxy;
 	}
-	
-	protected ControllerProxyCRUD<?,?> getCrudController(ModelMetadata model)
-			throws IncompatibleControllerException {
-		Class<?> keyType = model.getKeyField().getType();
-		Class<?> modelType = model.getType();
-		ControllerProxyCRUD<?,?> crud = getControllerProxy(keyType, modelType);
-		return crud;
-	}
-	
-	protected ControllerProxyCRUD<?, ?> getControllerProxy(Class<?> keyType, Class<?> modelType) throws IncompatibleControllerException {
+
+	protected ControllerProxy<?, ?> getControllerProxy(Class<?> keyType, Class<?> modelType) throws IncompatibleControllerException {
 		return controllerRegistry.getCrudController(keyType, modelType);
 	}
 

@@ -17,6 +17,7 @@ import play.utils.crud.APIController;
 import play.utils.crud.CRUD;
 import play.utils.crud.CRUDController;
 import play.utils.crud.ControllerProxyCRUD;
+import play.utils.crud.ControllerProxy;
 import play.utils.crud.ControllerProxyREST;
 
 import com.google.common.collect.Maps;
@@ -25,7 +26,7 @@ public class ClasspathScanningControllerRegistry implements CrudControllerRegist
 
 	private static ALogger log = Logger.of(ClasspathScanningControllerRegistry.class);
 
-	private Map<Class<?>, ControllerProxyREST<?, ?>> restControllers;
+	private Map<Class<?>, ControllerProxy<?, ?>> restControllers;
 	private Map<Class<?>, ControllerProxyCRUD<?, ?>> crudControllers;
 
 	private ModelRegistry models;
@@ -44,12 +45,12 @@ public class ClasspathScanningControllerRegistry implements CrudControllerRegist
 	}
 
 	@SuppressWarnings("unchecked")
-	public <K, M> ControllerProxyREST<K, M> getRestController(K keyClass, M modelClass, Map<Class<?>, ControllerProxyREST<?, ?>> controllers) throws IncompatibleControllerException {
-		ControllerProxyREST<?, ?> cp = controllers.get(modelClass);
+	public <K, M> ControllerProxy<K, M> getRestController(K keyClass, M modelClass, Map<Class<?>, ControllerProxy<?, ?>> controllers) throws IncompatibleControllerException {
+		ControllerProxy<?, ?> cp = controllers.get(modelClass);
 		
-		ControllerProxyREST<K, M> controller = null;
+		ControllerProxy<K, M> controller = null;
 		try {
-			controller = ((ControllerProxyREST<K, M>) cp);
+			controller = ((ControllerProxy<K, M>) cp);
 			if (log.isDebugEnabled())
 				log.debug("controller : " + controller);
 		} catch (Exception e) {
@@ -78,7 +79,7 @@ public class ClasspathScanningControllerRegistry implements CrudControllerRegist
 	}
 
 	@Override
-	public <K, M> ControllerProxyREST<K, M> getRestController(K keyClass, M modelClass) throws IncompatibleControllerException {
+	public <K, M> ControllerProxy<K, M> getRestController(K keyClass, M modelClass) throws IncompatibleControllerException {
 		if (log.isDebugEnabled())
 			log.debug("getApiController <- key: " + keyClass + "  model: " + modelClass);
 		return getRestController(keyClass, modelClass, restControllers);
@@ -92,12 +93,12 @@ public class ClasspathScanningControllerRegistry implements CrudControllerRegist
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private <C extends CRUD> Map<Class<?>, ControllerProxyREST<?, ?>> scanRest(ClassLoader classloader, GlobalSettings global, Class<C> superType) {
+	private <C extends CRUD> Map<Class<?>, ControllerProxy<?, ?>> scanRest(ClassLoader classloader, GlobalSettings global, Class<C> superType) {
 		final Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(
 				ClasspathHelper.forPackage("", classloader)).setScanners(new SubTypesScanner(),
 				new TypeAnnotationsScanner()));
 
-		Map<Class<?>, ControllerProxyREST<?, ?>> map = Maps.newHashMap();
+		Map<Class<?>, ControllerProxy<?, ?>> map = Maps.newHashMap();
 		Set<Class<? extends C>> controllerClasses = reflections.getSubTypesOf(superType);
 		for (Class<? extends C> controllerClass : controllerClasses) {
 			try {

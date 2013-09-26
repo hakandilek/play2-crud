@@ -1,4 +1,4 @@
-@(page: com.avaje.ebean.Page[Sample])
+@(page: com.avaje.ebean.Page[Simple])
 @import helper._ 
 @import helper.twitterBootstrap._
 
@@ -17,18 +17,18 @@
     <table class="table table-striped table-bordered">
         <thead>
             <tr>
+                <th class="header">key</th>
                 <th class="header">name</th>
-                <th class="header">random value</th>
             </tr>
         </thead>
         <tbody>
-        @for(sample <- page.getList()) {
+        @for(simple <- page.getList()) {
             <tr>
                 <td>
-                	@sample.getName()
+                	@simple.getKey()
                	</td>
                 <td>
-                	@sample.getRandomValue()
+                	@simple.getName()
                	</td>
             </tr>
         }

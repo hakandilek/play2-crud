@@ -1,5 +1,7 @@
 package play.utils.crud;
 
+import play.Logger;
+import play.Logger.ALogger;
 import play.data.Form;
 import play.mvc.Call;
 import play.mvc.Result;
@@ -12,6 +14,8 @@ import com.avaje.ebean.Page;
 public abstract class CRUDController<K, M extends BasicModel<K>> extends TemplateController implements
 		CRUD<K, M> {
 
+	private static ALogger log = Logger.of(CRUDController.class);
+	
 	private final DAO<K, M> dao;
 
 	private final Form<M> form;
@@ -24,8 +28,20 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends Templat
 
 	private int pageSize;
 
+	public CRUDController(ClassLoader classLoader, DAO<K, M> dao, Form<M> form, Class<K> keyClass, Class<M> modelClass, int pagesize,
+			String orderBy) {
+		super(classLoader);
+		this.dao = dao;
+		this.form = form;
+		this.keyClass = keyClass;
+		this.modelClass = modelClass;
+		this.pageSize = pagesize;
+		this.orderBy = orderBy;
+	}
+
 	public CRUDController(DAO<K, M> dao, Form<M> form, Class<K> keyClass, Class<M> modelClass, int pagesize,
 			String orderBy) {
+		super();
 		this.dao = dao;
 		this.form = form;
 		this.keyClass = keyClass;
@@ -94,7 +110,10 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends Templat
 			if (log.isDebugEnabled())
 				log.debug("entity created");
 
-			return redirect(toIndex());
+			Call index = toIndex();
+			if (log.isDebugEnabled())
+				log.debug("index : " + index);
+			return redirect(index);
 		}
 	}
 
@@ -130,7 +149,10 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends Templat
 			if (log.isDebugEnabled())
 				log.debug("entity updated");
 
-			return redirect(toIndex());
+			Call index = toIndex();
+			if (log.isDebugEnabled())
+				log.debug("index : " + index);
+			return redirect(index);
 		}
 	}
 
@@ -159,7 +181,10 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends Templat
 			flash("error", "entity not found for key:" + key);
 		}
 
-		return redirect(toIndex());
+		Call index = toIndex();
+		if (log.isDebugEnabled())
+			log.debug("index : " + index);
+		return redirect(index);
 	}
 
 }

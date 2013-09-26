@@ -35,7 +35,7 @@ public class CRUDManager {
 		ModelRegistry models = new ClasspathScanningModelRegistry(app, converters);
 		CrudControllerRegistry crudControllers = new ClasspathScanningControllerRegistry(app, global, models);
 		dynamicRestController = new RouterRestController(crudControllers, models);
-		dynamicCrudController = new RouterCrudController(crudControllers, models);
+		dynamicCrudController = new RouterCrudController(app.classloader(), crudControllers, models);
 	}
 
 	@SuppressWarnings("unchecked")

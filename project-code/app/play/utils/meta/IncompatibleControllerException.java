@@ -1,12 +1,12 @@
 package play.utils.meta;
 
-import play.utils.crud.ControllerProxyREST;
+import play.utils.crud.ControllerProxy;
 
 public class IncompatibleControllerException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-	public <K, M> IncompatibleControllerException(K keyClass, M modelClass, ControllerProxyREST<?, ?> cp) {
+	public <K, M> IncompatibleControllerException(K keyClass, M modelClass, ControllerProxy<?, ?> cp) {
 		super("Controller (" + cp + ") is incompatible with key:" + keyClass + " and model:" + modelClass);
 	}
 
