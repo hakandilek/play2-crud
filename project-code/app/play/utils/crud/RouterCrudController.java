@@ -50,5 +50,8 @@ public class RouterCrudController extends RouterController {
 		return controllerRegistry.getCrudController(keyType, modelType);
 	}
 
+	public Result index() {
+		return ok(play.utils.crud.views.html.index.render());
+	}
 
 }

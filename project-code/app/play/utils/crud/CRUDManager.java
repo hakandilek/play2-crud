@@ -1,5 +1,7 @@
 package play.utils.crud;
 
+import com.google.common.collect.ImmutableSortedSet;
+
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;
@@ -10,7 +12,6 @@ import play.utils.meta.ClasspathScanningConverterRegistry;
 import play.utils.meta.ClasspathScanningModelRegistry;
 import play.utils.meta.ConverterRegistry;
 import play.utils.meta.CrudControllerRegistry;
-import play.utils.meta.ModelRegistry;
 
 public class CRUDManager {
 
@@ -24,6 +25,10 @@ public class CRUDManager {
 
 	RouterCrudController dynamicCrudController;
 
+	ClasspathScanningModelRegistry models;
+	
+	private static CRUDManager instance;
+
 	public CRUDManager(GlobalSettings global) {
 		this.global = global;
 	}
@@ -32,10 +37,11 @@ public class CRUDManager {
 		if (log.isDebugEnabled())
 			log.debug("initialize <-");
 		ConverterRegistry converters = new ClasspathScanningConverterRegistry(app);
-		ModelRegistry models = new ClasspathScanningModelRegistry(app, converters);
+		models = new ClasspathScanningModelRegistry(app, converters);
 		CrudControllerRegistry crudControllers = new ClasspathScanningControllerRegistry(app, global, models);
 		dynamicRestController = new RouterRestController(crudControllers, models);
 		dynamicCrudController = new RouterCrudController(app.classloader(), crudControllers, models);
+		instance = this;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -48,5 +54,13 @@ public class CRUDManager {
 
 		return injections.getInstance(type);
 	}
+
+    public static CRUDManager getInstance() {
+		return instance;
+	}
+
+	public Iterable<String> modelNames() {
+        return ImmutableSortedSet.<String>naturalOrder().addAll(models.getModelNames()).build();
+    }
 
 }

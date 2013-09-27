@@ -3,6 +3,7 @@ package play.utils.meta;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -127,6 +128,15 @@ public class ClasspathScanningModelRegistry implements ModelRegistry {
 				return fieldInfo.getField().getName();
 			}
 		};
+	}
+
+	public Iterable<? extends String> getModelNames() {
+		Collection<ModelMetadata> models = getModels();
+		List<String> list = new ArrayList<String>();
+		for (ModelMetadata model : models) {
+			list.add(model.getName());
+		}
+		return list ;
 	}
 
 }

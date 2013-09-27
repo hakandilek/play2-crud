@@ -1,0 +1,56 @@
+crud.appname=play2-crud
+
+crud.models=Models
+crud.model=Model
+crud.create=Create
+
+crud.form.error=There are some errors
+crud.form.file.select=Select a file
+crud.form.file.change=Change
+crud.form.file.remove=Remove
+crud.form.file.current.download=Download current file
+crud.form.file.current.remove=Remove current file
+crud.form.select.none=None
+crud.form.relation.add=Choose {0}
+crud.form.relation.multiple.add=Choose {0}
+
+crud.flash.create.success=<b>{0} {1}</b> successfully created
+crud.flash.create.failed=<b>{0}</b> creation failed
+crud.flash.update.success=<b>{0} {1}</b> successfully updated
+crud.flash.update.failed=<b>{0} {1}</b> update failed
+
+crud.list.page.title={0} list
+crud.list.page.header={0} list
+crud.list.create=New {0}
+crud.list.search=Search
+crud.list.search.cancel=Cancel
+crud.list.edit=Edit
+crud.list.view=View
+crud.list.file.download=Download
+
+crud.list.displaying.x.of.y={1}/{2}
+
+pagination.previous=Previous
+pagination.next=Next
+
+crud.show.page.title={0} {1}
+crud.show.page.header={0} {1}
+crud.show.return.to.list={0} list
+crud.show.edit=Edit
+crud.show.delete=Delete
+crud.show.confirm.delete=You are deleting {0} {1}. Do you confirm?
+crud.show.modal.loading=Loading...
+crud.show.modal.close=Close
+
+crud.create.page.title=New {0}
+crud.create.page.header=New {0}
+crud.create.cancel=Cancel
+crud.create.save=Create
+
+crud.edit.page.title=Edit {0} {1}
+crud.edit.page.header=Edit {0} {1}
+crud.edit.cancel=Cancel
+crud.edit.save=Save
+
+true=Yes
+false=No

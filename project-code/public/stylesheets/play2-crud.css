@@ -1,0 +1,31 @@
+.main {
+  padding-top: 60px;
+}
+@media (max-width: 979px) {
+  .main {
+    padding-top: 0;
+  }
+}
+.crud-list-action {
+  margin: 5px 0;
+}
+@media (max-width: 767px) {
+  .crud-list-action span {
+    display: none;
+  }
+}
+.crud-constraints {
+  margin-top: 5px;
+  color: #666;
+  font-size: 13px;
+  /*Bootstrap override*/
+
+}
+.form-horizontal input + .crud-constraints,
+.form-horizontal select + .crud-constraints,
+.form-horizontal textarea + .crud-constraints {
+  margin-top: 5px;
+}
+.control-group.error .crud-constraints {
+  color: #666;
+}

@@ -1,0 +1,30 @@
+@()
+
+@import play.utils.crud.CRUDManager
+
+@template.layout(Messages("crud.appname"), null) {
+
+    <div class="page-header">
+        <h1>@Messages("crud.appname")</h1>
+    </div>
+    
+    <h2>@Messages("crud.models")</h2>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="header">@Messages("crud.model")</th>
+                <th class="header">@Messages("crud.create")</th>
+            </tr>
+        </thead>
+        <tbody>
+        @for(item <- javaCollectionToScala(CRUDManager.getInstance().modelNames())) {
+            <tr>
+                <td><a href="@play.utils.crud.routes.RouterCrudController.list(item)">@Messages(item)</a></td>
+                <td><a href="@play.utils.crud.routes.RouterCrudController.newForm(item)"><i class="icon-plus"></i> @Messages("crud.create")</a></td>
+            </tr>
+        }
+        </tbody>
+	</table>
+
+}

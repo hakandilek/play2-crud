@@ -1,0 +1,22 @@
+@(current: String)
+
+@import play.utils.crud.CRUDManager
+@import play.utils.crud.views.Utils
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <a href="#" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="@play.utils.crud.routes.RouterCrudController.index()">@Utils.appName</a>
+            <ul class="nav nav-collapse">
+                @for(item <- javaCollectionToScala(CRUDManager.getInstance().modelNames())) {
+                    <li class="@{"active".when(item == current)}"><a href="@play.utils.crud.routes.RouterCrudController.list(item)">@Messages(item)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
