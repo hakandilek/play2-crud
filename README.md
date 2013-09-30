@@ -3,9 +3,12 @@ play2-crud
 
 simple CRUD &amp; DAO implementation with REST interface for [play framework](http://github.com/playframework/play) 2.0 and 2.1
 
-# Sample
+# Samples
    
-   [Here](https://github.com/hakandilek/play2-crud/tree/master/samples/play2-crud-sample) is a full featured sample.
+   * [Sample with basic dynamic CRUD controllers](https://github.com/hakandilek/play2-crud/tree/master/samples/play2-crud-simple)
+   * [Sample with custom views](https://github.com/hakandilek/play2-crud/tree/master/samples/play2-crud-sample) is a full featured sample.
+   * [Full featured sample with DAO and DAOListeners](https://github.com/hakandilek/play2-crud/tree/master/samples/play2-crud-sample)
+   * [Sample with Cache usage](https://github.com/hakandilek/play2-crud/tree/master/samples/play2-cache-sample)
    
 # HOW-TO
 
