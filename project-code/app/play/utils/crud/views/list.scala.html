@@ -1,0 +1,56 @@
+@(model: play.utils.meta.ModelMetadata,
+	fields: java.lang.Iterable[play.utils.meta.FieldMetadata],
+	page: com.avaje.ebean.Page[_])
+
+@import play.utils.crud.CRUDManager
+@import play.utils.crud.views.Utils
+
+@template.layout(Messages("crud.appname"), model.getName) {
+
+    <div class="page-header">
+        <h1>@Messages("crud.appname")</h1>
+    </div>
+    
+    <h2>@Messages(model.getName) (@page.getTotalRowCount() records)</h2>
+    
+    <h3><a href="@play.utils.crud.routes.RouterCrudController.newForm(model.getName)">@Messages("crud.createNew")</a></h3>
+    
+    @if(page.getTotalRowCount() == 0) {
+        
+        <div class="well">
+            <em>Nothing to display</em>
+        </div>
+        
+    } else {
+        <table class="table table-striped table-bordered">
+	        <thead>
+	            <tr>
+                    @for(field <- javaCollectionToScala(fields)) {
+	                <th class="header">
+						@Messages(field.getDisplayName)
+                    </th>
+                    }
+	                <th class="header">@Messages("crud.edit")</th>
+	                <th class="header">@Messages("crud.delete")</th>
+	            </tr>
+	        </thead>
+	        <tbody>
+        @for(o <- page.getList()) {
+        	@defining(Utils.keyValue(model, o)) { key =>
+	            <tr>
+                    @for(field <- javaCollectionToScala(fields)) {
+                    	@if(field.isKey) {
+                    <td class="@field.getField.getName"><a href="@play.utils.crud.routes.RouterCrudController.show(model.getName, key)">@Utils.listRowField(field, o)</a></td>
+                    	} else {
+                    <td class="@field.getField.getName">@Utils.listRowField(field, o)</td>
+                    	}
+                    }
+                    <td class="crud-edit"><a class="btn btn-mini btn-primary" href="@play.utils.crud.routes.RouterCrudController.update(model.getName, key)"><i class="icon-white icon-edit"></i> </a></td>
+                    <td class="crud-delete"><a class="btn btn-mini btn-danger" href="@play.utils.crud.routes.RouterCrudController.delete(model.getName, key)"><i class="icon-white icon-remove"></i> </a></td>
+	            </tr>
+            }
+        }
+	        </tbody>
+	    </table>
+    }
+}

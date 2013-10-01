@@ -39,7 +39,8 @@ public class RouterCrudController extends RouterController {
 	protected ControllerProxy<?, ?> getDynamicController(Class<?> keyType, Class<?> modelType, ModelMetadata model) {
 		ControllerProxy<?, ?> proxy = dynamicCrudControllers.get(modelType);
 		if (proxy == null) {
-			DynamicCrudController dynController = new DynamicCrudController(classLoader, model, new Call("GET", "/"));
+			Call indexCall = routes.RouterCrudController.list(model.getName());
+			DynamicCrudController dynController = new DynamicCrudController(classLoader, model, indexCall);
 			proxy = new ControllerProxyCRUD<>(dynController, model);
 			dynamicCrudControllers.put(modelType, proxy);
 		}

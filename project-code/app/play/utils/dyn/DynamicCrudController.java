@@ -1,14 +1,25 @@
 package play.utils.dyn;
 
-import static play.data.Form.*;
+import static play.data.Form.form;
 
+import com.avaje.ebean.Page;
+
+import play.Logger;
+import play.Logger.ALogger;
+import play.data.Form;
 import play.mvc.Call;
+import play.mvc.Content;
 import play.mvc.Result;
 import play.utils.crud.CRUDController;
+import play.utils.crud.Parameters;
+import play.utils.dao.BasicModel;
 import play.utils.meta.ModelMetadata;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
+@Dynamic
 public class DynamicCrudController extends CRUDController {
+	
+	private static ALogger log = Logger.of(DynamicCrudController.class);
 	
 	private ModelMetadata model;
 	private String templateList;
@@ -18,10 +29,13 @@ public class DynamicCrudController extends CRUDController {
 
 	public DynamicCrudController(ClassLoader classLoader, ModelMetadata model, Call indexCall) {
 		super(classLoader, new DynamicDAO(model), form(model.getType()), model.getKeyField().getType(), model.getType(), 10, model.getKeyField().getField().getName());
+		this.model = model;
 		this.indexCall = indexCall;
 		templateList = model.getName() + "List";
 		templateForm = model.getName() + "Form";
 		templateShow = model.getName() + "Show";
+		if (log.isDebugEnabled())
+			log.debug("DynamicCrudController for model : " + model);
 	}
 
 	@Override
@@ -52,6 +66,51 @@ public class DynamicCrudController extends CRUDController {
 	@Override
 	public Result list() {
 		return list(0);
+	}
+	
+	@Override
+	protected Content render(String template, Parameters params) {
+		Content content;
+		try {
+			content = call("views.html." + template, "render", params);
+		} catch (ClassNotFoundException | MethodNotFoundException e) {
+			throw new TemplateNotFoundException();
+		}
+		return content;
+	}
+
+	@Override
+	protected Content renderList(Page p) {
+		try {
+			return super.renderList(p);
+		} catch (TemplateNotFoundException e) {
+			// use dynamic template
+			return play.utils.crud.views.html.list.render(model, model.getFields().values(), p);
+		}
+	}
+
+	protected Content renderForm(Object key, Form form) {
+		try {
+			return super.renderForm(key, form);
+		} catch (TemplateNotFoundException e) {
+			// use dynamic template
+			return play.utils.crud.views.html.edit.render(model, model.getFields().values(), key, form);
+		}
+	}
+
+	@Override
+	protected Content renderShow(BasicModel modelObject) {
+		try {
+			return super.renderShow(modelObject);
+		} catch (TemplateNotFoundException e) {
+			// use dynamic template
+			return play.utils.crud.views.html.show.render(model, model.getFields().values(), modelObject);
+		}
+	}
+	
+	private class TemplateNotFoundException extends RuntimeException {
+		/** serial id */
+		private static final long serialVersionUID = 1L;
 	}
 
 }

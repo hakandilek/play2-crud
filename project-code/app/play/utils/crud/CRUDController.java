@@ -4,6 +4,7 @@ import play.Logger;
 import play.Logger.ALogger;
 import play.data.Form;
 import play.mvc.Call;
+import play.mvc.Content;
 import play.mvc.Result;
 import play.utils.dao.BasicModel;
 import play.utils.dao.DAO;
@@ -68,7 +69,7 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends Templat
 
 	public Result list(int page) {
 		Page<M> p = dao.page(page, pageSize(), orderBy());
-		return ok(templateForList(), with(Page.class, p));
+		return ok(renderList(p));
 	}
 
 	protected String orderBy() {
@@ -86,12 +87,24 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends Templat
 	protected abstract String templateForShow();
 
 	protected abstract Call toIndex();
+	
+	protected Content renderList(Page<M> p) {
+		return render(templateForList(), with(Page.class, p));
+	}
+
+	protected Content renderForm(K key, Form<M> form) {
+		return render(templateForForm(), with(keyClass, key).and(Form.class, form));
+	}
+
+	protected Content renderShow(M model) {
+		return render(templateForShow(), with(modelClass, model));
+	}
 
 	public Result newForm() {
 		if (log.isDebugEnabled())
 			log.debug("newForm() <-");
 
-		return ok(templateForForm(), with(keyClass, null).and(Form.class, form));
+		return ok(renderForm(null, form));
 	}
 
 	public Result create() {
@@ -101,9 +114,9 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends Templat
 		Form<M> filledForm = form.bindFromRequest();
 		if (filledForm.hasErrors()) {
 			if (log.isDebugEnabled())
-				log.debug("validation errors occured");
+				log.debug("validation errors occured: " + filledForm.errors());
 
-			return badRequest(templateForForm(), with(keyClass, null).and(Form.class, filledForm));
+			return badRequest(renderForm(null, filledForm));
 		} else {
 			M model = filledForm.get();
 			dao.create(model);
@@ -126,7 +139,7 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends Templat
 			log.debug("model : " + model);
 
 		Form<M> frm = form.fill(model);
-		return ok(templateForForm(), with(keyClass, key).and(Form.class, frm));
+		return ok(renderForm(key, frm));
 	}
 
 	public Result update(K key) {
@@ -137,9 +150,9 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends Templat
 		Form<M> filledForm = form.fill(original).bindFromRequest();
 		if (filledForm.hasErrors()) {
 			if (log.isDebugEnabled())
-				log.debug("validation errors occured");
+				log.debug("validation errors occured: " + filledForm.errors());
 
-			return badRequest(templateForForm(), with(keyClass, key).and(Form.class, filledForm));
+			return badRequest(renderForm(key, filledForm));
 		} else {
 			M model = filledForm.get();
 			model.setKey(key);
@@ -164,7 +177,7 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends Templat
 		if (log.isDebugEnabled())
 			log.debug("model : " + model);
 
-		return ok(templateForShow(), with(modelClass, model));
+		return ok(renderShow(model));
 	}
 
 	public Result delete(K key) {

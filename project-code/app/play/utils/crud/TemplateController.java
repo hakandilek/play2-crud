@@ -6,6 +6,7 @@ import org.springframework.util.ReflectionUtils;
 
 import play.Logger;
 import play.Logger.ALogger;
+import play.api.templates.Html;
 import play.mvc.Content;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -24,30 +25,26 @@ public class TemplateController extends Controller {
 	}
 
 	protected Result ok(String template, Parameters params) {
-		Content content;
-		try {
-			content = call("views.html." + template, "render", params);
-		} catch (ClassNotFoundException | MethodNotFoundException e) {
-			if (log.isDebugEnabled())
-				log.debug("template not found : '" + template + "'", e);
-			return internalServerError(templateNotFound(template, params));
-		}
-		return ok(content);
+		return ok(render(template, params));
 	}
 
 	protected Result badRequest(String template, Parameters params) {
+		return badRequest(render(template, params));
+	}
+
+	protected Content render(String template, Parameters params) {
 		Content content;
 		try {
 			content = call("views.html." + template, "render", params);
 		} catch (ClassNotFoundException | MethodNotFoundException e) {
 			if (log.isDebugEnabled())
 				log.debug("template not found : '" + template + "'", e);
-			return internalServerError(templateNotFound(template, params));
+			return templateNotFound(template, params);
 		}
-		return badRequest(content);
+		return content;
 	}
 
-	private String templateNotFound(String template, Parameters params) {
+	protected Html templateNotFound(String template, Parameters params) {
 		StringBuilder sb = new StringBuilder("Template ");
 		sb.append(template).append("(");
 		Class<?>[] types = params.types();
@@ -58,7 +55,7 @@ public class TemplateController extends Controller {
 			sb.append(type.getSimpleName());
 		}
 		sb.append(") is not found");
-		return sb.toString();
+		return Html.apply(sb.toString());
 	}
 
 	protected <T> Parameters with() {
@@ -70,7 +67,7 @@ public class TemplateController extends Controller {
 	}
 
 	@SuppressWarnings("unchecked")
-	private <R> R call(String className, String methodName, Parameters params)
+	protected <R> R call(String className, String methodName, Parameters params)
 			throws ClassNotFoundException, MethodNotFoundException {
 		if (log.isDebugEnabled())
 			log.debug("call <-");
@@ -110,7 +107,7 @@ public class TemplateController extends Controller {
 		return classLoader;
 	}
 
-	class MethodNotFoundException extends Exception {
+	public class MethodNotFoundException extends Exception {
 
 		private static final long serialVersionUID = 1L;
 		private String className;

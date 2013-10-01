@@ -15,6 +15,7 @@ import play.utils.meta.ModelMetadata;
 import com.google.common.collect.ImmutableMap;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
+@Dynamic
 public class DynamicRestController extends APIController {
 
 	private static ALogger log = Logger.of(DynamicRestController.class);

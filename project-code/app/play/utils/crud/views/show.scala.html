@@ -1,0 +1,19 @@
+@(model: play.utils.meta.ModelMetadata, 
+	fields: java.lang.Iterable[play.utils.meta.FieldMetadata], 
+	o: Object)
+
+@import helper._ 
+@import helper.twitterBootstrap._
+@import play.utils.crud.views.Utils
+
+@template.layout(Messages("crud.appname"), model.getName) {
+        
+	<h3>@Messages("crud.display", model.getName)</h3>
+
+    <dl class="dl-horizontal">
+        @for(field <- javaCollectionToScala(fields)) {
+        	<dt>@Messages(field.getDisplayName)</dt>
+        	<dd>@Utils.showField(field, o)</dd>
+		}
+    </dl>
+}

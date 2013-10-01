@@ -29,6 +29,20 @@ public class FieldMetadata {
 		return key;
 	}
 
+	public boolean isSortable() {
+		//TODO:
+		return false;
+	}
+	
+	public boolean isRelation() {
+		//TODO:
+		return false;
+	}
+	
+	public String getDisplayName() {
+		return field.getName();
+	}
+	
 	public Converter<?> getConverter() {
 		return converter;
 	}

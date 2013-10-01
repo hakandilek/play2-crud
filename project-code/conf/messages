@@ -3,6 +3,12 @@ crud.appname=play2-crud
 crud.models=Models
 crud.model=Model
 crud.create=Create
+crud.createNew=Create a new one
+crud.new=Create new
+crud.update=Update
+crud.display=Display a(n) {0} object
+crud.edit=Edit
+crud.delete=Delete
 
 crud.form.error=There are some errors
 crud.form.file.select=Select a file

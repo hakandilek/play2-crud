@@ -45,4 +45,11 @@ public class ModelMetadata {
 		field.set(modelObject, value);
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("ModelMetadata [").append(type).append("]");
+		return builder.toString();
+	}
+
 }

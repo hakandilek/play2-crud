@@ -1,0 +1,27 @@
+@(model: play.utils.meta.ModelMetadata,
+	fields: java.lang.Iterable[play.utils.meta.FieldMetadata], 
+	key: Object, 
+	modelForm: Form[_])
+
+@import helper._ 
+@import helper.twitterBootstrap._
+
+@template.layout(Messages("crud.appname"), model.getName) {
+        
+	<h3>@if(key != null) { @Messages("crud.update") } else { @Messages("crud.new") }  @Messages(model.getName)</h3>
+
+    @form(if(key != null) { play.utils.crud.routes.RouterCrudController.update(model.getName, key + "") } 
+          else            { play.utils.crud.routes.RouterCrudController.create(model.getName) }) { 
+
+        @for(field <- javaCollectionToScala(fields)) {
+        	@if(!field.isKey) {
+        		@inputText(modelForm(field.getField.getName), args = '_label -> field.getField.getName)
+        	}
+        }
+        
+        <div>
+           <input type="submit" class="btn btn-success" value="@if(key != null) { @Messages("crud.update") } else { @Messages("crud.create") }">
+        </div>
+    }
+    
+}

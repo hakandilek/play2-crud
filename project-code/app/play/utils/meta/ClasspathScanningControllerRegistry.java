@@ -16,9 +16,10 @@ import play.Logger.ALogger;
 import play.utils.crud.APIController;
 import play.utils.crud.CRUD;
 import play.utils.crud.CRUDController;
-import play.utils.crud.ControllerProxyCRUD;
 import play.utils.crud.ControllerProxy;
+import play.utils.crud.ControllerProxyCRUD;
 import play.utils.crud.ControllerProxyREST;
+import play.utils.dyn.Dynamic;
 
 import com.google.common.collect.Maps;
 
@@ -105,6 +106,12 @@ public class ClasspathScanningControllerRegistry implements CrudControllerRegist
 				if (log.isDebugEnabled())
 					log.debug("controllerClass : " + controllerClass);
 
+				if (controllerClass.isAnnotationPresent(Dynamic.class)) {
+					if (log.isDebugEnabled())
+						log.debug(controllerClass + "is @" + Dynamic.class);
+					continue;
+				}
+
 				C controller = global.getControllerInstance(controllerClass);
 				if (controller != null) {
 					Class modelClass = controller.getModelClass();
@@ -131,6 +138,12 @@ public class ClasspathScanningControllerRegistry implements CrudControllerRegist
 			try {
 				if (log.isDebugEnabled())
 					log.debug("controllerClass : " + controllerClass);
+				
+				if (controllerClass.isAnnotationPresent(Dynamic.class)) {
+					if (log.isDebugEnabled())
+						log.debug(controllerClass + "is @" + Dynamic.class);
+					continue;
+				}
 
 				C controller = global.getControllerInstance(controllerClass);
 				if (controller != null) {
