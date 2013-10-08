@@ -1,0 +1,8 @@
+@(field: play.data.Form.Field, args: (Symbol,Any)*)(implicit handler: helper.FieldConstructor, lang: play.api.i18n.Lang)
+
+@import helper._ 
+
+@input(field, args:_*) { (id, name, value, htmlArgs) =>
+    <textarea id="@id" name="@name" @toHtmlArgs(htmlArgs)>@value</textarea>
+}
+

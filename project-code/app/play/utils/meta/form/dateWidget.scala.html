@@ -1,0 +1,9 @@
+@(field: play.data.Form.Field, args: (Symbol,Any)*)(implicit handler: helper.FieldConstructor, lang: play.api.i18n.Lang)
+
+@import helper._ 
+
+@inputType = @{ args.toMap.get('type).map(_.toString).getOrElse("text") }
+
+@input(field, args:_*) { (id, name, value, htmlArgs) =>
+    <input type="date" id="@id" name="@name" value="@value" @toHtmlArgs(htmlArgs)>
+}

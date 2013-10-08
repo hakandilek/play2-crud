@@ -14,8 +14,8 @@
           else            { play.utils.crud.routes.RouterCrudController.create(model.getName) }) { 
 
         @for(field <- javaCollectionToScala(fields)) {
-        	@if(!field.isKey) {
-        		@inputText(modelForm(field.getField.getName), args = '_label -> field.getField.getName)
+        	@if(!field.isKey && field.getWidget != null) {
+        		@field.getWidget.render(modelForm)
         	}
         }
         
