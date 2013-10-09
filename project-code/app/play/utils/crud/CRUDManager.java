@@ -7,11 +7,11 @@ import play.GlobalSettings;
 import play.Logger;
 import play.Logger.ALogger;
 import play.utils.inject.InjectAdapter;
-import play.utils.meta.ClasspathScanningControllerRegistry;
-import play.utils.meta.ClasspathScanningConverterRegistry;
-import play.utils.meta.ClasspathScanningModelRegistry;
 import play.utils.meta.ConverterRegistry;
-import play.utils.meta.CrudControllerRegistry;
+import play.utils.meta.ControllerRegistry;
+import play.utils.meta.cp.ClasspathScanningControllerRegistry;
+import play.utils.meta.cp.ClasspathScanningConverterRegistry;
+import play.utils.meta.cp.ClasspathScanningModelRegistry;
 
 public class CRUDManager {
 
@@ -38,7 +38,7 @@ public class CRUDManager {
 			log.debug("initialize <-");
 		ConverterRegistry converters = new ClasspathScanningConverterRegistry(app);
 		models = new ClasspathScanningModelRegistry(app, converters);
-		CrudControllerRegistry crudControllers = new ClasspathScanningControllerRegistry(app, global, models);
+		ControllerRegistry crudControllers = new ClasspathScanningControllerRegistry(app, global, models);
 		dynamicRestController = new RouterRestController(crudControllers, models);
 		dynamicCrudController = new RouterCrudController(app.classloader(), crudControllers, models);
 		instance = this;

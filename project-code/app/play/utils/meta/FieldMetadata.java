@@ -10,6 +10,7 @@ import javax.persistence.Id;
 
 import play.data.validation.Constraints.MaxLength;
 import play.data.validation.Constraints.Required;
+import play.utils.meta.convert.Converter;
 import play.utils.meta.form.CheckboxWidget;
 import play.utils.meta.form.DateWidget;
 import play.utils.meta.form.FileWidget;

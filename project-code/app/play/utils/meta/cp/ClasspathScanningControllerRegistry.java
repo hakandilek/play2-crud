@@ -1,4 +1,4 @@
-package play.utils.meta;
+package play.utils.meta.cp;
 
 import java.util.Map;
 import java.util.Set;
@@ -20,10 +20,14 @@ import play.utils.crud.ControllerProxy;
 import play.utils.crud.ControllerProxyCRUD;
 import play.utils.crud.ControllerProxyREST;
 import play.utils.dyn.Dynamic;
+import play.utils.meta.ControllerRegistry;
+import play.utils.meta.IncompatibleControllerException;
+import play.utils.meta.ModelMetadata;
+import play.utils.meta.ModelRegistry;
 
 import com.google.common.collect.Maps;
 
-public class ClasspathScanningControllerRegistry implements CrudControllerRegistry {
+public class ClasspathScanningControllerRegistry implements ControllerRegistry {
 
 	private static ALogger log = Logger.of(ClasspathScanningControllerRegistry.class);
 

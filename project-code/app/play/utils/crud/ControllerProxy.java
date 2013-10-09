@@ -2,8 +2,8 @@ package play.utils.crud;
 
 import play.mvc.Controller;
 import play.mvc.Result;
-import play.utils.meta.Converter;
 import play.utils.meta.ModelMetadata;
+import play.utils.meta.convert.Converter;
 
 public abstract class ControllerProxy<K, M> extends Controller {
 

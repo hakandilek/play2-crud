@@ -1,4 +1,4 @@
-package play.utils.meta;
+package play.utils.meta.cp;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -28,6 +28,11 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import play.Application;
+import play.utils.meta.ConverterRegistry;
+import play.utils.meta.FieldMetadata;
+import play.utils.meta.ModelMetadata;
+import play.utils.meta.ModelRegistry;
+import play.utils.meta.convert.Converter;
 
 public class ClasspathScanningModelRegistry implements ModelRegistry {
 

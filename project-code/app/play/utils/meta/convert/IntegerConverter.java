@@ -1,6 +1,5 @@
 package play.utils.meta.convert;
 
-import play.utils.meta.Converter;
 
 public class IntegerConverter extends Converter<Integer> {
 

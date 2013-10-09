@@ -12,7 +12,7 @@ import play.cache.Cache;
 import play.libs.F;
 import play.mvc.Controller;
 import play.mvc.Result;
-import play.utils.meta.CrudControllerRegistry;
+import play.utils.meta.ControllerRegistry;
 import play.utils.meta.IncompatibleControllerException;
 import play.utils.meta.ModelMetadata;
 import play.utils.meta.ModelRegistry;
@@ -26,12 +26,12 @@ public abstract class RouterController extends Controller {
 	private static ALogger log = Logger.of(RouterController.class);
 
 	protected ModelRegistry modelRegistry;
-	protected CrudControllerRegistry controllerRegistry;
+	protected ControllerRegistry controllerRegistry;
 
 	protected Map<Class<?>, ControllerProxy<?, ?>> dynamicRestControllers = new HashMap<Class<?>, ControllerProxy<?, ?>>();
 	protected Map<Class<?>, ControllerProxy<?, ?>> dynamicCrudControllers = new HashMap<Class<?>, ControllerProxy<?, ?>>();
 
-	public RouterController(CrudControllerRegistry controllerRegistry, ModelRegistry modelRegistry) {
+	public RouterController(ControllerRegistry controllerRegistry, ModelRegistry modelRegistry) {
 		this.controllerRegistry = controllerRegistry;
 		this.modelRegistry = modelRegistry;
 	}

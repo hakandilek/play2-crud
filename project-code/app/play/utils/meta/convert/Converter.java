@@ -1,4 +1,4 @@
-package play.utils.meta;
+package play.utils.meta.convert;
 
 public abstract class Converter<K> {
 

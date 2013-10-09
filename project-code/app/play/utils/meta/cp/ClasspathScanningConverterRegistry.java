@@ -1,4 +1,4 @@
-package play.utils.meta;
+package play.utils.meta.cp;
 
 import java.util.Map;
 import java.util.Set;
@@ -13,6 +13,8 @@ import com.google.common.collect.Maps;
 import play.Application;
 import play.Logger;
 import play.Logger.ALogger;
+import play.utils.meta.ConverterRegistry;
+import play.utils.meta.convert.Converter;
 
 public class ClasspathScanningConverterRegistry implements ConverterRegistry {
 

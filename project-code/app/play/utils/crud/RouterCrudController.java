@@ -6,7 +6,7 @@ import play.api.mvc.Call;
 import play.libs.F;
 import play.mvc.Result;
 import play.utils.dyn.DynamicCrudController;
-import play.utils.meta.CrudControllerRegistry;
+import play.utils.meta.ControllerRegistry;
 import play.utils.meta.IncompatibleControllerException;
 import play.utils.meta.ModelMetadata;
 import play.utils.meta.ModelRegistry;
@@ -17,7 +17,7 @@ public class RouterCrudController extends RouterController {
 	private static ALogger log = Logger.of(RouterCrudController.class);
 	private ClassLoader classLoader;
 	
-	public RouterCrudController(ClassLoader classLoader, CrudControllerRegistry controllerRegistry, ModelRegistry modelRegistry) {
+	public RouterCrudController(ClassLoader classLoader, ControllerRegistry controllerRegistry, ModelRegistry modelRegistry) {
 		super(controllerRegistry, modelRegistry);
 		this.classLoader = classLoader;
 	}

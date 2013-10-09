@@ -3,6 +3,8 @@ package play.utils.meta;
 import java.lang.reflect.Field;
 import java.util.Map;
 
+import play.utils.meta.convert.Converter;
+
 public class ModelMetadata {
 
 	Class<?> type;

@@ -1,14 +1,14 @@
 package play.utils.crud;
 
 import play.utils.dyn.DynamicRestController;
-import play.utils.meta.CrudControllerRegistry;
+import play.utils.meta.ControllerRegistry;
 import play.utils.meta.IncompatibleControllerException;
 import play.utils.meta.ModelMetadata;
 import play.utils.meta.ModelRegistry;
 
 public class RouterRestController extends RouterController {
 
-	public RouterRestController(CrudControllerRegistry controllerRegistry, ModelRegistry modelRegistry) {
+	public RouterRestController(ControllerRegistry controllerRegistry, ModelRegistry modelRegistry) {
 		super(controllerRegistry, modelRegistry);
 	}
 
