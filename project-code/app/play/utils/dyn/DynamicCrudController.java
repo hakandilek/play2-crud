@@ -74,6 +74,8 @@ public class DynamicCrudController extends CRUDController {
 		try {
 			content = call("views.html." + template, "render", params);
 		} catch (ClassNotFoundException | MethodNotFoundException e) {
+			if (log.isDebugEnabled())
+				log.debug("template not found : '" + template + "'");
 			throw new TemplateNotFoundException();
 		}
 		return content;
@@ -85,15 +87,21 @@ public class DynamicCrudController extends CRUDController {
 			return super.renderList(p);
 		} catch (TemplateNotFoundException e) {
 			// use dynamic template
+			if (log.isDebugEnabled())
+				log.debug("Rendering dynamic LIST template for model : " + model);
 			return play.utils.crud.views.html.list.render(model, model.getFields().values(), p);
 		}
 	}
 
 	protected Content renderForm(Object key, Form form) {
+		if (log.isDebugEnabled())
+			log.debug("renderForm <- form:" + form);
 		try {
 			return super.renderForm(key, form);
 		} catch (TemplateNotFoundException e) {
 			// use dynamic template
+			if (log.isDebugEnabled())
+				log.debug("Rendering dynamic FORM template for model : " + model);
 			return play.utils.crud.views.html.edit.render(model, model.getFields().values(), key, form);
 		}
 	}
@@ -104,6 +112,8 @@ public class DynamicCrudController extends CRUDController {
 			return super.renderShow(modelObject);
 		} catch (TemplateNotFoundException e) {
 			// use dynamic template
+			if (log.isDebugEnabled())
+				log.debug("Rendering dynamic SHOW template for model : " + model);
 			return play.utils.crud.views.html.show.render(model, model.getFields().values(), modelObject);
 		}
 	}

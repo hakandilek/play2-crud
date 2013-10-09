@@ -38,7 +38,7 @@ public class TemplateController extends Controller {
 			content = call("views.html." + template, "render", params);
 		} catch (ClassNotFoundException | MethodNotFoundException e) {
 			if (log.isDebugEnabled())
-				log.debug("template not found : '" + template + "'", e);
+				log.debug("template not found : '" + template + "'");
 			return templateNotFound(template, params);
 		}
 		return content;
@@ -77,7 +77,6 @@ public class TemplateController extends Controller {
 			log.debug("methodName : " + methodName);
 		if (log.isDebugEnabled())
 			log.debug("params : " + params);
-
 		
 		ClassLoader cl = classLoader();
 		Object result = null;

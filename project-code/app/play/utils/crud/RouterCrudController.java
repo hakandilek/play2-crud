@@ -35,6 +35,19 @@ public class RouterCrudController extends RouterController {
 		return controller.newForm();
 	}
 	
+	public Result editForm(String name, String key) {
+		if (log.isDebugEnabled())
+			log.debug("editForm <- " + name + ", " + key);
+		F.Either<ControllerProxy, ? extends Result> cnf = controllerOrNotFound(name);
+		if (cnf.right.isDefined())
+			return cnf.right.get();
+		ControllerProxyCRUD controller = (ControllerProxyCRUD) cnf.left.get();
+		if (controller == null) {
+			return controllerNotFound(name);
+		}
+		return controller.editForm(key);
+	}
+	
 	@SuppressWarnings("unchecked")
 	protected ControllerProxy<?, ?> getDynamicController(Class<?> keyType, Class<?> modelType, ModelMetadata model) {
 		ControllerProxy<?, ?> proxy = dynamicCrudControllers.get(modelType);
