@@ -8,6 +8,3 @@ GET     /               controllers.Application.index()
 ->     /app    	        play.crud.Routes
 # REST API
 ->     /api             play.crud.rest.Routes
-
-# Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file   controllers.Assets.at(path="/public", file)
