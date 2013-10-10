@@ -20,6 +20,12 @@ import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
+import play.utils.meta.ConverterRegistry;
+import play.utils.meta.FieldMetadata;
+import play.utils.meta.ModelMetadata;
+import play.utils.meta.ModelRegistry;
+import play.utils.meta.convert.Converter;
+
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
@@ -27,29 +33,22 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import play.Application;
-import play.utils.meta.ConverterRegistry;
-import play.utils.meta.FieldMetadata;
-import play.utils.meta.ModelMetadata;
-import play.utils.meta.ModelRegistry;
-import play.utils.meta.convert.Converter;
-
 public class ClasspathScanningModelRegistry implements ModelRegistry {
 
 	private Map<Class<?>, ModelMetadata> models;
 	private ConverterRegistry converters;
 
-	public ClasspathScanningModelRegistry(Application app, ConverterRegistry converters) {
+	public ClasspathScanningModelRegistry(ConverterRegistry converters, ClassLoader... cls) {
 		this.converters = converters;
-		this.models = scan(app.classloader());
+		this.models = scan(cls);
 	}
 
-	private Map<Class<?>, ModelMetadata> scan(ClassLoader classloader) {
+	private Map<Class<?>, ModelMetadata> scan(ClassLoader... classloaders) {
 		Map<Class<?>, ModelMetadata> map = Maps.newHashMap();
 
 		final Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(
-				ClasspathHelper.forPackage("", classloader)).setScanners(new SubTypesScanner(),
-				new TypeAnnotationsScanner()));
+				ClasspathHelper.forPackage("", classloaders)).setScanners(new SubTypesScanner(),
+				new TypeAnnotationsScanner()).addClassLoaders(classloaders));
 
 		Set<Class<?>> entities = reflections.getTypesAnnotatedWith(Entity.class);
 		for (Class<?> entity : entities) {

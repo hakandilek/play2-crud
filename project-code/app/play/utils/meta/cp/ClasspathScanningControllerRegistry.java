@@ -9,7 +9,6 @@ import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
-import play.Application;
 import play.GlobalSettings;
 import play.Logger;
 import play.Logger.ALogger;
@@ -36,17 +35,15 @@ public class ClasspathScanningControllerRegistry implements ControllerRegistry {
 
 	private ModelRegistry models;
 
-	public ClasspathScanningControllerRegistry(Application app, GlobalSettings global, ModelRegistry models) {
+	public ClasspathScanningControllerRegistry(GlobalSettings global, ModelRegistry models, ClassLoader... cls) {
 		if (log.isDebugEnabled())
 			log.debug("ClasspathScanningControllerRegistry <-");
-		if (log.isDebugEnabled())
-			log.debug("app : " + app);
 		if (log.isDebugEnabled())
 			log.debug("global : " + global);
 
 		this.models = models;
-		this.restControllers = scanRest(app.classloader(), global, APIController.class);
-		this.crudControllers = scanCrud(app.classloader(), global, CRUDController.class);
+		this.restControllers = scanRest(global, APIController.class, cls);
+		this.crudControllers = scanCrud(global, CRUDController.class, cls);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -98,10 +95,10 @@ public class ClasspathScanningControllerRegistry implements ControllerRegistry {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private <C extends CRUD> Map<Class<?>, ControllerProxy<?, ?>> scanRest(ClassLoader classloader, GlobalSettings global, Class<C> superType) {
+	private <C extends CRUD> Map<Class<?>, ControllerProxy<?, ?>> scanRest(GlobalSettings global, Class<C> superType, ClassLoader... cls) {
 		final Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(
-				ClasspathHelper.forPackage("", classloader)).setScanners(new SubTypesScanner(),
-				new TypeAnnotationsScanner()));
+				ClasspathHelper.forPackage("", cls)).setScanners(new SubTypesScanner(),
+				new TypeAnnotationsScanner()).addClassLoaders(cls));
 
 		Map<Class<?>, ControllerProxy<?, ?>> map = Maps.newHashMap();
 		Set<Class<? extends C>> controllerClasses = reflections.getSubTypesOf(superType);
@@ -131,10 +128,10 @@ public class ClasspathScanningControllerRegistry implements ControllerRegistry {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private <C extends CRUD> Map<Class<?>, ControllerProxyCRUD<?, ?>> scanCrud(ClassLoader classloader, GlobalSettings global, Class<C> superType) {
+	private <C extends CRUD> Map<Class<?>, ControllerProxyCRUD<?, ?>> scanCrud(GlobalSettings global, Class<C> superType, ClassLoader... cls) {
 		final Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(
-				ClasspathHelper.forPackage("", classloader)).setScanners(new SubTypesScanner(),
-				new TypeAnnotationsScanner()));
+				ClasspathHelper.forPackage("", cls)).setScanners(new SubTypesScanner(),
+				new TypeAnnotationsScanner()).addClassLoaders(cls));
 
 		Map<Class<?>, ControllerProxyCRUD<?, ?>> map = Maps.newHashMap();
 		Set<Class<? extends C>> controllerClasses = reflections.getSubTypesOf(superType);

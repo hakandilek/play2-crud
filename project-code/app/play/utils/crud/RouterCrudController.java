@@ -17,7 +17,7 @@ public class RouterCrudController extends RouterController {
 	private static ALogger log = Logger.of(RouterCrudController.class);
 	private ClassLoader classLoader;
 	
-	public RouterCrudController(ClassLoader classLoader, ControllerRegistry controllerRegistry, ModelRegistry modelRegistry) {
+	public RouterCrudController(ControllerRegistry controllerRegistry, ModelRegistry modelRegistry, ClassLoader classLoader) {
 		super(controllerRegistry, modelRegistry);
 		this.classLoader = classLoader;
 	}

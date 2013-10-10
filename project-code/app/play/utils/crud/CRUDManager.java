@@ -36,11 +36,14 @@ public class CRUDManager {
 	public void initialize(Application app) {
 		if (log.isDebugEnabled())
 			log.debug("initialize <-");
-		ConverterRegistry converters = new ClasspathScanningConverterRegistry(app);
-		models = new ClasspathScanningModelRegistry(app, converters);
-		ControllerRegistry crudControllers = new ClasspathScanningControllerRegistry(app, global, models);
+		ClassLoader appClassloader = app.classloader();
+		ClassLoader libClassloader = getClass().getClassLoader();
+		ClassLoader[] classLoaders = new ClassLoader[] { appClassloader, libClassloader };
+		ConverterRegistry converters = new ClasspathScanningConverterRegistry(classLoaders);
+		models = new ClasspathScanningModelRegistry(converters, classLoaders);
+		ControllerRegistry crudControllers = new ClasspathScanningControllerRegistry(global, models, classLoaders);
 		dynamicRestController = new RouterRestController(crudControllers, models);
-		dynamicCrudController = new RouterCrudController(app.classloader(), crudControllers, models);
+		dynamicCrudController = new RouterCrudController(crudControllers, models, appClassloader);
 		instance = this;
 	}
 
