@@ -124,6 +124,6 @@ public class Sample extends Model implements BasicModel<Long> {
   * [HOW-TO define a custom DAO](docs/custom-dao.md)
   * [HOW-TO define a custom Controller](docs/custom-controller.md)
   * [HOW-TO use DAO Listeners](docs/dao-listeners.md)
-  * [HOW-TO use basic REST Controllers](docs/rest-controllers.md)
+  * [HOW-TO use dynamic REST Controllers](docs/rest-controllers.md)
   * [HOW-TO use custom REST Controllers](docs/custom-rest-controllers.md)
 
