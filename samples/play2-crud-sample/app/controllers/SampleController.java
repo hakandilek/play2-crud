@@ -7,7 +7,6 @@ import javax.inject.Inject;
 import models.Sample;
 import models.dao.SampleDAO;
 import play.mvc.Call;
-import play.mvc.Result;
 import play.utils.crud.CRUDController;
 
 public class SampleController extends CRUDController<Long, Sample> {
@@ -35,16 +34,6 @@ public class SampleController extends CRUDController<Long, Sample> {
 	@Override
 	protected Call toIndex() {
 		return routes.Application.index();
-	}
-
-	@Override
-	public Result read(Long key) {
-		return show(key);
-	}
-
-	@Override
-	public Result list() {
-		return list(0);
 	}
 
 }

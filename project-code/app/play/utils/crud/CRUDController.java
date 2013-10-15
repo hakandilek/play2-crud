@@ -200,4 +200,12 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends Templat
 		return redirect(index);
 	}
 
+	public Result read(K key) {
+		return show(key);
+	}
+
+	public Result list() {
+		return list(0);
+	}
+
 }
