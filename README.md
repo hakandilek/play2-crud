@@ -3,7 +3,7 @@ play2-crud
 
 Powerful CRUD &amp; DAO implementation with REST interface for [play framework](http://github.com/playframework/play) 2.0 and 2.1
 
-Play 2.2 support comming soon!
+Play 2.2 support is coming soon!
 
 # Samples
    
@@ -49,9 +49,7 @@ You can begin with adding play2-crud dependency inside `conf/Build.scala` file.
 
 ```
 ...
-
 application.global=play.utils.crud.GlobalCRUDSettings
-
 ...
 
 ```
@@ -62,7 +60,6 @@ application.global=play.utils.crud.GlobalCRUDSettings
 ### Define routes
 
 ```
-
 # CRUD Controllers
 ->     /app             play.crud.Routes
 
@@ -107,7 +104,18 @@ public class Sample extends Model implements BasicModel<Long> {
 
  * Here the `Sample` model class implements `BasicModel<Long>` where `key` field indicated with `@Id` is `Long`.
 
-... and voila!
+... call `http://localhost:9000/app` and voila!
+
+### Some screenshots
+
+ * index page
+   ![crud-index page](/screenshot/index.png)
+
+ * create page
+   ![create page](/screenshot/create.png)
+
+ * list page
+   ![list page](/screenshot/list.png)
    
 # HOW-TO
 
