@@ -104,7 +104,7 @@ public class Sample extends Model implements BasicModel<Long> {
 
  * Here the `Sample` model class implements `BasicModel<Long>` where `key` field indicated with `@Id` is `Long`.
 
-... call `http://localhost:9000/app` and voila!
+... call [http://localhost:9000/app](http://localhost:9000/app) and voila!
 
 ### Some screenshots
 
