@@ -5,7 +5,7 @@ import play.Project._
 object ApplicationBuild extends Build {
 
     val appName         = "play2-crud"
-    val appVersion      = "0.7.0-SNAPSHOT"
+    val appVersion      = "0.7.0"
 
     val appDependencies = Seq(
         javaCore, javaJdbc, javaEbean,
