@@ -9,8 +9,7 @@ object ApplicationBuild extends Build {
 
     val appDependencies = Seq(
         javaCore, javaJdbc, javaEbean,
-        "play2-crud" % "play2-crud_2.10" % "0.7.0-SNAPSHOT",
-        "org.mockito" % "mockito-core" % "1.9.5"
+        "play2-crud" % "play2-crud_2.10" % "0.7.0-SNAPSHOT"
     )
 
     val main = play.Project(appName, appVersion, appDependencies).settings(
