@@ -71,7 +71,7 @@ application.global=play.utils.crud.GlobalCRUDSettings
 
 ### Define model
 
- * Model class have to implement `play.utils.dao.BasicModel` with the type parameter indicating the type of the `@Id` field.
+ * Model class has to implement `play.utils.dao.BasicModel` with the type parameter indicating the type of the `@Id` field.
 
 ```java
 @Entity

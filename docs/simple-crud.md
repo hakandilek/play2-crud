@@ -4,7 +4,7 @@ Follow these steps to use play2-crud. You can also use it partially just for DAO
 
 ### Define model
 
- * Model class have to implement `play.utils.dao.BasicModel` with the type parameter indicating the type of the `@Id` field.
+ * Model class has to implement `play.utils.dao.BasicModel` with the type parameter indicating the type of the `@Id` field.
 
 ```java
 @Entity
