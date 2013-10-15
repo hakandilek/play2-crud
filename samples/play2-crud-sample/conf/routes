@@ -5,9 +5,9 @@
 # Home page
 GET     /               controllers.Application.index()
 # CRUD Controllers
-->     /app    	        play.crud.Routes
+->     /app             play.crud.Routes
 # REST API
-->     /api             play.crud.rest.Routes
+->     /api             play.rest.Routes
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file   controllers.Assets.at(path="/public", file)

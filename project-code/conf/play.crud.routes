@@ -9,6 +9,3 @@ GET		/:model/:key		@play.utils.crud.RouterCrudController.show(model: String, key
 GET		/:model/:key/edit	@play.utils.crud.RouterCrudController.editForm(model: String, key: String)
 POST	/:model/:key/update	@play.utils.crud.RouterCrudController.update(model: String, key: String)
 GET		/:model/:key/delete	@play.utils.crud.RouterCrudController.delete(model: String, key: String)
-
-# Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)

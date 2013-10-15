@@ -5,6 +5,7 @@
 # Home page
 GET     /               controllers.Application.index()
 # CRUD Controllers
-->     /app    	        play.crud.Routes
+->     /app             play.crud.Routes
 # REST API
-->     /api             play.crud.rest.Routes
+->     /api             play.rest.Routes
+
