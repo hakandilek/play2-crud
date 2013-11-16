@@ -112,4 +112,14 @@ public class FieldMetadata {
 		return widget;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("FieldMetadata [").append(field).append(", key=").append(key).append(", required=")
+				.append(required).append(", sortable=").append(sortable).append(", converter=").append(converter)
+				.append("]");
+		return builder.toString();
+	}
+
+	
 }

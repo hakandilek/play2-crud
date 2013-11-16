@@ -118,7 +118,9 @@ public class ClasspathScanningControllerRegistry implements ControllerRegistry {
 					Class modelClass = controller.getModelClass();
 					log.info("Found controller:" + controllerClass + " (" + modelClass + ")");
 					ModelMetadata model = models.getModel(modelClass);
-					map.put(modelClass, new ControllerProxyREST(controller, model));
+					if (model != null) {
+						map.put(modelClass, new ControllerProxyREST(controller, model));
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -151,7 +153,9 @@ public class ClasspathScanningControllerRegistry implements ControllerRegistry {
 					Class modelClass = controller.getModelClass();
 					log.info("Found controller:" + controllerClass + " (" + modelClass + ")");
 					ModelMetadata model = models.getModel(modelClass);
-					map.put(modelClass, new ControllerProxyCRUD(controller, model));
+					if (model != null) {
+						map.put(modelClass, new ControllerProxyCRUD(controller, model));
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -20,6 +20,8 @@ import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
+import play.Logger;
+import play.Logger.ALogger;
 import play.utils.meta.ConverterRegistry;
 import play.utils.meta.FieldMetadata;
 import play.utils.meta.ModelMetadata;
@@ -27,6 +29,7 @@ import play.utils.meta.ModelRegistry;
 import play.utils.meta.convert.Converter;
 
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
@@ -35,6 +38,8 @@ import com.google.common.collect.Maps;
 
 public class ClasspathScanningModelRegistry implements ModelRegistry {
 
+	private static ALogger log = Logger.of(ClasspathScanningModelRegistry.class);
+	
 	private Map<Class<?>, ModelMetadata> models;
 	private ConverterRegistry converters;
 
@@ -52,13 +57,16 @@ public class ClasspathScanningModelRegistry implements ModelRegistry {
 
 		Set<Class<?>> entities = reflections.getTypesAnnotatedWith(Entity.class);
 		for (Class<?> entity : entities) {
-			map.put(entity, getMetadata(entity));
+			ModelMetadata metadata = getMetadata(entity);
+			map.put(entity, metadata);
 		}
 
 		return map;
 	}
 
 	private ModelMetadata getMetadata(Class<?> entity) {
+		if (log.isDebugEnabled())
+			log.debug("getMetadata for: " + entity);
 		List<Field> modelFields = Lists.newArrayList(entity.getDeclaredFields());
 
 		Class<?> superClass = entity.getSuperclass();
@@ -73,6 +81,8 @@ public class ClasspathScanningModelRegistry implements ModelRegistry {
 			modelFields.addAll(Lists.newArrayList(superClass.getDeclaredFields()));
 			superClass = superClass.getSuperclass();
 		}
+		if (log.isDebugEnabled())
+			log.debug("superClass : " + superClass);
 
 		Function<Field, FieldMetadata> fieldMetadata = extractFieldMetadata();
 		Function<FieldMetadata, String> fieldName = extractFieldName();
@@ -89,15 +99,28 @@ public class ClasspathScanningModelRegistry implements ModelRegistry {
 										return field.getName().startsWith("_ebean");
 									}
 								}))), fieldMetadata), fieldName);
+		
+		if (log.isDebugEnabled()) {
+			log.debug("fields : ");
+			Set<String> fieldNames = fields.keySet();
+			for (String fn : fieldNames) {
+				log.debug(" * " + fn + " : " + fields.get(fn));
+			}
+		}
 
-		FieldMetadata keyField = Iterables.find(fields.values(), new Predicate<FieldMetadata>() {
+		Optional<FieldMetadata> keyField = Iterables.tryFind(fields.values(), new Predicate<FieldMetadata>() {
 			@Override
 			public boolean apply(FieldMetadata fieldInfo) {
 				return fieldInfo.isKey();
 			}
 		});
+		if (log.isDebugEnabled())
+			log.debug("keyField : " + keyField);
 		
-		ModelMetadata metadata = new ModelMetadata(entity, fields, keyField);
+		ModelMetadata metadata = null; 
+		if (keyField.isPresent()) {
+			metadata = new ModelMetadata(entity, fields, keyField.get());
+		}
 		return metadata;
 	}
 

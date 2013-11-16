@@ -6,6 +6,7 @@ import play.Application;
 import play.GlobalSettings;
 import play.Logger;
 import play.Logger.ALogger;
+import play.api.Play;
 import play.utils.inject.InjectAdapter;
 import play.utils.meta.ConverterRegistry;
 import play.utils.meta.ControllerRegistry;
@@ -36,7 +37,7 @@ public class CRUDManager {
 	public void initialize(Application app) {
 		if (log.isDebugEnabled())
 			log.debug("initialize <-");
-		ClassLoader appClassloader = app.classloader();
+		ClassLoader appClassloader = Play.classloader(Play.current());
 		ClassLoader libClassloader = getClass().getClassLoader();
 		ClassLoader[] classLoaders = new ClassLoader[] { appClassloader, libClassloader };
 		ConverterRegistry converters = new ClasspathScanningConverterRegistry(classLoaders);

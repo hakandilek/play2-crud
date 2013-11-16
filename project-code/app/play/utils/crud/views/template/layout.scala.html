@@ -10,11 +10,11 @@
         <title>@title</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="@routes.Assets.at("stylesheets/bootstrap.min.css")" rel="stylesheet">
-        <link href="@routes.Assets.at("stylesheets/jasny-bootstrap.min.css")" rel="stylesheet">
-        <link href="@routes.Assets.at("stylesheets/bootstrap-responsive.min.css")" rel="stylesheet">
-        <link href="@routes.Assets.at("stylesheets/jasny-bootstrap-responsive.min.css")" rel="stylesheet">
-        <link href="@routes.Assets.at("stylesheets/play2-crud.css")" rel="stylesheet" media="screen">
+        <link href="@play.utils.crud.CrudAssets.at("/public", "stylesheets/bootstrap.min.css")" rel="stylesheet">
+        <link href="@play.utils.crud.CrudAssets.at("/public", "stylesheets/jasny-bootstrap.min.css")" rel="stylesheet">
+        <link href="@play.utils.crud.CrudAssets.at("/public", "stylesheets/bootstrap-responsive.min.css")" rel="stylesheet">
+        <link href="@play.utils.crud.CrudAssets.at("/public", "stylesheets/jasny-bootstrap-responsive.min.css")" rel="stylesheet">
+        <link href="@play.utils.crud.CrudAssets.at("/public", "stylesheets/play2-crud.css")" rel="stylesheet" media="screen">
         @styles
     </head>
     <body>
@@ -43,11 +43,11 @@
             </div>
         </div>
 
-        <script src="@routes.Assets.at("javascripts/json2.js")" type="text/javascript"></script>
-        <script src="@routes.Assets.at("javascripts/jquery-1.7.1.min.js")" type="text/javascript"></script>
-        <script src="@routes.Assets.at("javascripts/bootstrap.min.js")" type="text/javascript"></script>
-        <script src="@routes.Assets.at("javascripts/jasny-bootstrap.min.js")" type="text/javascript"></script>
-        <script src="@routes.Assets.at("javascripts/play2-crud.js")" type="text/javascript"></script>
+        <script src="@play.utils.crud.CrudAssets.at("/public", "javascripts/json2.js")" type="text/javascript"></script>
+        <script src="@play.utils.crud.CrudAssets.at("/public", "javascripts/jquery-1.7.1.min.js")" type="text/javascript"></script>
+        <script src="@play.utils.crud.CrudAssets.at("/public", "javascripts/bootstrap.min.js")" type="text/javascript"></script>
+        <script src="@play.utils.crud.CrudAssets.at("/public", "javascripts/jasny-bootstrap.min.js")" type="text/javascript"></script>
+        <script src="@play.utils.crud.CrudAssets.at("/public", "javascripts/play2-crud.js")" type="text/javascript"></script>
         @scripts
     </body>
 </html>
