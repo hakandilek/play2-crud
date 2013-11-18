@@ -8,7 +8,7 @@ object ApplicationBuild extends Build {
     val appVersion      = "0.7.2-SNAPSHOT"
 
     val appDependencies = Seq(
-        javaCore, javaJdbc, javaEbean,
+        javaCore, javaJdbc, javaEbean, cache,
         "com.google.inject" % "guice" % "3.0"
     )
 

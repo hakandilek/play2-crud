@@ -10,7 +10,7 @@ import java.util.List;
 
 import javax.persistence.OptimisticLockException;
 
-import org.codehaus.jackson.JsonNode;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import play.Logger;
 import play.Logger.ALogger;
@@ -143,7 +143,7 @@ public abstract class APIController<K, M> extends Controller implements CRUD<K, 
 		JsonNode node = json.get(name);
 		if (node == null)
 			return null;
-		String value = node.getTextValue();
+		String value = node.asText();
 		return value;
 	}
 
@@ -153,7 +153,7 @@ public abstract class APIController<K, M> extends Controller implements CRUD<K, 
 		if (node == null)
 			return null;
 		List<String> list = new ArrayList<String>();
-		for (Iterator<JsonNode> elems = node.getElements(); elems.hasNext();) {
+		for (Iterator<JsonNode> elems = node.elements(); elems.hasNext();) {
 			JsonNode elem = elems.next();
 			list.add(elem.asText());
 		}
