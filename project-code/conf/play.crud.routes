@@ -10,4 +10,4 @@ GET		/:model/:key/edit	@play.utils.crud.RouterCrudController.editForm(model: Str
 POST	/:model/:key/update	@play.utils.crud.RouterCrudController.update(model: String, key: String)
 GET		/:model/:key/delete	@play.utils.crud.RouterCrudController.delete(model: String, key: String)
 
-GET     /assets/*file               play.utils.crud.CrudAssets.at(path="/public", file)
+GET     /assets/*file       play.utils.crud.Assets.at(path="/public", file)
