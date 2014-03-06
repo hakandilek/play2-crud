@@ -1,7 +1,7 @@
 play2-crud
 ==========
 
-Powerful CRUD &amp; DAO implementation with REST interface for [play framework](http://github.com/playframework/play) 2.0 and 2.1
+Powerful CRUD &amp; DAO implementation with REST interface for [play framework](http://github.com/playframework/play) 2.x
 
 Play 2.2 support is coming soon!
 
