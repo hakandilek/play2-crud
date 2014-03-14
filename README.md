@@ -3,8 +3,6 @@ play2-crud
 
 Powerful CRUD &amp; DAO implementation with REST interface for [play framework](http://github.com/playframework/play) 2.x
 
-Play 2.2 support is coming soon!
-
 # Samples
    
    * [Sample with basic dynamic CRUD controllers](https://github.com/hakandilek/play2-crud/tree/master/samples/play2-crud-simple)
