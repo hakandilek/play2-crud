@@ -3,6 +3,8 @@ play2-crud
 
 Powerful CRUD &amp; DAO implementation with REST interface for [play framework](http://github.com/playframework/play) 2.x
 
+For the [Typesafe Activator](http://typesafe.com/activator) check [play2-crud-activator](https://github.com/hakandilek/play2-crud-activator). 
+
 # Samples
    
    * [Sample with basic dynamic CRUD controllers](https://github.com/hakandilek/play2-crud/tree/master/samples/play2-crud-simple)
