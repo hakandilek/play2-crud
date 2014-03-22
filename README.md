@@ -45,7 +45,7 @@ You can begin with adding play2-crud dependency inside `conf/Build.scala` file.
 
 ### Associate Global settings
 
- * Change the `application.global` configuration key in the `conf/application.conf` file, aand use `play.utils.crud.GlobalCRUDSettings`:
+ * Change the `application.global` configuration key in the `conf/application.conf` file, and use `play.utils.crud.GlobalCRUDSettings`:
 
 ```
 ...
