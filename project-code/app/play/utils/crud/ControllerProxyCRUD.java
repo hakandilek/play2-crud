@@ -16,7 +16,8 @@ public class ControllerProxyCRUD<K, M> extends ControllerProxy<K, M> {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Result editForm(String key) {
-		return ((CRUDController)delegate).editForm(key);
+		K k = keyConverter.convert(key);
+		return ((CRUDController)delegate).editForm(k);
 	}
 
 }
