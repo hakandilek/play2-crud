@@ -2,6 +2,7 @@
 	opts: java.util.Map[Object, String], 
 	args: (Symbol,Any)*)(implicit handler: helper.FieldConstructor, lang: play.api.i18n.Lang)
 
+@import collection.JavaConversions._
 @import helper._ 
 
 @input(field, args:_*) { (id, name, value, htmlArgs) =>
