@@ -4,8 +4,9 @@
 
 @import collection.JavaConversions._
 @import helper._ 
+@import play.core.j.PlayMagicForJava
 
-@input(field, args:_*) { (id, name, value, htmlArgs) =>
+@input(PlayMagicForJava.javaFieldtoScalaField(field), args:_*) { (id, name, value, htmlArgs) =>
     @defining( if( htmlArgs.contains('multiple) ) "%s[]".format(name) else name ) { selectName =>
         <select id="@id" name="@selectName" @toHtmlArgs(htmlArgs)>
             @args.toMap.get('_default).map { defaultValue =>
