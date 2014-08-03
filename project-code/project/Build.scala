@@ -1,18 +1,23 @@
 import sbt._
 import Keys._
-import play.Project._
+import play.Play.autoImport._
+import PlayKeys._
 
 object ApplicationBuild extends Build {
 
     val appName         = "play2-crud"
-    val appVersion      = "0.7.3-SNAPSHOT"
+    val appVersion      = "0.7.4-SNAPSHOT"
+    val appScalaVersion = "2.11.1"
 
     val appDependencies = Seq(
         javaCore, javaJdbc, javaEbean, cache,
         "com.google.inject" % "guice" % "3.0"
     )
 
-    val main = play.Project(appName, appVersion, appDependencies).settings(
+    val root = Project(appName, file(".")).enablePlugins(play.PlayScala).settings(
+        version := appVersion,
+        scalaVersion := appScalaVersion,
+        libraryDependencies ++= appDependencies,
         publishArtifact in(Compile, packageDoc) := false,
         publishMavenStyle := true,
         publishTo <<= version { (v: String) =>
