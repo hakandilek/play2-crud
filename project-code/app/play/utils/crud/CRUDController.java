@@ -4,7 +4,7 @@ import play.Logger;
 import play.Logger.ALogger;
 import play.data.Form;
 import play.mvc.Call;
-import play.mvc.Content;
+import play.twirl.api.Content;
 import play.mvc.Result;
 import play.utils.dao.BasicModel;
 import play.utils.dao.DAO;

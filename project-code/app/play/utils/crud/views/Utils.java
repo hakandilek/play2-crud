@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 
 import play.Logger;
 import play.Logger.ALogger;
-import play.api.templates.Html;
+import play.twirl.api.Html;
 import play.i18n.Messages;
 import play.utils.meta.FieldMetadata;
 import play.utils.meta.ModelMetadata;
