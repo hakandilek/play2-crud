@@ -2,7 +2,7 @@
 ## HOW-TO Define Custom DAO
 
  * DAO class extends `play.utils.dao.BasicDAO` with two type parameters: One for the key type and one for the Model type
- * Alternatively, `play.utils.dao.CachedDAO` cn be used to cache fetched data.
+ * Alternatively, `play.utils.dao.CachedDAO` can be used to cache fetched data.
  * Classes implementing both `BasicDAO` or `CachedDAO` should override the constructor with key ad model class type parameters.
 
 ```java
