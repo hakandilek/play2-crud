@@ -11,6 +11,7 @@
    * Sorting field as string (might be in the form of `"fieldName [asc]/[desc]"`)
  * Template file name prefixes for List/Form and Show pages
  * A Call to the index page, indicating the call to return after CRUD operations
+ * An `@Inject` (javax.inject.Inject) annotation may be required before the construction definition.
  
 ```java
 import static play.data.Form.*;
