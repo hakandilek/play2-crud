@@ -40,4 +40,4 @@ public class SampleController extends CRUDController<Long, Sample> {
    }
 }
 ```
-
+[Definition of the class SampleDAO is here.](custom-dao.md)
