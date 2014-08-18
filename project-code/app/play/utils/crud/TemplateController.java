@@ -6,8 +6,8 @@ import org.springframework.util.ReflectionUtils;
 
 import play.Logger;
 import play.Logger.ALogger;
-import play.api.templates.Html;
-import play.mvc.Content;
+import play.twirl.api.Html;
+import play.twirl.api.Content;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -44,7 +44,7 @@ public class TemplateController extends Controller {
 		return content;
 	}
 
-	protected Html templateNotFound(String template, Parameters params) {
+	protected Content templateNotFound(String template, Parameters params) {
 		StringBuilder sb = new StringBuilder("Template ");
 		sb.append(template).append("(");
 		Class<?>[] types = params.types();

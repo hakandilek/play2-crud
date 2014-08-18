@@ -8,7 +8,7 @@ import play.Logger;
 import play.Logger.ALogger;
 import play.data.Form;
 import play.mvc.Call;
-import play.mvc.Content;
+import play.twirl.api.Content;
 import play.mvc.Result;
 import play.utils.crud.CRUDController;
 import play.utils.crud.Parameters;

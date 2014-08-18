@@ -1,9 +1,10 @@
 @(field: play.data.Form.Field, args: (Symbol,Any)*)(implicit handler: helper.FieldConstructor, lang: play.api.i18n.Lang)
 
 @import helper._ 
+@import play.core.j.PlayMagicForJava
 
 @inputType = @{ args.toMap.get('type).map(_.toString).getOrElse("text") }
 
-@input(field, args.filter(_._1 != 'type):_*) { (id, name, value, htmlArgs) =>
+@input(PlayMagicForJava.javaFieldtoScalaField(field), args.filter(_._1 != 'type):_*) { (id, name, value, htmlArgs) =>
     <input type="@inputType" id="@id" name="@name" value="@value" @toHtmlArgs(htmlArgs)>
 }

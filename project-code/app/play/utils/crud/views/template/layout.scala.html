@@ -1,6 +1,7 @@
 @(title: String, currentMenu: String, withMenuBar: Boolean = true)(content: Html, scripts: Html = Html(""), styles: Html = Html(""))
 
 @import play.utils.crud.CRUDKeys
+@import play.core.j.PlayMagicForJava
 
 @minified=@{ if (play.Play.isProd()) ".min" else "" }
 
@@ -24,16 +25,16 @@
 
         <div class="main">
             <div class="container-fluid">
-                @if(flash().containsKey(CRUDKeys.FLASH_SUCCESS_KEY)) {
+                @if(PlayMagicForJava.requestHeader.flash.get(CRUDKeys.FLASH_SUCCESS_KEY).isDefined) {
                     <div class="alert alert-block alert-success">
                         <button type="button" class="close" data-dismiss="alert">×</button>
-                        @Html(flash().get(CRUDKeys.FLASH_SUCCESS_KEY))
+                        @Html(PlayMagicForJava.requestHeader.flash.apply(CRUDKeys.FLASH_SUCCESS_KEY))
                     </div>
                 }
-                @if(flash().containsKey(CRUDKeys.FLASH_ERROR_KEY)) {
+                @if(PlayMagicForJava.requestHeader.flash.get(CRUDKeys.FLASH_ERROR_KEY).isDefined) {
                     <div class="alert alert-block alert-success">
                         <button type="button" class="close" data-dismiss="alert">×</button>
-                        @Html(flash().get(CRUDKeys.FLASH_ERROR_KEY))
+                        @Html(PlayMagicForJava.requestHeader.flash.apply(CRUDKeys.FLASH_ERROR_KEY))
                     </div>
                 }
             </div>

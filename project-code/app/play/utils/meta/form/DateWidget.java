@@ -1,7 +1,7 @@
 package play.utils.meta.form;
 
 import play.api.i18n.Lang;
-import play.api.templates.Html;
+import play.twirl.api.Html;
 import play.data.Form.Field;
 import play.utils.meta.FieldMetadata;
 import scala.Symbol;
