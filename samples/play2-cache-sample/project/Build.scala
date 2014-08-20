@@ -11,7 +11,8 @@ object ApplicationBuild extends Build {
 
     val appDependencies = Seq(
         javaCore, javaJdbc, javaEbean,
-        "play2-crud" % "play2-crud_2.11" % "0.7.4-SNAPSHOT"
+        "play2-crud" % "play2-crud_2.11" % "0.7.4-SNAPSHOT",
+        "play2-crud" % "play2-crud_2.11" % "0.7.4-SNAPSHOT" classifier "assets"
     )
 
     val main = Project(appName, file(".")).enablePlugins(play.PlayJava).settings(

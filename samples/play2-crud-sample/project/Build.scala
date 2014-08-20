@@ -12,6 +12,7 @@ object ApplicationBuild extends Build {
     val appDependencies = Seq(
         javaCore, javaJdbc, javaEbean,
         "play2-crud" % "play2-crud_2.11" % "0.7.4-SNAPSHOT",
+        "play2-crud" % "play2-crud_2.11" % "0.7.4-SNAPSHOT" classifier "assets",
         "org.mockito" % "mockito-core" % "1.9.5"
     )
 
