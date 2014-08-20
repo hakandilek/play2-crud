@@ -21,6 +21,7 @@ object ApplicationBuild extends Build {
         scalaVersion := appScalaVersion,
         libraryDependencies ++= appDependencies,
         publishArtifact in(Compile, packageDoc) := false,
+        packagedArtifacts += ((artifact in playPackageAssets).value -> playPackageAssets.value),
         publishMavenStyle := true,
         publishTo <<= version { (v: String) =>
         	if (v.trim.endsWith("SNAPSHOT"))
