@@ -24,10 +24,10 @@ object ApplicationBuild extends Build {
         packagedArtifacts += ((artifact in playPackageAssets).value -> playPackageAssets.value),
         publishMavenStyle := true,
         publishTo <<= version { (v: String) =>
-        	if (v.trim.endsWith("SNAPSHOT"))
-    			Some(Resolver.file("file",  new File( "../../maven-repo/snapshots" )) )
-			else
-    			Some(Resolver.file("file",  new File( "../../maven-repo/releases" )) )
+            if (v.trim.endsWith("SNAPSHOT"))
+                Some(Resolver.file("file",  new File( "../../maven-repo/snapshots" )) )
+            else
+                Some(Resolver.file("file",  new File( "../../maven-repo/releases" )) )
         }
     )
 
