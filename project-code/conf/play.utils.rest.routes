@@ -1,8 +1,0 @@
-# REST Routes
-# ~~~~
-
-GET		/:model/list		@play.utils.crud.RouterRestController.list(model: String)
-GET		/:model/:key		@play.utils.crud.RouterRestController.show(model: String, key: String)
-POST	/:model/create		@play.utils.crud.RouterRestController.create(model: String)
-PUT		/:model/:key		@play.utils.crud.RouterRestController.update(model: String, key: String)
-DELETE	/:model/:key		@play.utils.crud.RouterRestController.delete(model: String, key: String)
