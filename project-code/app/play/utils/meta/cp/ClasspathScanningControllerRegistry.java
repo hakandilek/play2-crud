@@ -1,5 +1,6 @@
 package play.utils.meta.cp;
 
+import java.lang.reflect.Modifier;
 import java.util.Map;
 import java.util.Set;
 
@@ -113,7 +114,19 @@ public class ClasspathScanningControllerRegistry implements ControllerRegistry {
 					continue;
 				}
 
-				C controller = global.getControllerInstance(controllerClass);
+				if (Modifier.isAbstract(controllerClass.getModifiers())) {
+					if (log.isDebugEnabled())
+						log.debug(controllerClass + "is abstract");
+					continue;
+				}
+
+				C controller = null;
+				try {
+					controller = global.getControllerInstance(controllerClass);
+				} catch (Exception e) {
+					log.info("cannot get instances of controller: " + controllerClass, e);
+				}
+
 				if (controller != null) {
 					Class modelClass = controller.getModelClass();
 					log.info("Found controller:" + controllerClass + " (" + modelClass + ")");
@@ -148,7 +161,19 @@ public class ClasspathScanningControllerRegistry implements ControllerRegistry {
 					continue;
 				}
 
-				C controller = global.getControllerInstance(controllerClass);
+				if (Modifier.isAbstract(controllerClass.getModifiers())) {
+					if (log.isDebugEnabled())
+						log.debug(controllerClass + "is abstract");
+					continue;
+				}
+
+				C controller = null;
+				try {
+					controller = global.getControllerInstance(controllerClass);
+				} catch (Exception e) {
+					log.info("cannot get instances of controller: " + controllerClass, e);
+				}
+				
 				if (controller != null) {
 					Class modelClass = controller.getModelClass();
 					log.info("Found controller:" + controllerClass + " (" + modelClass + ")");
