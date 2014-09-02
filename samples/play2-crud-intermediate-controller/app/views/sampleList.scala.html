@@ -1,0 +1,39 @@
+@(page: com.avaje.ebean.Page[Sample])
+@import helper._ 
+@import helper.twitterBootstrap._
+
+@main("list") {
+
+	<h3>@page.getTotalRowCount() objects</h3>
+	
+    @if(page.getTotalRowCount() == 0) {
+        
+        <div class="well">
+            <em>Nothing to display</em>
+        </div>
+        
+    } else {
+	
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th class="header">name</th>
+                <th class="header">random value</th>
+            </tr>
+        </thead>
+        <tbody>
+        @for(sample <- page.getList()) {
+            <tr>
+                <td>
+                	@sample.getName()
+               	</td>
+                <td>
+                	@sample.getRandomValue()
+               	</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    
+    }
+}
