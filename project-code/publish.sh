@@ -1,3 +1,3 @@
 #!/bin/bash
-play clean publish
+activator clean publish
 

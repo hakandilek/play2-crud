@@ -1,3 +1,3 @@
 #!/bin/bash
-play clean publish-local
+activator clean publish-local
 
