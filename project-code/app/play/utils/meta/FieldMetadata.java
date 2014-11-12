@@ -8,9 +8,9 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Id;
 
+import org.joda.time.DateTime;
 import play.data.validation.Constraints.MaxLength;
 import play.data.validation.Constraints.Required;
-import play.utils.field.Ignore;
 import play.utils.field.IgnoreEdit;
 import play.utils.meta.convert.Converter;
 import play.utils.meta.form.CheckboxWidget;
@@ -68,6 +68,10 @@ public class FieldMetadata {
 		}
 
 		if (Date.class.isAssignableFrom(getField().getType())) {
+			widget = new DateWidget(this);
+		}
+
+		if (DateTime.class.isAssignableFrom(getField().getType())) {
 			widget = new DateWidget(this);
 		}
 
