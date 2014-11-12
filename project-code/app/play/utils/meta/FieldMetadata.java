@@ -10,6 +10,8 @@ import javax.persistence.Id;
 
 import play.data.validation.Constraints.MaxLength;
 import play.data.validation.Constraints.Required;
+import play.utils.field.Ignore;
+import play.utils.field.IgnoreEdit;
 import play.utils.meta.convert.Converter;
 import play.utils.meta.form.CheckboxWidget;
 import play.utils.meta.form.DateWidget;
@@ -26,6 +28,7 @@ public class FieldMetadata {
 	boolean key;
 	boolean required;
 	boolean sortable;
+	boolean ignoreEdit;
 	Converter<?> converter;
 	FormFieldWidget widget;
 
@@ -38,6 +41,10 @@ public class FieldMetadata {
 
 		if (annotation(Required.class) != null) {
 			required = true;
+		}
+
+		if (annotation(IgnoreEdit.class) != null) {
+			ignoreEdit = true;
 		}
 		
 		if (CharSequence.class.isAssignableFrom(getField().getType())) {
@@ -99,6 +106,9 @@ public class FieldMetadata {
 	public boolean isRequired() {
 		return required;
 	}
+	public boolean isIgnoreEdit() {
+		return ignoreEdit;
+	}
 
 	public String getDisplayName() {
 		return field.getName();
@@ -116,7 +126,8 @@ public class FieldMetadata {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("FieldMetadata [").append(field).append(", key=").append(key).append(", required=")
-				.append(required).append(", sortable=").append(sortable).append(", converter=").append(converter)
+				.append(required).append(", sortable=").append(sortable).append(", ignoreEdit=").append(ignoreEdit)
+				.append(", converter=").append(converter)
 				.append("]");
 		return builder.toString();
 	}

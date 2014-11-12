@@ -8,12 +8,12 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Indicates to ignore this field in the list of fields in the metamodel.
+ * Indicates to ignore this field in the edit/create form.
  * 
  * @author Ludovic Chane Won In
  */
 @Documented
 @Target(FIELD)
 @Retention(RUNTIME)
-public @interface Ignore {
+public @interface IgnoreEdit {
 }

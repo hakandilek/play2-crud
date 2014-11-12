@@ -1,5 +1,7 @@
 #!/bin/bash
 
+./publish-local.sh
+
 ARTIFACT=play2-crud;
 VERSION=0.7.5-SNAPSHOT;
 LOCAL_REPO=/Users/ludochane/workspace/maven-repo;

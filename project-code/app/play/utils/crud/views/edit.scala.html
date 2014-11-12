@@ -14,7 +14,7 @@
           else            { play.utils.crud.routes.RouterCrudController.create(model.getName) }) { 
 
         @for(field <- javaCollectionToScala(fields)) {
-        	@if(!field.isKey && field.getWidget != null) {
+        	@if(!field.isKey && !field.isIgnoreEdit && field.getWidget != null) {
         		@field.getWidget.render(modelForm)
         	}
         }
