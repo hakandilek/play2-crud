@@ -3,7 +3,7 @@
 @import helper._
 @import play.core.j.PlayMagicForJava
 
-@implicitFieldConstructor = @{ FieldConstructor(bootstrap3Input.f) }
+@implicitFieldConstructor = @{ FieldConstructor(crudBootstrap3Input.f) }
 
 @inputType = @{ args.toMap.get('type).map(_.toString).getOrElse("text") }
 

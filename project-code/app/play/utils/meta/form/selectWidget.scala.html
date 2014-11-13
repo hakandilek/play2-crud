@@ -6,7 +6,7 @@
 @import helper._
 @import play.core.j.PlayMagicForJava
 
-@implicitFieldConstructor = @{ FieldConstructor(bootstrap3Input.f) }
+@implicitFieldConstructor = @{ FieldConstructor(crudBootstrap3Input.f) }
 
 @input(PlayMagicForJava.javaFieldtoScalaField(field), args:_*) { (id, name, value, htmlArgs) =>
     @defining( if( htmlArgs.contains('multiple) ) "%s[]".format(name) else name ) { selectName =>
