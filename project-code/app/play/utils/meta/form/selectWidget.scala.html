@@ -1,20 +1,22 @@
-@(field: play.data.Form.Field, 
-	opts: java.util.Map[Object, String], 
-	args: (Symbol,Any)*)(implicit handler: helper.FieldConstructor, lang: play.api.i18n.Lang)
+@(field: play.data.Form.Field,
+	opts: java.util.Map[Object, String],
+	args: (Symbol,Any)*)(lang: play.api.i18n.Lang)
 
 @import collection.JavaConversions._
-@import helper._ 
+@import helper._
 @import play.core.j.PlayMagicForJava
+
+@implicitFieldConstructor = @{ FieldConstructor(bootstrap3Input.f) }
 
 @input(PlayMagicForJava.javaFieldtoScalaField(field), args:_*) { (id, name, value, htmlArgs) =>
     @defining( if( htmlArgs.contains('multiple) ) "%s[]".format(name) else name ) { selectName =>
-        <select id="@id" name="@selectName" @toHtmlArgs(htmlArgs)>
+        <select id="@id" name="@selectName" class="form-control" @toHtmlArgs(htmlArgs)>
             @args.toMap.get('_default).map { defaultValue =>
                 <option class="blank" value="">@defaultValue</option>
             }
-			
+
 			@for((k,v) <- opts) {
-                <option value="@k" @if(field.value != null && k.equals(field.value)){selected}>@Messages(v)</option>			
+                <option value="@k" @if(field.value != null && k.equals(field.value)){selected}>@Messages(v)</option>
 			}
         </select>
     }

@@ -15,8 +15,8 @@ public class CheckboxWidget extends FormFieldWidget {
 	}
 
 	@Override
-	protected Html render(Field formField, Tuple2<Symbol, Object>[] args, FieldConstructor fieldConstructor, Lang lang) {
-		return play.utils.meta.form.html.checkboxWidget.render(formField, args, fieldConstructor, lang);
+	protected Html render(Field formField, Tuple2<Symbol, Object>[] args, Lang lang) {
+		return play.utils.meta.form.html.checkboxWidget.render(formField, args, lang);
 	}
 
 

@@ -1,11 +1,6 @@
 .main {
   padding-top: 60px;
 }
-@media (max-width: 979px) {
-  .main {
-    padding-top: 0;
-  }
-}
 .crud-list-action {
   margin: 5px 0;
 }

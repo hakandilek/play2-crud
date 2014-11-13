@@ -12,6 +12,7 @@ object ApplicationBuild extends Build {
     val appDependencies = Seq(
         javaCore, javaJdbc, javaEbean, cache,
         "org.webjars" % "bootstrap" % "3.3.1",
+        "org.webjars" % "font-awesome" % "4.2.0",
         "org.webjars" % "json2" % "20110223",
         "com.google.inject" % "guice" % "4.0-beta4"
     )
