@@ -5,13 +5,17 @@ Powerful CRUD &amp; DAO implementation with REST interface for [play framework](
 
 For the [Typesafe Activator](http://typesafe.com/activator) check [play2-crud-activator](https://github.com/hakandilek/play2-crud-activator). 
 
-# Samples
+### Some screenshots
+
+ * index page
+   ![crud-index page](/screenshot/index.png)
+
+ * create page
+   ![create page](/screenshot/create.png)
+
+ * list page
+   ![list page](/screenshot/list.png)
    
-   * [Sample with basic dynamic CRUD controllers](https://github.com/hakandilek/play2-crud/tree/master/samples/play2-crud-simple)
-   * [Sample with custom views](https://github.com/hakandilek/play2-crud/tree/master/samples/play2-crud-customView) is a full featured sample.
-   * [Full featured sample with DAO and DAOListeners](https://github.com/hakandilek/play2-crud/tree/master/samples/play2-crud-sample)
-   * [Sample with Cache usage](https://github.com/hakandilek/play2-crud/tree/master/samples/play2-cache-sample)
- 
 ## Quick Start
 
 Follow these steps to use play2-crud. You can also use it partially just for DAO or CRUD controllers. If you think any part needs further explanation, please report a new issue.
@@ -54,30 +58,6 @@ application.global=play.utils.crud.GlobalCRUDSettings
 
 ```
 
-####Override play launcher
-If you want to override the play application launcher, you must create your own class which extends GlobalCRUDSettings. This class must be in the folder projectRoot/app/
-```java
-import play.Logger;
-import play.Application;
-import play.utils.crud.GlobalCRUDSettings;
-
-public class Global extends GlobalCRUDSettings
-{
-    @Override
-    public void onStart(Application app) {
-        super.onStart(app);
-        Logger.info("Application started !");
-    }
-}
-
-```
-Now notice play that the application launcher is now the class you created. Change the `application.global` configuration key in the `conf/application.conf` file, and use the class you created :
-```
-...
-application.global=Global
-...
-
-```
 ### Define routes
 
 ```
@@ -127,17 +107,14 @@ public class Sample extends Model implements BasicModel<Long> {
 
 ... call [http://localhost:9000/app](http://localhost:9000/app) and voila!
 
-### Some screenshots
 
- * index page
-   ![crud-index page](/screenshot/index.png)
-
- * create page
-   ![create page](/screenshot/create.png)
-
- * list page
-   ![list page](/screenshot/list.png)
+# Samples
    
+   * [Sample with basic dynamic CRUD controllers](https://github.com/hakandilek/play2-crud/tree/master/samples/play2-crud-simple)
+   * [Sample with custom views](https://github.com/hakandilek/play2-crud/tree/master/samples/play2-crud-customView) is a full featured sample.
+   * [Full featured sample with DAO and DAOListeners](https://github.com/hakandilek/play2-crud/tree/master/samples/play2-crud-sample)
+   * [Sample with Cache usage](https://github.com/hakandilek/play2-crud/tree/master/samples/play2-cache-sample)
+ 
 # HOW-TO
 
  Here you can find some HOW-TO documents introducing some powerful functionality:
@@ -147,4 +124,5 @@ public class Sample extends Model implements BasicModel<Long> {
   * [HOW-TO use DAO Listeners](docs/dao-listeners.md)
   * [HOW-TO use dynamic REST Controllers](docs/rest-controllers.md)
   * [HOW-TO use custom REST Controllers](docs/custom-rest-controllers.md)
+  * [HOW-TO Override Play Launcher](docs/override-play-launcher.md)
 
