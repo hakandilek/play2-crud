@@ -30,7 +30,7 @@ You can begin with adding play2-crud dependency inside `conf/Build.scala` file.
 
 ```
 
- * Here in the sample, it is defined for version 0.7.0, but you can use the latest version accordingly.
+ * Dependency version is for version 0.7.0 defined, but you can use the latest version.
 
  * Add custom maven repositories:
 
