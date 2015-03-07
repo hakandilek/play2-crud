@@ -111,6 +111,10 @@ public class FieldMetadata {
 	public FormFieldWidget getWidget() {
 		return widget;
 	}
+	
+	public void setWidget(FormFieldWidget widget) {
+		this.widget = widget;
+	}
 
 	@Override
 	public String toString() {
