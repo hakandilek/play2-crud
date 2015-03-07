@@ -16,6 +16,7 @@ public class TemplateController extends Controller {
 	protected final ALogger log = Logger.of(getClass());
 	
 	private ClassLoader classLoader;
+	protected String templatePackageName = "views.html."; //derived classes can change this. MUST end in "."
 
 	public TemplateController(ClassLoader classLoader) {
 		this.classLoader = classLoader;
@@ -31,11 +32,11 @@ public class TemplateController extends Controller {
 	protected Result badRequest(String template, Parameters params) {
 		return badRequest(render(template, params));
 	}
-
+	
 	protected Content render(String template, Parameters params) {
 		Content content;
 		try {
-			content = call("views.html." + template, "render", params);
+			content = call(templatePackageName + template, "render", params);
 		} catch (ClassNotFoundException | MethodNotFoundException e) {
 			if (log.isDebugEnabled())
 				log.debug("template not found : '" + template + "'");
