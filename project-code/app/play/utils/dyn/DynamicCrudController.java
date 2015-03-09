@@ -72,7 +72,7 @@ public class DynamicCrudController extends CRUDController {
 	protected Content render(String template, Parameters params) {
 		Content content;
 		try {
-			content = call("views.html." + template, "render", params);
+			content = call(templatePackageName + template, "render", params);
 		} catch (ClassNotFoundException | MethodNotFoundException e) {
 			if (log.isDebugEnabled())
 				log.debug("template not found : '" + template + "'");
