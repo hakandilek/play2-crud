@@ -1,0 +1,22 @@
+@(elements: views.html.helper.FieldElements)
+
+@import play.api.i18n._
+@import views.html.helper._
+
+@*****************************************************
+* Generate input according twitter bootstrap 3 rules *
+*****************************************************@
+<div class="form-group @elements.args.get('_class) @if(elements.hasErrors){ has-error}" id="@elements.args.get('_id).getOrElse(elements.id + "_field")">
+    <label for="@elements.id" class="@elements.args.get('_labelclass) col-sm-3 control-label">@elements.label(elements.lang)
+        @if(elements.field.constraints.find(_._1 == "constraint.required").nonEmpty){ * }
+    </label>
+    <div class="@elements.args.get('_inputclass) col-sm-4">
+    @elements.input
+    @if(elements.args.get('_showConstraints).map{ _ == true}.getOrElse(false)){
+        <span class="help-block">@elements.infos(elements.lang).mkString(", ")</span>
+    }
+    @if(elements.hasErrors) {
+    <span class="help-block">@elements.errors(elements.lang).mkString(", ")</span>
+    }
+    </div>
+</div>

@@ -9,6 +9,7 @@ crud.update=Update
 crud.display=Display a(n) {0} object
 crud.edit=Edit
 crud.delete=Delete
+crud.cancel=Cancel
 
 crud.form.error=There are some errors
 crud.form.file.select=Select a file

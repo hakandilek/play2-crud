@@ -1,27 +1,35 @@
 @(model: play.utils.meta.ModelMetadata,
-	fields: java.lang.Iterable[play.utils.meta.FieldMetadata], 
-	key: Object, 
+	fields: java.lang.Iterable[play.utils.meta.FieldMetadata],
+	key: Object,
 	modelForm: play.data.Form[_])
 
-@import helper._ 
+@import helper._
 @import helper.twitterBootstrap._
 
 @template.layout(Messages("crud.appname"), model.getName) {
-        
-	<h3>@if(key != null) { @Messages("crud.update") } else { @Messages("crud.new") }  @Messages(model.getName)</h3>
 
-    @form(if(key != null) { play.utils.crud.routes.RouterCrudController.update(model.getName, key + "") } 
-          else            { play.utils.crud.routes.RouterCrudController.create(model.getName) }) { 
+    <div class="row">
 
-        @for(field <- javaCollectionToScala(fields)) {
-        	@if(!field.isKey && field.getWidget != null) {
-        		@field.getWidget.render(modelForm)
-        	}
-        }
-        
-        <div>
-           <input type="submit" class="btn btn-success" value="@if(key != null) { @Messages("crud.update") } else { @Messages("crud.create") }">
+        <div class="col-sm-12">
+
+            <h3>@if(key != null) { @Messages("crud.update") } else { @Messages("crud.new") }  @Messages(model.getName)</h3>
+
+            @form(if(key != null) { play.utils.crud.routes.RouterCrudController.update(model.getName, key + "") }
+                  else            { play.utils.crud.routes.RouterCrudController.create(model.getName) }, 'class -> "form-horizontal") {
+
+                @for(field <- javaCollectionToScala(fields)) {
+                    @if(!field.isKey && !field.isIgnoreEdit && field.getWidget != null) {
+                        @field.getWidget.render(modelForm)
+                    }
+                }
+
+                <div>
+                   <input type="submit" class="btn btn-success" value="@if(key != null) { @Messages("crud.update") } else { @Messages("crud.create") }">
+                   <input type="button" class="btn btn-warning history-back" value="@Messages("crud.cancel")">
+                </div>
+            }
+
         </div>
-    }
-    
+
+    </div>
 }

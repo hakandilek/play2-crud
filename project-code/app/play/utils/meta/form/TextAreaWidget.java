@@ -14,10 +14,10 @@ public class TextAreaWidget extends FormFieldWidget {
 	public TextAreaWidget(FieldMetadata fieldMetadata) {
 		super(fieldMetadata);
 	}
-	
+
 	@Override
-	protected Html render(Field formField, Tuple2<Symbol, Object>[] args, FieldConstructor fieldConstructor, Lang lang) {
-		return textareaWidget.render(formField, args, fieldConstructor, lang);
+	protected Html render(Field formField, Tuple2<Symbol, Object>[] args, Lang lang) {
+		return textareaWidget.render(formField, args, lang);
 	}
 
 
