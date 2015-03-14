@@ -16,6 +16,8 @@ import play.utils.meta.FieldMetadata;
 import play.utils.meta.form.FormFieldWidget;
 import play.utils.meta.form.TextAreaWidget;
 
+//change base class and this controller is no longer seen by ClasspathScanningControllerRegistry
+//public class TaxiController extends DynamicTwixtController<Long, Taxi, TaxiTwixt> 
 public class TaxiController extends MyDynamicTwixtController<Long, Taxi, TaxiTwixt> 
 {
 	@Inject
