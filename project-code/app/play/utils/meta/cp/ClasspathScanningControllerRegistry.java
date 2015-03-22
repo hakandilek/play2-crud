@@ -147,7 +147,7 @@ public class ClasspathScanningControllerRegistry implements ControllerRegistry {
 		
 		ConfigurationBuilder builder = new ConfigurationBuilder().setUrls(
 				ClasspathHelper.forPackage("", cls));
-			//builder.addUrls(ClasspathHelper.forPackage("org.mef.twixt"));
+			builder.addUrls(ClasspathHelper.forPackage("org.mef.twixt"));
 
 		
 		final Reflections reflections = new Reflections(builder.setScanners(new SubTypesScanner(),
