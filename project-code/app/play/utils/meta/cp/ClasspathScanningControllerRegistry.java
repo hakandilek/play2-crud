@@ -144,8 +144,13 @@ public class ClasspathScanningControllerRegistry implements ControllerRegistry {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private <C extends CRUD> Map<Class<?>, ControllerProxyCRUD<?, ?>> scanCrud(GlobalSettings global, Class<C> superType, ClassLoader... cls) {
-		final Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(
-				ClasspathHelper.forPackage("", cls)).setScanners(new SubTypesScanner(),
+		
+		ConfigurationBuilder builder = new ConfigurationBuilder().setUrls(
+				ClasspathHelper.forPackage("", cls));
+			//builder.addUrls(ClasspathHelper.forPackage("org.mef.twixt"));
+
+		
+		final Reflections reflections = new Reflections(builder.setScanners(new SubTypesScanner(),
 				new TypeAnnotationsScanner()).addClassLoaders(cls));
 
 		Map<Class<?>, ControllerProxyCRUD<?, ?>> map = Maps.newHashMap();
@@ -153,7 +158,7 @@ public class ClasspathScanningControllerRegistry implements ControllerRegistry {
 		for (Class<? extends C> controllerClass : controllerClasses) {
 			try {
 				if (log.isDebugEnabled())
-					log.debug("controllerClass : " + controllerClass);
+					log.debug("pqpcontrollerClass : " + controllerClass);
 				
 				if (controllerClass.isAnnotationPresent(Dynamic.class)) {
 					if (log.isDebugEnabled())
