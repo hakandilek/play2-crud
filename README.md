@@ -1,6 +1,8 @@
 play2-crud
 ==========
 
+[![Join the chat at https://gitter.im/hakandilek/play2-crud](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hakandilek/play2-crud?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Powerful CRUD &amp; DAO implementation with REST interface for [play framework](http://github.com/playframework/play) 2.x
 
 For the [Typesafe Activator](http://typesafe.com/activator) check [play2-crud-activator](https://github.com/hakandilek/play2-crud-activator). 
