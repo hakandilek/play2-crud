@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Play2-crud by hakandilek</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Play2-crud</h1>
+        <h2>Simple CRUD &amp; DAO implementation for play2</h2>
+        <a href="https://github.com/hakandilek/play2-crud" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="play2-crud" class="anchor" href="#play2-crud" aria-hidden="true"><span class="octicon octicon-link"></span></a>play2-crud</h1>
+
+<p><a href="https://gitter.im/hakandilek/play2-crud?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Join the chat at https://gitter.im/hakandilek/play2-crud"></a></p>
+
+<p>Powerful CRUD &amp; DAO implementation with REST interface for <a href="http://github.com/playframework/play">play framework</a> 2.x</p>
+
+<p>For the <a href="http://typesafe.com/activator">Typesafe Activator</a> check <a href="https://github.com/hakandilek/play2-crud-activator">play2-crud-activator</a>. </p>
+
+<h3>
+<a id="some-screenshots" class="anchor" href="#some-screenshots" aria-hidden="true"><span class="octicon octicon-link"></span></a>Some screenshots</h3>
+
+<ul>
+<li><p>index page
+<img src="/screenshot/index.png" alt="crud-index page"></p></li>
+<li><p>create page
+<img src="/screenshot/create.png" alt="create page"></p></li>
+<li><p>list page
+<img src="/screenshot/list.png" alt="list page"></p></li>
+</ul>
+
+<h2>
+<a id="quick-start" class="anchor" href="#quick-start" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quick Start</h2>
+
+<p>Follow these steps to use play2-crud. You can also use it partially just for DAO or CRUD controllers. If you think any part needs further explanation, please report a new issue.</p>
+
+<h3>
+<a id="add-play2-crud-dependency" class="anchor" href="#add-play2-crud-dependency" aria-hidden="true"><span class="octicon octicon-link"></span></a>Add play2-crud dependency</h3>
+
+<p>You can begin with adding play2-crud dependency inside <code>conf/Build.scala</code> file.</p>
+
+<ul>
+<li>Add app dependency:</li>
+</ul>
+
+<pre><code>    val appDependencies = Seq(
+        javaCore, javaJdbc, javaEbean,
+        "play2-crud" % "play2-crud_2.10" % "0.7.0"
+    )
+
+</code></pre>
+
+<ul>
+<li><p>Dependency version is for version 0.7.0 defined, but you can use the latest version.</p></li>
+<li><p>Add custom maven repositories:</p></li>
+</ul>
+
+<pre><code>    val main = play.Project(appName, appVersion, appDependencies).settings(
+        //maven repository
+        resolvers += "release repository" at  "http://hakandilek.github.com/maven-repo/releases/",
+        resolvers += "snapshot repository" at "http://hakandilek.github.com/maven-repo/snapshots/"
+    )
+
+</code></pre>
+
+<h3>
+<a id="associate-global-settings" class="anchor" href="#associate-global-settings" aria-hidden="true"><span class="octicon octicon-link"></span></a>Associate Global settings</h3>
+
+<h4>
+<a id="direct-reference" class="anchor" href="#direct-reference" aria-hidden="true"><span class="octicon octicon-link"></span></a>Direct reference</h4>
+
+<p>If you don't want to override the play application launcher, you just have to notice to play that the class to use as launcher is now GlobalCRUDSettings. Change the <code>application.global</code> configuration key in the <code>conf/application.conf</code> file, and use <code>play.utils.crud.GlobalCRUDSettings</code>:</p>
+
+<pre><code>...
+application.global=play.utils.crud.GlobalCRUDSettings
+...
+
+</code></pre>
+
+<h3>
+<a id="define-routes" class="anchor" href="#define-routes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Define routes</h3>
+
+<pre><code># CRUD Controllers
+-&gt;     /app             play.crud.Routes
+
+# REST API
+-&gt;     /api             play.rest.Routes
+
+</code></pre>
+
+<h3>
+<a id="define-model" class="anchor" href="#define-model" aria-hidden="true"><span class="octicon octicon-link"></span></a>Define model</h3>
+
+<ul>
+<li>Model class has to implement <code>play.utils.dao.BasicModel</code> with the type parameter indicating the type of the <code>@Id</code> field.</li>
+</ul>
+
+<div class="highlight highlight-source-java"><pre>@<span class="pl-smi">Entity</span>
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">Sample</span> <span class="pl-k">extends</span> <span class="pl-e">Model</span> <span class="pl-k">implements</span> <span class="pl-e">BasicModel&lt;<span class="pl-smi">Long</span>&gt;</span> {
+
+   <span class="pl-k">@Id</span>
+   <span class="pl-k">private</span> <span class="pl-smi">Long</span> key;
+
+   <span class="pl-k">@Basic</span>
+   <span class="pl-k">@Required</span>
+   <span class="pl-k">private</span> <span class="pl-smi">String</span> name;
+
+   <span class="pl-k">public</span> <span class="pl-smi">Long</span> <span class="pl-en">getKey</span>() {
+      <span class="pl-k">return</span> key;
+   }
+
+   <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">setKey</span>(<span class="pl-smi">Long</span> <span class="pl-v">key</span>) {
+      <span class="pl-v">this</span><span class="pl-k">.</span>key <span class="pl-k">=</span> key;
+   }
+
+   <span class="pl-k">public</span> <span class="pl-smi">String</span> <span class="pl-en">getName</span>() {
+      <span class="pl-k">return</span> name;
+   }
+
+   <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">setName</span>(<span class="pl-smi">String</span> <span class="pl-v">name</span>) {
+      <span class="pl-v">this</span><span class="pl-k">.</span>name <span class="pl-k">=</span> name;
+   }
+}</pre></div>
+
+<ul>
+<li>Here the <code>Sample</code> model class implements <code>BasicModel&lt;Long&gt;</code> where <code>key</code> field indicated with <code>@Id</code> is <code>Long</code>.</li>
+</ul>
+
+<p>... call <a href="http://localhost:9000/app">http://localhost:9000/app</a> and voila!</p>
+
+<h1>
+<a id="samples" class="anchor" href="#samples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Samples</h1>
+
+<ul>
+<li><a href="https://github.com/hakandilek/play2-crud/tree/master/samples/play2-crud-simple">Sample with basic dynamic CRUD controllers</a></li>
+<li>
+<a href="https://github.com/hakandilek/play2-crud/tree/master/samples/play2-crud-customView">Sample with custom views</a> is a full featured sample.</li>
+<li><a href="https://github.com/hakandilek/play2-crud/tree/master/samples/play2-crud-sample">Full featured sample with DAO and DAOListeners</a></li>
+<li><a href="https://github.com/hakandilek/play2-crud/tree/master/samples/play2-cache-sample">Sample with Cache usage</a></li>
+</ul>
+
+<h1>
+<a id="how-to" class="anchor" href="#how-to" aria-hidden="true"><span class="octicon octicon-link"></span></a>HOW-TO</h1>
+
+<p>Here you can find some HOW-TO documents introducing some powerful functionality:</p>
+
+<ul>
+<li><a href="docs/simple-crud.md">HOW-TO use simple CRUD</a></li>
+<li><a href="docs/custom-dao.md">HOW-TO define a custom DAO</a></li>
+<li><a href="docs/custom-controller.md">HOW-TO define a custom Controller</a></li>
+<li><a href="docs/dao-listeners.md">HOW-TO use DAO Listeners</a></li>
+<li><a href="docs/rest-controllers.md">HOW-TO use dynamic REST Controllers</a></li>
+<li><a href="docs/custom-rest-controllers.md">HOW-TO use custom REST Controllers</a></li>
+<li><a href="docs/override-play-launcher.md">HOW-TO Override Play Launcher</a></li>
+</ul>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/hakandilek/play2-crud/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/hakandilek/play2-crud/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/hakandilek/play2-crud"></a> is maintained by <a href="https://github.com/hakandilek">hakandilek</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
