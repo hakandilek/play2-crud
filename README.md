@@ -24,28 +24,29 @@ Follow these steps to use play2-crud. You can also use it partially just for DAO
 
 ### Add play2-crud dependency
 
-You can begin with adding play2-crud dependency inside `conf/Build.scala` file.
+You can begin with adding play2-crud dependency inside `build.sbt` file.
 
  * Add app dependency:
 
 ```
-    val appDependencies = Seq(
-        javaCore, javaJdbc, javaEbean,
-        "play2-crud" % "play2-crud_2.10" % "0.7.0"
+    libraryDependencies ++= Seq(
+        javaCore, 
+        javaJdbc, 
+        javaEbean,
+        "play2-crud" % "play2-crud_2.10" % "0.7.0" exclude("org.scala-stm", "scala-stm_2.10.0") exclude("com.typesafe.akka", "akka-slf4j_2.10") exclude("com.typesafe.akka", "akka-actor_2.10"),
     )
 
 ```
 
- * Dependency version is for version 0.7.0 defined, but you can use the latest version.
+ * Dependency version is defined for version 0.7.0, but you can use the latest version.
 
  * Add custom maven repositories:
 
 ```
-    val main = play.Project(appName, appVersion, appDependencies).settings(
-        //maven repository
-        resolvers += "release repository" at  "http://hakandilek.github.com/maven-repo/releases/",
-        resolvers += "snapshot repository" at "http://hakandilek.github.com/maven-repo/snapshots/"
-    )
+    resolvers ++= Seq(
+      "release repository" at  "http://hakandilek.github.com/maven-repo/releases/",
+      "snapshot repository" at "http://hakandilek.github.com/maven-repo/snapshots/"
+   )
 
 ```
 
