@@ -5,3 +5,5 @@ target
 tmp
 .history
 dist
+/bin
+/app-2.11

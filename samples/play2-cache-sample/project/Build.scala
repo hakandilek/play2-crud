@@ -6,13 +6,13 @@ import PlayKeys._
 object ApplicationBuild extends Build {
 
     val appName         = "play2-cache-sample"
-    val appVersion      = "0.7.4-SNAPSHOT"
-    val appScalaVersion = "2.11.1"
+    val appVersion      = "0.8.0-SNAPSHOT"
+    val appScalaVersion = "2.11.6"
 
     val appDependencies = Seq(
         javaCore, javaJdbc, javaEbean,
-        "play2-crud" %% "play2-crud" % "0.7.4-SNAPSHOT",
-        "play2-crud" %% "play2-crud" % "0.7.4-SNAPSHOT" classifier "assets"
+        "play2-crud" %% "play2-crud" % "0.8.0-SNAPSHOT",
+        "play2-crud" %% "play2-crud" % "0.8.0-SNAPSHOT" classifier "assets"
     )
 
     val main = Project(appName, file(".")).enablePlugins(play.PlayJava).settings(
