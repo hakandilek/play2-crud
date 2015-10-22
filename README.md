@@ -1,5 +1,5 @@
-play2-crud Spring and Spring Data JPA
-==========
+play2-crud - Spring and Spring Data JPA
+=======================================
 
 [![Join the chat at https://gitter.im/hakandilek/play2-crud](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hakandilek/play2-crud?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
