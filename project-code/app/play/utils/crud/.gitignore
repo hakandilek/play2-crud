@@ -1,0 +1,13 @@
+logs
+project/project
+project/target
+target
+tmp
+.history
+dist
+/.idea
+/.idea_modules
+/.classpath
+/.project
+/.settings
+/RUNNING_PID

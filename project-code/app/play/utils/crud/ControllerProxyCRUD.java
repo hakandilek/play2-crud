@@ -3,9 +3,11 @@ package play.utils.crud;
 import play.mvc.Result;
 import play.utils.meta.ModelMetadata;
 
-public class ControllerProxyCRUD<K, M> extends ControllerProxy<K, M> {
+import java.io.Serializable;
 
-	public ControllerProxyCRUD(CRUD<K, M> delegate, ModelMetadata model) {
+public class ControllerProxyCRUD<M, K extends Serializable> extends ControllerProxy<M, K> {
+
+	public ControllerProxyCRUD(CRUD<M, K> delegate, ModelMetadata model) {
 		super(delegate, model);
 	}
 

@@ -2,12 +2,12 @@ package play.utils.crud;
 
 import com.google.common.collect.ImmutableSortedSet;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;
 import play.Logger.ALogger;
 import play.api.Play;
-import play.utils.inject.InjectAdapter;
 import play.utils.meta.ConverterRegistry;
 import play.utils.meta.ControllerRegistry;
 import play.utils.meta.cp.ClasspathScanningControllerRegistry;
@@ -20,7 +20,7 @@ public class CRUDManager {
 
 	GlobalSettings global;
 
-	InjectAdapter injections = InjectAdapter.getInstance();
+	AnnotationConfigApplicationContext ctx;
 
 	RouterRestController dynamicRestController;
 
@@ -30,8 +30,10 @@ public class CRUDManager {
 	
 	private static CRUDManager instance;
 
-	public CRUDManager(GlobalSettings global) {
+	public CRUDManager(GlobalSettings global, AnnotationConfigApplicationContext ctx) {
+
 		this.global = global;
+		this.ctx = ctx;
 	}
 
 	public void initialize(Application app) {
@@ -43,8 +45,8 @@ public class CRUDManager {
 		ConverterRegistry converters = new ClasspathScanningConverterRegistry(classLoaders);
 		models = new ClasspathScanningModelRegistry(converters, classLoaders);
 		ControllerRegistry crudControllers = new ClasspathScanningControllerRegistry(global, models, classLoaders);
-		dynamicRestController = new RouterRestController(crudControllers, models);
-		dynamicCrudController = new RouterCrudController(crudControllers, models, appClassloader);
+		dynamicRestController = new RouterRestController(crudControllers, models, ctx);
+		dynamicCrudController = new RouterCrudController(crudControllers, models, appClassloader, ctx);
 		instance = this;
 	}
 
@@ -56,7 +58,7 @@ public class CRUDManager {
 		if (RouterCrudController.class.equals(type))
 			return (A) dynamicCrudController;
 
-		return injections.getInstance(type);
+		return ctx.getBean(type);
 	}
 
     public static CRUDManager getInstance() {

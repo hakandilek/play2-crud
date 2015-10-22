@@ -2,38 +2,40 @@ package play.utils.crud;
 
 import static play.libs.Json.toJson;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.persistence.OptimisticLockException;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import play.Logger;
 import play.Logger.ALogger;
 import play.mvc.Controller;
 import play.mvc.Result;
-import play.utils.dao.DAO;
-import play.utils.dao.EntityNotFoundException;
 
 import com.google.common.collect.ImmutableMap;
 
-public abstract class APIController<K, M> extends Controller implements CRUD<K, M> {
+public abstract class APIController<M, K extends Serializable> extends Controller implements CRUD<M, K> {
 
 	protected final ALogger log = Logger.of(getClass());
 
-	protected final DAO<K, M> dao;
+	protected final JpaRepository<M, K> repo;
 
 	protected final Class<K> keyClass;
 
 	protected final Class<M> modelClass;
 
-	public APIController(DAO<K, M> dao, Class<K> keyClass, Class<M> modelClass) {
+	@Inject
+	public APIController(JpaRepository<M, K> repo, Class<K> keyClass, Class<M> modelClass) {
 		super();
-		this.dao = dao;
+		this.repo = repo;
 		this.keyClass = keyClass;
 		this.modelClass = modelClass;
 	}
@@ -41,8 +43,8 @@ public abstract class APIController<K, M> extends Controller implements CRUD<K, 
 	public abstract Result create();
 
 	
-	public DAO<K, M> getDao() {
-		return dao;
+	public JpaRepository<M, K> getRepo() {
+		return repo;
 	}
 
 	public Class<K> getKeyClass() {
@@ -70,7 +72,7 @@ public abstract class APIController<K, M> extends Controller implements CRUD<K, 
 		if (log.isDebugEnabled())
 			log.debug("value : " + value);
 
-		M m = dao.get(key);
+		M m = repo.findOne(key);
 		if (log.isDebugEnabled())
 			log.debug("m : " + m);
 		if (m == null) {
@@ -98,7 +100,7 @@ public abstract class APIController<K, M> extends Controller implements CRUD<K, 
 					+ e)));
 		}
 
-		dao.update(m);
+		repo.save(m);
 		if (log.isDebugEnabled())
 			log.debug("updated.");
 		if (log.isDebugEnabled())
@@ -115,12 +117,12 @@ public abstract class APIController<K, M> extends Controller implements CRUD<K, 
 	}
 
 	public Result list() {
-		List<M> list = dao.all();
+		List<M> list = repo.findAll();
 		return ok(toJson(ImmutableMap.of("status", "OK", "list", list)));
 	}
 
 	public Result read(K key) {
-		M model = dao.get(key);
+		M model = repo.findOne(key);
 		if (model == null) {
 			return notFound(toJson(ImmutableMap.of("status", "NOT_FOUND", "key", key)));
 		}
@@ -129,11 +131,11 @@ public abstract class APIController<K, M> extends Controller implements CRUD<K, 
 
 	public Result delete(K key) {
 		try {
-			dao.remove(key);
-		} catch (EntityNotFoundException e) {
-			return notFound(toJson(ImmutableMap.of("status", "NOT_FOUND", "key", key)));
+			repo.delete(key);
 		} catch (OptimisticLockException e) {
 			return notFound(toJson(ImmutableMap.of("status", "CANNOT_DELETE", "key", key)));
+		} catch (Exception e) {
+			return notFound(toJson(ImmutableMap.of("status", "NOT_FOUND", "key", key)));
 		}
 		return ok(toJson(ImmutableMap.of("status", "OK", "key", key, "message", "deleted :" + key)));
 	}

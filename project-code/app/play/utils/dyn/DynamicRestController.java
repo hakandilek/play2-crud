@@ -2,9 +2,11 @@ package play.utils.dyn;
 
 import static play.libs.Json.toJson;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import play.Logger;
 import play.Logger.ALogger;
 import play.mvc.Result;
@@ -16,14 +18,14 @@ import com.google.common.collect.ImmutableMap;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Dynamic
-public class DynamicRestController extends APIController {
+public class DynamicRestController<M, K extends Serializable> extends APIController {
 
 	private static ALogger log = Logger.of(DynamicRestController.class);
 
 	private ModelMetadata model;
 
-	public DynamicRestController(ModelMetadata model) {
-		super(new DynamicDAO(model), model.getKeyField().getType(), model.getType());
+	public DynamicRestController(ModelMetadata model, JpaRepository<M, K> repo) {
+		super(repo, model.getKeyField().getType(), model.getType());
 		this.model = model;
 	}
 
@@ -46,7 +48,7 @@ public class DynamicRestController extends APIController {
 				model.setField(m, fieldName, valueStr);
 			}
 
-			key = dao.create(m);
+			key = repo.save(m);
 			if (log.isDebugEnabled())
 				log.debug("key : " + key);
 		} catch (Exception e) {
