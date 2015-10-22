@@ -56,6 +56,13 @@ public class ClasspathScanningModelRegistry implements ModelRegistry {
 				new TypeAnnotationsScanner()).addClassLoaders(classloaders));
 
 		Set<Class<?>> entities = reflections.getTypesAnnotatedWith(Entity.class);
+
+		final Reflections domainReflections = new Reflections(new ConfigurationBuilder().setUrls(
+				ClasspathHelper.forPackage("com.teksourcery")).setScanners(new SubTypesScanner(),
+				new TypeAnnotationsScanner()).addClassLoaders(classloaders));
+
+		entities.addAll(domainReflections.getTypesAnnotatedWith(Entity.class));
+
 		for (Class<?> entity : entities) {
 			ModelMetadata metadata = getMetadata(entity);
 			map.put(entity, metadata);
@@ -71,12 +78,12 @@ public class ClasspathScanningModelRegistry implements ModelRegistry {
 
 		Class<?> superClass = entity.getSuperclass();
 		while (superClass != null
-				&& Iterables.tryFind(Lists.newArrayList(superClass.getAnnotations()), new Predicate<Annotation>() {
+				/*&& Iterables.tryFind(Lists.newArrayList(superClass.getAnnotations()), new Predicate<Annotation>() {
 					@Override
 					public boolean apply(Annotation annotation) {
 						return annotation.annotationType().equals(MappedSuperclass.class);
 					}
-				}).isPresent()) {
+				}).isPresent()*/) {
 
 			modelFields.addAll(Lists.newArrayList(superClass.getDeclaredFields()));
 			superClass = superClass.getSuperclass();

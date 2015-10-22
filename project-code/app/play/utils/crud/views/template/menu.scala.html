@@ -12,11 +12,11 @@
                 <span class="icon-bar"></span>
             </a>
             <a class="brand" href="@play.utils.crud.routes.RouterCrudController.index()">@Utils.appName</a>
-            <ul class="nav nav-collapse">
-                @for(item <- javaCollectionToScala(CRUDManager.getInstance().modelNames())) {
-                    <li class="@{"active".when(item == current)}"><a href="@play.utils.crud.routes.RouterCrudController.list(item)">@Messages(item)</a></li>
-                }
-            </ul>
+            @*<ul class="nav nav-collapse">*@
+                @* @for(item <- javaCollectionToScala(CRUDManager.getInstance().modelNames())) {*@
+                    @*<li class="@{"active".when(item == current)}"><a href="@play.utils.crud.routes.RouterCrudController.list(item)">@Messages(item)</a></li>*@
+                @*}*@
+            @*</ul>*@
         </div>
     </div>
 </div>

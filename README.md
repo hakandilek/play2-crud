@@ -1,7 +1,10 @@
-play2-crud
-==========
+play2-crud - Spring and Spring Data JPA
+=======================================
 
 [![Join the chat at https://gitter.im/hakandilek/play2-crud](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hakandilek/play2-crud?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+**This play2-crud fork has been refactored to use Spring and Spring Data JPA instead of Guice and Ebean. You will need to modify at least the GlobalCRUDSpring and ClasspathScanningModelRegistry to make this sub-project work inside your own Play2-Spring project. Also note that I have replaced generic references to \<K, M\> to \<M, K extends Serializable\> in order to be consistent with Spring Data JPA conventions. At the very least I hope it is useful to you as an example.**
+
 
 Powerful CRUD &amp; DAO implementation with REST interface for [play framework](http://github.com/playframework/play) 2.x
 

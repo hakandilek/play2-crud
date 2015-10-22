@@ -5,14 +5,16 @@ import play.mvc.Result;
 import play.utils.meta.ModelMetadata;
 import play.utils.meta.convert.Converter;
 
-public abstract class ControllerProxy<K, M> extends Controller {
+import java.io.Serializable;
 
-	protected CRUD<K, M> delegate;
+public abstract class ControllerProxy<M, K extends Serializable> extends Controller {
+
+	protected CRUD<M, K> delegate;
 	protected ModelMetadata model;
 	protected Converter<K> keyConverter;
 
 	@SuppressWarnings("unchecked")
-	public ControllerProxy(CRUD<K, M> delegate, ModelMetadata model) {
+	public ControllerProxy(CRUD<M, K> delegate, ModelMetadata model) {
 		this.delegate = delegate;
 		this.model = model;
 		this.keyConverter = (Converter<K>) model.getKeyConverter();

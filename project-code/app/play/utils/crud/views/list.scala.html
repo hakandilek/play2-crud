@@ -1,6 +1,6 @@
 @(model: play.utils.meta.ModelMetadata,
 	fields: java.lang.Iterable[play.utils.meta.FieldMetadata],
-	page: com.avaje.ebean.Page[_])
+	page: org.springframework.data.domain.Page[_])
 
 @import play.utils.crud.CRUDManager
 @import play.utils.crud.views.Utils
@@ -11,11 +11,11 @@
         <h1>@Messages("crud.appname")</h1>
     </div>
     
-    <h2>@Messages(model.getName) (@page.getTotalRowCount() records)</h2>
+    <h2>@Messages(model.getName) (@page.getNumberOfElements() records)</h2>
     
     <h3><a href="@play.utils.crud.routes.RouterCrudController.newForm(model.getName)">@Messages("crud.createNew")</a></h3>
     
-    @if(page.getTotalRowCount() == 0) {
+    @if(page.getTotalElements == 0) {
         
         <div class="well">
             <em>Nothing to display</em>
@@ -35,7 +35,7 @@
 	            </tr>
 	        </thead>
 	        <tbody>
-        @for(o <- page.getList()) {
+        @for(o <- page.getContent) {
         	@defining(Utils.keyValue(model, o)) { key =>
 	            <tr>
                     @for(field <- javaCollectionToScala(fields)) {

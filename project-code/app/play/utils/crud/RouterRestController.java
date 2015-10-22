@@ -1,5 +1,7 @@
 package play.utils.crud;
 
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.data.jpa.repository.JpaRepository;
 import play.utils.dyn.DynamicRestController;
 import play.utils.meta.ControllerRegistry;
 import play.utils.meta.IncompatibleControllerException;
@@ -8,8 +10,11 @@ import play.utils.meta.ModelRegistry;
 
 public class RouterRestController extends RouterController {
 
-	public RouterRestController(ControllerRegistry controllerRegistry, ModelRegistry modelRegistry) {
+	private ConfigurableApplicationContext ctx;
+
+	public RouterRestController(ControllerRegistry controllerRegistry, ModelRegistry modelRegistry, ConfigurableApplicationContext ctx) {
 		super(controllerRegistry, modelRegistry);
+		this.ctx = ctx;
 	}
 
 	@Override
@@ -22,7 +27,8 @@ public class RouterRestController extends RouterController {
 	protected ControllerProxy<?, ?> getDynamicController(Class<?> keyType, Class<?> modelType, ModelMetadata model) {
 		ControllerProxy<?, ?> proxy = dynamicRestControllers.get(modelType);
 		if (proxy == null) {
-			DynamicRestController dynController = new DynamicRestController(model);
+			String repositoryBeanName = Character.toLowerCase(model.getName().charAt(0)) + model.getName().substring(1)+"Repository";
+			DynamicRestController dynController = new DynamicRestController(model, ctx.getBean(repositoryBeanName, JpaRepository.class));
 			proxy = new ControllerProxyREST(dynController, model);
 			dynamicRestControllers.put(modelType, proxy);
 		}

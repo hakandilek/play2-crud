@@ -1,23 +1,25 @@
 package play.utils.crud;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.JpaRepository;
 import play.Logger;
 import play.Logger.ALogger;
 import play.data.Form;
 import play.mvc.Call;
 import play.twirl.api.Content;
 import play.mvc.Result;
-import play.utils.dao.BasicModel;
-import play.utils.dao.DAO;
-import play.utils.dao.EntityNotFoundException;
 
-import com.avaje.ebean.Page;
+import javax.inject.Inject;
+import java.io.Serializable;
 
-public abstract class CRUDController<K, M extends BasicModel<K>> extends TemplateController implements
-		CRUD<K, M> {
+public abstract class CRUDController<M, K extends Serializable> extends TemplateController implements
+		CRUD<M, K> {
 
 	private static ALogger log = Logger.of(CRUDController.class);
-	
-	private final DAO<K, M> dao;
+
+	private final JpaRepository<M, K> repo;
 
 	private final Form<M> form;
 
@@ -25,34 +27,36 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends Templat
 
 	private final Class<M> modelClass;
 
-	private String orderBy;
+	private Sort sort;
 
 	private int pageSize;
 
-	public CRUDController(ClassLoader classLoader, DAO<K, M> dao, Form<M> form, Class<K> keyClass, Class<M> modelClass, int pagesize,
-			String orderBy) {
+	@Inject
+	public CRUDController(ClassLoader classLoader, JpaRepository<M, K> repo, Form<M> form, Class<K> keyClass, Class<M> modelClass, int pageSize,
+			Sort sort) {
 		super(classLoader);
-		this.dao = dao;
+		this.repo = repo;
 		this.form = form;
 		this.keyClass = keyClass;
 		this.modelClass = modelClass;
-		this.pageSize = pagesize;
-		this.orderBy = orderBy;
+		this.pageSize = pageSize;
+		this.sort = sort;
 	}
 
-	public CRUDController(DAO<K, M> dao, Form<M> form, Class<K> keyClass, Class<M> modelClass, int pagesize,
-			String orderBy) {
+	@Inject
+	public CRUDController(JpaRepository<M, K> repo, Form<M> form, Class<K> keyClass, Class<M> modelClass, int pageSize,
+			Sort sort) {
 		super();
-		this.dao = dao;
+		this.repo = repo;
 		this.form = form;
 		this.keyClass = keyClass;
 		this.modelClass = modelClass;
-		this.pageSize = pagesize;
-		this.orderBy = orderBy;
+		this.pageSize = pageSize;
+		this.sort = sort;
 	}
 
-	public DAO<K, M> getDao() {
-		return dao;
+	public JpaRepository<M, K> getRepo() {
+		return repo;
 	}
 
 	public Class<K> getKeyClass() {
@@ -68,12 +72,12 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends Templat
 	}
 
 	public Result list(int page) {
-		Page<M> p = dao.page(page, pageSize(), orderBy());
+		Page p = repo.findAll(new PageRequest(page, pageSize(), sort()));
 		return ok(renderList(p));
 	}
 
-	protected String orderBy() {
-		return orderBy;
+	protected Sort sort() {
+		return sort;
 	}
 
 	protected int pageSize() {
@@ -88,11 +92,11 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends Templat
 
 	protected abstract Call toIndex();
 	
-	protected Content renderList(Page<M> p) {
+	protected Content renderList(Page p) {
 		return render(templateForList(), with(Page.class, p));
 	}
 
-	protected Content renderForm(K key, Form<M> form) {
+	protected Content renderForm(Object key, Form<M> form) {
 		return render(templateForForm(), with(keyClass, key).and(Form.class, form));
 	}
 
@@ -119,7 +123,7 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends Templat
 			return badRequest(renderForm(null, filledForm));
 		} else {
 			M model = filledForm.get();
-			dao.create(model);
+			repo.save(model);
 			if (log.isDebugEnabled())
 				log.debug("entity created");
 
@@ -134,7 +138,7 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends Templat
 		if (log.isDebugEnabled())
 			log.debug("editForm() <-" + key);
 
-		M model = dao.get(key);
+		M model = repo.findOne(key);
 		if (log.isDebugEnabled())
 			log.debug("model : " + model);
 
@@ -146,7 +150,7 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends Templat
 		if (log.isDebugEnabled())
 			log.debug("update() <-" + key);
 
-		M original = dao.get(key);
+		M original = repo.findOne(key);
 		Form<M> filledForm = form.fill(original).bindFromRequest();
 		if (filledForm.hasErrors()) {
 			if (log.isDebugEnabled())
@@ -155,10 +159,9 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends Templat
 			return badRequest(renderForm(key, filledForm));
 		} else {
 			M model = filledForm.get();
-			model.setKey(key);
 			if (log.isDebugEnabled())
 				log.debug("model : " + model);
-			dao.update(model);
+			repo.save(model);
 			if (log.isDebugEnabled())
 				log.debug("entity updated");
 
@@ -173,7 +176,7 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends Templat
 		if (log.isDebugEnabled())
 			log.debug("show() <-" + key);
 
-		M model = dao.get(key);
+		M model = repo.findOne(key);
 		if (log.isDebugEnabled())
 			log.debug("model : " + model);
 
@@ -185,10 +188,10 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends Templat
 			log.debug("delete() <-" + key);
 
 		try {
-			dao.remove(key);
+			repo.delete(key);
 			if (log.isDebugEnabled())
 				log.debug("entity deleted");
-		} catch (EntityNotFoundException e) {
+		} catch (Exception e) {
 			if (log.isDebugEnabled())
 				log.debug("entity not found for key:" + key);
 			flash("error", "entity not found for key:" + key);

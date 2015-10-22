@@ -2,8 +2,9 @@ package play.utils.dyn;
 
 import static play.data.Form.form;
 
-import com.avaje.ebean.Page;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.JpaRepository;
 import play.Logger;
 import play.Logger.ALogger;
 import play.data.Form;
@@ -12,23 +13,26 @@ import play.twirl.api.Content;
 import play.mvc.Result;
 import play.utils.crud.CRUDController;
 import play.utils.crud.Parameters;
-import play.utils.dao.BasicModel;
 import play.utils.meta.ModelMetadata;
+
+import javax.inject.Inject;
+import java.io.Serializable;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 @Dynamic
 public class DynamicCrudController extends CRUDController {
 	
 	private static ALogger log = Logger.of(DynamicCrudController.class);
-	
+
 	private ModelMetadata model;
 	private String templateList;
 	private String templateForm;
 	private String templateShow;
 	private Call indexCall;
 
-	public DynamicCrudController(ClassLoader classLoader, ModelMetadata model, Call indexCall) {
-		super(classLoader, new DynamicDAO(model), form(model.getType()), model.getKeyField().getType(), model.getType(), 10, model.getKeyField().getField().getName());
+	@Inject
+	public DynamicCrudController(ClassLoader classLoader, ModelMetadata model, Call indexCall, JpaRepository repo) {
+		super(classLoader, repo, form(model.getType()), model.getKeyField().getType(), model.getType(), 10, new Sort(Sort.Direction.ASC, model.getKeyField().getField().getName()) );
 		this.model = model;
 		this.indexCall = indexCall;
 		templateList = model.getName() + "List";
@@ -59,7 +63,7 @@ public class DynamicCrudController extends CRUDController {
 	}
 
 	@Override
-	public Result read(Object key) {
+	public Result read(Serializable key) {
 		return show(key);
 	}
 
@@ -93,11 +97,12 @@ public class DynamicCrudController extends CRUDController {
 		}
 	}
 
+	@Override
 	protected Content renderForm(Object key, Form form) {
 		if (log.isDebugEnabled())
 			log.debug("renderForm <- form:" + form);
 		try {
-			return super.renderForm(key, form);
+			return super.renderForm((Serializable) key, form);
 		} catch (TemplateNotFoundException e) {
 			// use dynamic template
 			if (log.isDebugEnabled())
@@ -107,7 +112,7 @@ public class DynamicCrudController extends CRUDController {
 	}
 
 	@Override
-	protected Content renderShow(BasicModel modelObject) {
+	protected Content renderShow(Object modelObject) {
 		try {
 			return super.renderShow(modelObject);
 		} catch (TemplateNotFoundException e) {

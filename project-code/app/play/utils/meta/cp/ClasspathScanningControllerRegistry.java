@@ -1,5 +1,6 @@
 package play.utils.meta.cp;
 
+import java.io.Serializable;
 import java.lang.reflect.Modifier;
 import java.util.Map;
 import java.util.Set;
@@ -48,12 +49,12 @@ public class ClasspathScanningControllerRegistry implements ControllerRegistry {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <K, M> ControllerProxy<K, M> getRestController(K keyClass, M modelClass, Map<Class<?>, ControllerProxy<?, ?>> controllers) throws IncompatibleControllerException {
+	public <M, K extends Serializable> ControllerProxy<M, K> getRestController(K keyClass, M modelClass, Map<Class<?>, ControllerProxy<?, ?>> controllers) throws IncompatibleControllerException {
 		ControllerProxy<?, ?> cp = controllers.get(modelClass);
 		
-		ControllerProxy<K, M> controller = null;
+		ControllerProxy<M, K> controller = null;
 		try {
-			controller = ((ControllerProxy<K, M>) cp);
+			controller = ((ControllerProxy<M, K>) cp);
 			if (log.isDebugEnabled())
 				log.debug("controller : " + controller);
 		} catch (Exception e) {
@@ -65,12 +66,12 @@ public class ClasspathScanningControllerRegistry implements ControllerRegistry {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <K, M> ControllerProxyCRUD<K, M> getCrudController(K keyClass, M modelClass, Map<Class<?>, ControllerProxyCRUD<?, ?>> controllers) throws IncompatibleControllerException {
+	public <M, K extends Serializable> ControllerProxyCRUD<M, K> getCrudController(K keyClass, M modelClass, Map<Class<?>, ControllerProxyCRUD<?, ?>> controllers) throws IncompatibleControllerException {
 		ControllerProxyCRUD<?, ?> cp = controllers.get(modelClass);
 		
-		ControllerProxyCRUD<K, M> controller = null;
+		ControllerProxyCRUD<M, K> controller = null;
 		try {
-			controller = ((ControllerProxyCRUD<K, M>) cp);
+			controller = ((ControllerProxyCRUD<M, K>) cp);
 			if (log.isDebugEnabled())
 				log.debug("controller : " + controller);
 		} catch (Exception e) {
@@ -82,14 +83,14 @@ public class ClasspathScanningControllerRegistry implements ControllerRegistry {
 	}
 
 	@Override
-	public <K, M> ControllerProxy<K, M> getRestController(K keyClass, M modelClass) throws IncompatibleControllerException {
+	public <M, K extends Serializable> ControllerProxy<M, K> getRestController(K keyClass, M modelClass) throws IncompatibleControllerException {
 		if (log.isDebugEnabled())
 			log.debug("getApiController <- key: " + keyClass + "  model: " + modelClass);
 		return getRestController(keyClass, modelClass, restControllers);
 	}
 
 	@Override
-	public <K, M> ControllerProxyCRUD<K, M> getCrudController(K keyClass, M modelClass) throws IncompatibleControllerException {
+	public <M, K extends Serializable> ControllerProxyCRUD<M, K> getCrudController(K keyClass, M modelClass) throws IncompatibleControllerException {
 		if (log.isDebugEnabled())
 			log.debug("getCrudController <- key: " + keyClass + "  model: " + modelClass);
 		return getCrudController(keyClass, modelClass, crudControllers);

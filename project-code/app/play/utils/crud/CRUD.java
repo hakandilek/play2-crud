@@ -1,11 +1,13 @@
 package play.utils.crud;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import play.mvc.Result;
-import play.utils.dao.DAO;
 
-public interface CRUD<K, M> {
+import java.io.Serializable;
 
-	DAO<K, M> getDao();
+public interface CRUD<M, K extends Serializable> {
+
+	JpaRepository<M, K> getRepo();
 
 	Class<M> getModelClass();
 

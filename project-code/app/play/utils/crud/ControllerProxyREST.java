@@ -2,9 +2,11 @@ package play.utils.crud;
 
 import play.utils.meta.ModelMetadata;
 
-public class ControllerProxyREST<K, M> extends ControllerProxy<K, M> {
+import java.io.Serializable;
 
-	public ControllerProxyREST(CRUD<K, M> delegate, ModelMetadata model) {
+public class ControllerProxyREST<M, K extends Serializable> extends ControllerProxy<M, K> {
+
+	public ControllerProxyREST(CRUD<M, K> delegate, ModelMetadata model) {
 		super(delegate, model);
 	}
 
