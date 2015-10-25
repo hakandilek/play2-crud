@@ -47,7 +47,7 @@ public class TemplateController extends Controller {
 
 	protected Content templateNotFound(String template, Parameters params) {
 		StringBuilder sb = new StringBuilder("Template ");
-		sb.append(template).append("(");
+		sb.append(templatePackageName).append(template).append("(");
 		Class<?>[] types = params.types();
 		for (int i = 0; i < types.length; i++) {
 			Class<?> type = types[i];
