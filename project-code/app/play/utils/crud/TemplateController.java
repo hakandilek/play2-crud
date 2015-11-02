@@ -16,7 +16,7 @@ public class TemplateController extends Controller {
 	protected final ALogger log = Logger.of(getClass());
 	
 	private ClassLoader classLoader;
-	protected String templatePackageName = "views.html."; //derived classes can change this. MUST end in "."
+	protected String templatePackageName = "views.html."; //derived classes can change this by reassigning it in a constructor. MUST end in "."
 
 	public TemplateController(ClassLoader classLoader) {
 		this.classLoader = classLoader;
@@ -47,7 +47,7 @@ public class TemplateController extends Controller {
 
 	protected Content templateNotFound(String template, Parameters params) {
 		StringBuilder sb = new StringBuilder("Template ");
-		sb.append(template).append("(");
+		sb.append(templatePackageName).append(template).append("(");
 		Class<?>[] types = params.types();
 		for (int i = 0; i < types.length; i++) {
 			Class<?> type = types[i];
