@@ -1,6 +1,6 @@
 @(model: play.utils.meta.ModelMetadata,
 	fields: java.lang.Iterable[play.utils.meta.FieldMetadata],
-	page: com.avaje.ebean.Page[_])
+	page: play.utils.dao.Page[_])
 
 @import play.utils.crud.CRUDManager
 @import play.utils.crud.views.Utils
@@ -35,7 +35,7 @@
 	            </tr>
 	        </thead>
 	        <tbody>
-        @for(o <- page.getList()) {
+        @for(o <- page.list()) {
         	@defining(Utils.keyValue(model, o)) { key =>
 	            <tr>
                     @for(field <- javaCollectionToScala(fields)) {

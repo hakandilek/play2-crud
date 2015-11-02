@@ -1,7 +1,5 @@
 package play.utils.dao;
 
-import com.avaje.ebean.Page;
-
 public abstract class PageAdapter<S, T> implements Page<T> {
 
 	protected Page<S> delegate;

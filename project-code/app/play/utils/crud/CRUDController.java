@@ -9,8 +9,7 @@ import play.mvc.Result;
 import play.utils.dao.BasicModel;
 import play.utils.dao.DAO;
 import play.utils.dao.EntityNotFoundException;
-
-import com.avaje.ebean.Page;
+import play.utils.dao.Page;
 
 public abstract class CRUDController<K, M extends BasicModel<K>> extends TemplateController implements
 		CRUD<K, M> {

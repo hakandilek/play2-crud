@@ -3,11 +3,11 @@ package play.utils.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-class Listeners<K, M> implements DAOListener<K, M>{
+public class DAOListeners<K, M> implements DAOListener<K, M>{
 
 	private List<DAOListener<K, M>> list = new ArrayList<DAOListener<K,M>>();
 
-	void add(DAOListener<K, M> l) {
+	public void add(DAOListener<K, M> l) {
 		list.add(l);
 	}
 	

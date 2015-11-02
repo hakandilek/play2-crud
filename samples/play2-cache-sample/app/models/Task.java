@@ -11,7 +11,7 @@ import com.avaje.ebean.Page;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
-import play.utils.cache.CachedFinder;
+import play.utils.dao.ebean.CachedEbeanFinder;
 
 @Entity
 @SuppressWarnings("serial")
@@ -31,7 +31,7 @@ public class Task extends Model {
 	@Basic
 	private Date dueDate;
 
-	public static CachedFinder<Long, Task> find = new CachedFinder<Long, Task>(
+	public static CachedEbeanFinder<Long, Task> find = new CachedEbeanFinder<Long, Task>(
 			Long.class, Task.class);
 
 	/**

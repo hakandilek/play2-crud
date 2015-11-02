@@ -1,23 +1,25 @@
-package play.utils.dao;
+package play.utils.dao.ebean;
 
 import java.util.List;
 
 import javax.persistence.PersistenceException;
 
-import play.utils.cache.CachedFinder;
+import play.utils.dao.BasicModel;
+import play.utils.dao.DAO;
+import play.utils.dao.DAOListener;
+import play.utils.dao.DAOListeners;
+import play.utils.dao.EntityNotFoundException;
+import play.utils.dao.Page;
 
-import com.avaje.ebean.Expression;
-import com.avaje.ebean.Page;
+public class CachedEbeanDAO<K, M extends BasicModel<K>> implements DAO<K, M> {
 
-public class CachedDAO<K, M extends BasicModel<K>> implements DAO<K, M> {
+	protected final CachedEbeanFinder<K, M> find;
 
-	protected final CachedFinder<K, M> find;
+	private DAOListeners<K, M> listeners = new DAOListeners<K, M>();
 
-	private Listeners<K, M> listeners = new Listeners<K, M>();
-
-	public CachedDAO(Class<K> keyClass, Class<M> modelClass) {
+	public CachedEbeanDAO(Class<K> keyClass, Class<M> modelClass) {
 		super();
-		this.find = new CachedFinder<K, M>(keyClass, modelClass);
+		this.find = new CachedEbeanFinder<K, M>(keyClass, modelClass);
 	}
 
 	public List<M> all() {
@@ -57,7 +59,7 @@ public class CachedDAO<K, M extends BasicModel<K>> implements DAO<K, M> {
 		listeners.afterUpdate(m);
 	}
 
-	protected CachedFinder<K, M> find() {
+	protected CachedEbeanFinder<K, M> find() {
 		return find;
 	}
 
@@ -68,19 +70,20 @@ public class CachedDAO<K, M extends BasicModel<K>> implements DAO<K, M> {
 
 	@Override
 	public Page<M> page(int page, int pageSize, String orderBy) {
-		return find.page(page, pageSize, orderBy);
+		return new EbeanPage<>(find.page(page, pageSize, orderBy));
 	}
 
 	@Override
-	public <F> Page<M> page(int page, int pageSize, String orderBy,
-			String filterField, F filterValue) {
-		return find.page(page, pageSize, orderBy, filterField, filterValue);
+	public <F> Page<M> page(int page, int pageSize, String orderBy, String filterField, F filterValue) {
+		return new EbeanPage<>(find.page(page, pageSize, orderBy, filterField, filterValue));
 	}
-	
+
+	/*
 	public Page<M> page(int page, int pageSize, String orderBy,
 			String cacheKey, Expression expression) {
 		return find.page(page, pageSize, orderBy, cacheKey, expression);
 	}
+	*/
 
 	@Override
 	public void saveAssociation(M c, String association) {

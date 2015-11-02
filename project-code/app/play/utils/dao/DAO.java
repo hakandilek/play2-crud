@@ -2,9 +2,6 @@ package play.utils.dao;
 
 import java.util.List;
 
-import com.avaje.ebean.Expression;
-import com.avaje.ebean.Page;
-
 public interface DAO<K, M> {
 	
 	List<M> all();
@@ -21,7 +18,7 @@ public interface DAO<K, M> {
 	
 	Page<M> page(int page, int pageSize, String orderBy);
 	<F> Page<M> page(int page, int pageSize, String orderBy, String filterField, F filterValue);
-	Page<M> page(int page, int pageSize, String orderBy, String cacheKey, Expression expression);
+	//Page<M> page(int page, int pageSize, String orderBy, String cacheKey, Expression expression);
 
 	void saveAssociation(M c, String association);
 

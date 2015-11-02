@@ -5,12 +5,12 @@ import java.util.concurrent.Callable;
 import play.Logger;
 import play.Logger.ALogger;
 import play.cache.Cache;
-
-import com.avaje.ebean.Page;
+import play.utils.dao.Page;
 
 /**
+ * Cache implementation with a predefined timeout.
  * 
- * @author hakandilek
+ * @author Hakan Dilek
  * 
  * @param <T>
  *            type of cache

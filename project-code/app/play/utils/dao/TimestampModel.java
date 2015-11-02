@@ -2,9 +2,8 @@ package play.utils.dao;
 
 import java.util.Date;
 
-
 public interface TimestampModel<K> extends BasicModel<K> {
-	
+
 	Date getCreatedOn();
 
 	void setCreatedOn(Date createdOn);
@@ -16,5 +15,5 @@ public interface TimestampModel<K> extends BasicModel<K> {
 	int getRevision();
 
 	void setRevision(int revision);
-	
+
 }

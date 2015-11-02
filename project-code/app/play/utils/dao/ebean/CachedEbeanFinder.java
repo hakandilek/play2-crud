@@ -1,4 +1,4 @@
-package play.utils.cache;
+package play.utils.dao.ebean;
 
 import java.util.HashSet;
 import java.util.List;
@@ -13,9 +13,9 @@ import play.db.ebean.Model.Finder;
 import com.avaje.ebean.Expression;
 import com.avaje.ebean.Page;
 
-public class CachedFinder<K, T> extends Finder<K, T> {
+public class CachedEbeanFinder<K, T> extends Finder<K, T> {
 
-	private static ALogger log = Logger.of(CachedFinder.class);
+	private static ALogger log = Logger.of(CachedEbeanFinder.class);
 
 	/** expire in 24 hours */
 	private static final int EXPIRATION = 24 * 3600;
@@ -35,14 +35,14 @@ public class CachedFinder<K, T> extends Finder<K, T> {
 	/** cache keys for cached pages */
 	private final Set<String> pages = new HashSet<String>();
 
-	public CachedFinder(Class<K> keyType, Class<T> type) {
+	public CachedEbeanFinder(Class<K> keyType, Class<T> type) {
 		super(keyType, type);
 		this.pre = type.getName();
 		keyAll = pre + ".all";
 		prePage = pre + ".page.";
 	}
 
-	public CachedFinder(String serverName, Class<K> keyType, Class<T> type) {
+	public CachedEbeanFinder(String serverName, Class<K> keyType, Class<T> type) {
 		super(serverName, keyType, type);
 		this.pre = type.getName();
 		keyAll = pre + ".all";
@@ -55,7 +55,7 @@ public class CachedFinder<K, T> extends Finder<K, T> {
 		try {
 			return Cache.getOrElse(key, new Callable<T>() {
 				public T call() throws Exception {
-					return CachedFinder.super.byId(id);
+					return CachedEbeanFinder.super.byId(id);
 				}
 			}, EXPIRATION);
 		} catch (Exception e) {
@@ -70,7 +70,7 @@ public class CachedFinder<K, T> extends Finder<K, T> {
 		try {
 			return Cache.getOrElse(key, new Callable<T>() {
 				public T call() throws Exception {
-					return CachedFinder.super.ref(id);
+					return CachedEbeanFinder.super.ref(id);
 				}
 			}, EXPIRATION);
 		} catch (Exception e) {
@@ -107,7 +107,7 @@ public class CachedFinder<K, T> extends Finder<K, T> {
 		try {
 			return Cache.getOrElse(keyAll, new Callable<List<T>>() {
 				public List<T> call() throws Exception {
-					return CachedFinder.super.all();
+					return CachedEbeanFinder.super.all();
 				}
 			}, EXPIRATION);
 		} catch (Exception e) {

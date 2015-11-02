@@ -2,8 +2,6 @@ package play.utils.dyn;
 
 import static play.data.Form.form;
 
-import com.avaje.ebean.Page;
-
 import play.Logger;
 import play.Logger.ALogger;
 import play.data.Form;
@@ -13,6 +11,7 @@ import play.mvc.Result;
 import play.utils.crud.CRUDController;
 import play.utils.crud.Parameters;
 import play.utils.dao.BasicModel;
+import play.utils.dao.Page;
 import play.utils.meta.ModelMetadata;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
