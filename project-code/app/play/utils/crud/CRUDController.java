@@ -92,7 +92,7 @@ public abstract class CRUDController<K, M extends BasicModel<K>> extends Templat
 		return render(templateForList(), with(Page.class, p));
 	}
 
-	protected Content renderForm(K key, Form<M> form) {
+	protected Content renderForm(Object key, Form<M> form) {
 		return render(templateForForm(), with(keyClass, key).and(Form.class, form));
 	}
 

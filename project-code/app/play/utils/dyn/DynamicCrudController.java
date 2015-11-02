@@ -92,7 +92,8 @@ public class DynamicCrudController extends CRUDController {
 			return play.utils.crud.views.html.list.render(model, model.getFields().values(), p);
 		}
 	}
-
+	
+	@Override
 	protected Content renderForm(Object key, Form form) {
 		if (log.isDebugEnabled())
 			log.debug("renderForm <- form:" + form);
