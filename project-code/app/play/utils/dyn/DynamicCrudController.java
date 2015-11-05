@@ -6,12 +6,12 @@ import play.Logger;
 import play.Logger.ALogger;
 import play.data.Form;
 import play.mvc.Call;
-import play.twirl.api.Content;
 import play.mvc.Result;
+import play.twirl.api.Content;
 import play.utils.crud.CRUDController;
 import play.utils.crud.Parameters;
-import play.utils.dao.BasicModel;
 import play.utils.dao.Page;
+import play.utils.dao.SimpleModel;
 import play.utils.meta.ModelMetadata;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -107,7 +107,7 @@ public class DynamicCrudController extends CRUDController {
 	}
 
 	@Override
-	protected Content renderShow(BasicModel modelObject) {
+	protected Content renderShow(SimpleModel modelObject) {
 		try {
 			return super.renderShow(modelObject);
 		} catch (TemplateNotFoundException e) {

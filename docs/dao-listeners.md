@@ -9,7 +9,7 @@ This part introduces how to use DAO listeners
    * Let's define a new `int randomValue` field, that will be randomly updated on creation and when the model is updated.
    
 ```java
-public class Sample extends Model implements BasicModel<Long> {
+public class Sample extends Model implements ActiveObjectModel<Long> {
 
 ...
 

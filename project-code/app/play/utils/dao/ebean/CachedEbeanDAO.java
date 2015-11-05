@@ -4,14 +4,14 @@ import java.util.List;
 
 import javax.persistence.PersistenceException;
 
-import play.utils.dao.BasicModel;
+import play.utils.dao.ActiveObjectModel;
 import play.utils.dao.DAO;
 import play.utils.dao.DAOListener;
 import play.utils.dao.DAOListeners;
 import play.utils.dao.EntityNotFoundException;
 import play.utils.dao.Page;
 
-public class CachedEbeanDAO<K, M extends BasicModel<K>> implements DAO<K, M> {
+public class CachedEbeanDAO<K, M extends ActiveObjectModel<K>> implements DAO<K, M> {
 
 	protected final CachedEbeanFinder<K, M> find;
 

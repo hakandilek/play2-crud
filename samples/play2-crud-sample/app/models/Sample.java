@@ -6,11 +6,11 @@ import javax.persistence.Id;
 
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
-import play.utils.dao.BasicModel;
+import play.utils.dao.ActiveObjectModel;
 
 @Entity
 @SuppressWarnings("serial")
-public class Sample extends Model implements BasicModel<Long> {
+public class Sample extends Model implements ActiveObjectModel<Long> {
 
 	@Id
 	private Long key;

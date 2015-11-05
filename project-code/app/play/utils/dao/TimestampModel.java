@@ -2,7 +2,7 @@ package play.utils.dao;
 
 import java.util.Date;
 
-public interface TimestampModel<K> extends BasicModel<K> {
+public interface TimestampModel<K> extends ActiveObjectModel<K> {
 
 	Date getCreatedOn();
 

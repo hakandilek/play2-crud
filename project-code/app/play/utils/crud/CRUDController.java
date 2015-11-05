@@ -4,14 +4,14 @@ import play.Logger;
 import play.Logger.ALogger;
 import play.data.Form;
 import play.mvc.Call;
-import play.twirl.api.Content;
 import play.mvc.Result;
-import play.utils.dao.BasicModel;
+import play.twirl.api.Content;
 import play.utils.dao.DAO;
 import play.utils.dao.EntityNotFoundException;
 import play.utils.dao.Page;
+import play.utils.dao.SimpleModel;
 
-public abstract class CRUDController<K, M extends BasicModel<K>> extends TemplateController implements
+public abstract class CRUDController<K, M extends SimpleModel<K>> extends TemplateController implements
 		CRUD<K, M> {
 
 	private static ALogger log = Logger.of(CRUDController.class);

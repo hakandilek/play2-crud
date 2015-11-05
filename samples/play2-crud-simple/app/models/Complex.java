@@ -12,11 +12,11 @@ import com.avaje.ebean.annotation.EnumValue;
 import play.data.validation.Constraints.MaxLength;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
-import play.utils.dao.BasicModel;
+import play.utils.dao.ActiveObjectModel;
 
 @Entity
 @SuppressWarnings("serial")
-public class Complex extends Model implements BasicModel<Long> {
+public class Complex extends Model implements ActiveObjectModel<Long> {
 
 	@Id
 	private Long key;

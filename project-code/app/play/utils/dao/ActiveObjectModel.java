@@ -1,6 +1,6 @@
 package play.utils.dao;
 
-public interface BasicModel<K> {
+public interface ActiveObjectModel<K> extends SimpleModel<K> {
 
 	K getKey();
 

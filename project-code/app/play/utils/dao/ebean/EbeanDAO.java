@@ -3,14 +3,14 @@ package play.utils.dao.ebean;
 import java.util.List;
 
 import play.db.ebean.Model.Finder;
-import play.utils.dao.BasicModel;
+import play.utils.dao.ActiveObjectModel;
 import play.utils.dao.DAO;
 import play.utils.dao.DAOListener;
 import play.utils.dao.EntityNotFoundException;
 import play.utils.dao.Page;
 import play.utils.dao.DAOListeners;
 
-public class EbeanDAO<K, M extends BasicModel<K>> implements DAO<K, M> {
+public class EbeanDAO<K, M extends ActiveObjectModel<K>> implements DAO<K, M> {
 
 	protected final Finder<K, M> find;
 	

@@ -75,11 +75,11 @@ application.global=play.utils.crud.GlobalCRUDSettings
 
 ### Define model
 
- * Model class has to implement `play.utils.dao.BasicModel` with the type parameter indicating the type of the `@Id` field.
+ * Model class has to implement `play.utils.dao.ActiveObjectModel` with the type parameter indicating the type of the `@Id` field.
 
 ```java
 @Entity
-public class Sample extends Model implements BasicModel<Long> {
+public class Sample extends Model implements ActiveObjectModel<Long> {
 
    @Id
    private Long key;
@@ -106,7 +106,7 @@ public class Sample extends Model implements BasicModel<Long> {
 }
 ```
 
- * Here the `Sample` model class implements `BasicModel<Long>` where `key` field indicated with `@Id` is `Long`.
+ * Here the `Sample` model class implements `ActiveObjectModel<Long>` where `key` field indicated with `@Id` is `Long`.
 
 ... call [http://localhost:9000/app](http://localhost:9000/app) and voila!
 
@@ -117,6 +117,7 @@ public class Sample extends Model implements BasicModel<Long> {
    * [Sample with custom views](https://github.com/hakandilek/play2-crud/tree/master/samples/play2-crud-customView) is a full featured sample.
    * [Full featured sample with DAO and DAOListeners](https://github.com/hakandilek/play2-crud/tree/master/samples/play2-crud-sample)
    * [Sample with Cache usage](https://github.com/hakandilek/play2-crud/tree/master/samples/play2-cache-sample)
+   * [Sample with Hibernate JPA](https://github.com/hakandilek/play2-crud/tree/master/samples/play2-crud-hibernate-jpa)
  
 # HOW-TO
 
@@ -125,6 +126,7 @@ public class Sample extends Model implements BasicModel<Long> {
   * [HOW-TO define a custom DAO](docs/custom-dao.md)
   * [HOW-TO define a custom Controller](docs/custom-controller.md)
   * [HOW-TO use DAO Listeners](docs/dao-listeners.md)
+  * TODO: [HOW-TO use Hibernate JPA](docs/hibernate-jpa.md)
   * [HOW-TO use dynamic REST Controllers](docs/rest-controllers.md)
   * [HOW-TO use custom REST Controllers](docs/custom-rest-controllers.md)
   * [HOW-TO Override Play Launcher](docs/override-play-launcher.md)

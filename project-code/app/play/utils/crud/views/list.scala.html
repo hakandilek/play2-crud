@@ -11,11 +11,11 @@
         <h1>@Messages("crud.appname")</h1>
     </div>
     
-    <h2>@Messages(model.getName) (@page.getTotalRowCount() records)</h2>
+    <h2>@Messages(model.getName) (@page.size() records on page @page.getPageIndex())</h2>
     
     <h3><a href="@play.utils.crud.routes.RouterCrudController.newForm(model.getName)">@Messages("crud.createNew")</a></h3>
     
-    @if(page.getTotalRowCount() == 0) {
+    @if(page.size() == 0) {
         
         <div class="well">
             <em>Nothing to display</em>

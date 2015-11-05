@@ -11,6 +11,9 @@ object ApplicationBuild extends Build {
 
     val appDependencies = Seq(
         javaCore, javaJdbc, javaEbean, cache,
+		javaJpa.exclude("org.hibernate.javax.persistence", "hibernate-jpa-2.0-api"),
+		"org.hibernate" % "hibernate-entitymanager" % "5.0.3.Final",
+		
         "org.webjars" % "jasny-bootstrap" % "2.3.0-j5",
         "org.webjars" % "json2" % "20110223",
         "com.google.inject" % "guice" % "4.0-beta4"

@@ -4,11 +4,11 @@ Follow these steps to use play2-crud. You can also use it partially just for DAO
 
 ### Define model
 
- * Model class has to implement `play.utils.dao.BasicModel` with the type parameter indicating the type of the `@Id` field.
+ * Model class has to implement `play.utils.dao.ActiveObjectModel` with the type parameter indicating the type of the `@Id` field.
 
 ```java
 @Entity
-public class Sample extends Model implements BasicModel<Long> {
+public class Sample extends Model implements ActiveObjectModel<Long> {
 
    @Id
    private Long key;
@@ -35,7 +35,7 @@ public class Sample extends Model implements BasicModel<Long> {
 }
 ```
 
- * Here the `Sample` model class implements `BasicModel<Long>` where `key` field indicated with `@Id` is `Long`.
+ * Here the `Sample` model class implements `ActiveObjectModel<Long>` where `key` field indicated with `@Id` is `Long`.
 
 ### Associate Global settings
 

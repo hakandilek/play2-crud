@@ -12,12 +12,10 @@ public class EbeanPage<M> implements Page<M> {
 		this.page = page;
 	}
 
-	@Override
 	public int getTotalRowCount() {
 		return page.getTotalRowCount();
 	}
 
-	@Override
 	public int getTotalPageCount() {
 		return page.getTotalPageCount();
 	}
@@ -27,12 +25,10 @@ public class EbeanPage<M> implements Page<M> {
 		return page.getPageIndex();
 	}
 
-	@Override
 	public boolean hasNext() {
 		return page.hasNext();
 	}
 
-	@Override
 	public boolean hasPrev() {
 		return page.hasPrev();
 	}
@@ -42,19 +38,22 @@ public class EbeanPage<M> implements Page<M> {
 		return page.getList();
 	}
 
-	@Override
 	public Page<M> next() {
 		return new EbeanPage<>(page.next());
 	}
 
-	@Override
 	public Page<M> prev() {
 		return new EbeanPage<>(page.prev());
 	}
 
-	@Override
 	public String getDisplayXtoYofZ(String to, String of) {
 		return page.getDisplayXtoYofZ(to, of);
 	}
+	
+	public int size() {
+		List<M> list = page.getList();
+		return list != null ? list.size() : 0;
+	}
+
 
 }

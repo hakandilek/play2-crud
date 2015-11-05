@@ -1,18 +1,23 @@
 package models;
 
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Transient;
 
 import play.data.validation.Constraints.Required;
-import play.db.ebean.Model;
-import play.utils.dao.ActiveObjectModel;
+import play.utils.dao.SimpleModel;
 
 @Entity
-@SuppressWarnings("serial")
-public class Sample extends Model implements ActiveObjectModel<Long> {
+public class Sample implements SimpleModel<Long> {
 
 	@Id
+	@SequenceGenerator(name = "sample_seq", sequenceName = "sample_seq")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="sample_seq")
 	private Long key;
 
 	@Basic
@@ -20,6 +25,8 @@ public class Sample extends Model implements ActiveObjectModel<Long> {
 	private String name;
 	
 	@Basic
+	
+	@Transient
 	private int randomValue;
 
 	public Long getKey() {
@@ -50,4 +57,5 @@ public class Sample extends Model implements ActiveObjectModel<Long> {
 	public String toString() {
 		return "Sample [key=" + key + ", name=" + name + "]";
 	}
+
 }
