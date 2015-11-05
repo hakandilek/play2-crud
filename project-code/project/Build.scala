@@ -16,7 +16,7 @@ object ApplicationBuild extends Build {
 		
         "org.webjars" % "jasny-bootstrap" % "2.3.0-j5",
         "org.webjars" % "json2" % "20110223",
-        "com.google.inject" % "guice" % "4.0-beta4"
+        "com.google.inject" % "guice" % "4.0"
     )
 
     val root = Project(appName, file(".")).enablePlugins(play.PlayScala).settings(
