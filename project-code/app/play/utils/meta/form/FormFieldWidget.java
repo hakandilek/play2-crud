@@ -1,17 +1,14 @@
 package play.utils.meta.form;
 
-import java.util.Locale;
-
 import play.api.i18n.Lang;
-import play.twirl.api.Html;
 import play.data.Form;
 import play.data.Form.Field;
+import play.twirl.api.Html;
 import play.utils.meta.FieldMetadata;
 import scala.Symbol;
 import scala.Tuple2;
-import views.html.helper.FieldConstructor;
-import views.html.helper.FieldElements;
-import views.html.helper.twitterBootstrap.twitterBootstrapFieldConstructor;
+
+import java.util.Locale;
 
 public abstract class FormFieldWidget {
 
@@ -32,17 +29,12 @@ public abstract class FormFieldWidget {
 		Field formField = form.field(fieldName);
 
 		Lang lang = getLang();
-		FieldConstructor fc = new FieldConstructor() {
-			public Html apply(FieldElements elements) {
-				return twitterBootstrapFieldConstructor.apply(elements);
-			}
-		};
 		@SuppressWarnings("unchecked")
 		Tuple2<Symbol, Object>[] args = new Tuple2[] {};
-		return render(formField, args, fc, lang);
+		return render(formField, args, lang);
 	}
 
-	protected abstract Html render(Field formField, Tuple2<Symbol, Object>[] args, FieldConstructor fieldConstructor, Lang lang);
+	protected abstract Html render(Field formField, Tuple2<Symbol, Object>[] args, Lang lang);
 
 	protected Lang getLang() {
 		Lang lang = null;

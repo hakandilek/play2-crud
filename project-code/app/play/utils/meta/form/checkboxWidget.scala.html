@@ -1,11 +1,13 @@
-@(field: play.data.Form.Field, args: (Symbol,Any)*)(implicit handler: helper.FieldConstructor, lang: play.api.i18n.Lang)
+@(field: play.data.Form.Field, args: (Symbol,Any)*)(lang: play.api.i18n.Lang)
 
-@import helper._ 
+@import helper._
 @import play.core.j.PlayMagicForJava
+
+@implicitFieldConstructor = @{ FieldConstructor(crudBootstrap3Input.f) }
 
 @boxValue = @{ args.toMap.get('value).getOrElse("true") }
 
 @input(PlayMagicForJava.javaFieldtoScalaField(field), args:_*) { (id, name, value, htmlArgs) =>
-    <input type="checkbox" id="@id" name="@name" value="@boxValue" @(if(value == Some(boxValue)) "checked" else "") @toHtmlArgs(htmlArgs.filterKeys(_ != 'value))>
+    <input type="checkbox" id="@id" name="@name" class="form-control" value="@boxValue" @(if(value == Some(boxValue)) "checked" else "") @toHtmlArgs(htmlArgs.filterKeys(_ != 'value))>
     <span>@args.toMap.get('_text)</span>
 }

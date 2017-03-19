@@ -50,4 +50,11 @@ $(document).ready(function(){
         registerAChoice(inputs.attr("id"), inputs.data("relationId"), inputs.data("fieldId"), inputs.data("fieldName"), inputs.data("isMultiple"));
     });
 
+    $('.confirm').click(function(e) {
+        confirm("Do you really want to do this ?");
+    });
+
+    $(".history-back").click(function(e) {
+        history.back();
+    });
 });

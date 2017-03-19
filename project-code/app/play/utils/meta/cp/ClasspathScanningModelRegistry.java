@@ -22,6 +22,7 @@ import org.reflections.util.ConfigurationBuilder;
 
 import play.Logger;
 import play.Logger.ALogger;
+import play.utils.field.Ignore;
 import play.utils.meta.ConverterRegistry;
 import play.utils.meta.FieldMetadata;
 import play.utils.meta.ModelMetadata;
@@ -91,6 +92,7 @@ public class ClasspathScanningModelRegistry implements ModelRegistry {
 				Iterables.transform(
 						Iterables.filter(modelFields, Predicates.<Field> and(
 								Predicates.not(ReflectionUtils.withAnnotation(Transient.class)),
+								Predicates.not(ReflectionUtils.withAnnotation(Ignore.class)),
 								Predicates.not(ReflectionUtils.withModifier(Modifier.STATIC)),
 								Predicates.not(ReflectionUtils.withModifier(Modifier.FINAL)),
 								Predicates.not(new Predicate<Field>() {

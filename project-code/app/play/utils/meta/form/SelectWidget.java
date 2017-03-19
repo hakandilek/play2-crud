@@ -27,8 +27,8 @@ public class SelectWidget extends FormFieldWidget {
 	}
 
 	@Override
-	protected Html render(Field formField, Tuple2<Symbol, Object>[] args, FieldConstructor fieldConstructor, Lang lang) {
-		return play.utils.meta.form.html.selectWidget.render(formField, options, args, fieldConstructor, lang);
+	protected Html render(Field formField, Tuple2<Symbol, Object>[] args, Lang lang) {
+		return play.utils.meta.form.html.selectWidget.render(formField, options, args, lang);
 	}
 
 }
