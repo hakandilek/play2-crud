@@ -44,7 +44,7 @@ public class SampleController extends CRUDController<Long, Sample> {
 ```
 [Definition of the class SampleDAO is here.](custom-dao.md)
 
-###Overriding controller actions
+### Overriding controller actions
 Since the actions of the CrudController are not static, you can override them and use generic types !
 
 List of the functions you can override :
