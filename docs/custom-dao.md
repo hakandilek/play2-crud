@@ -1,9 +1,9 @@
 
 ## HOW-TO Define Custom DAO
 
-###Definition
+### Definition
 DAO stands for Data Access Object. This object is call for the interaction with the database. It overrides the create, update and delete functions.
-###Creation
+### Creation
 DAO class extends `play.utils.dao.BasicDAO` with two type parameters: One for the key type and one for the Model type and overrides the super class constructor with `super(Long.class, Sample.class)`
 Example:
 ```java
@@ -16,7 +16,7 @@ public class SampleDAO extends BasicDAO<Long, Sample> {
 Here the `SampleDAO` extends `BasicDAO<Long, Sample>` with `Long` key type, and `Sample` model type.
 
 Note that a `@Inject` (javax.inject.Inject) annotation may be required before the constructor definition.
-###Overriding DAO functions
+### Overriding DAO functions
 The interest of having DAO objects is that you can override their functions. This is the functions of the DAO that can be overrided :
 ```java
 public interface DAO<K, M> {
@@ -59,6 +59,6 @@ public class SampleDAO extends BasicDAO<Long, Sample> {
 }
 
 ```
-###DAO for cached data
+### DAO for cached data
 Alternatively, `play.utils.dao.CachedDAO` can be used to cache fetched data.
 Classes implementing both `BasicDAO` or `CachedDAO` should override the constructor with key ad model class type parameters.

@@ -50,7 +50,7 @@ You can begin with adding play2-crud dependency inside `conf/Build.scala` file.
 ```
 
 ### Associate Global settings
-####Direct reference
+#### Direct reference
 If you don't want to override the play application launcher, you just have to notice to play that the class to use as launcher is now GlobalCRUDSettings. Change the `application.global` configuration key in the `conf/application.conf` file, and use `play.utils.crud.GlobalCRUDSettings`:
 
 ```
