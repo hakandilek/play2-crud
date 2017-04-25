@@ -1,0 +1,123 @@
+<html>
+<head>
+    <title>Play + Java + Spring</title>
+</head>
+<body>
+<div>
+    <h2> View the App</h2>
+    
+    <p>
+        <span style="color: red">THIS TUTORIAL IS UNDER CONSTRUCTION!</span><br/>
+        
+        Once the application has been compiled and the server started, your application can be accessed at: <a href="http://localhost:9000" target="_blank">http://localhost:9000</a><br/>
+        Check in <a href="#run" class="shortcut">Run</a> to see the server status.<br/>
+        This example app stores and displays a list of "Bar" objects in a database.
+    </p>
+</div>
+<div>
+    <h2>Handling Requests</h2>
+
+    <p>
+        When you make an HTTP request to that URL, the Play server figures out what code to execute which will handle the request and return a response.  In this application the request handler for requests to the root URL (e.g. "/") are handled by a Java Controller.  You can use Java and Scala to create your controllers.<br/>
+        Controllers asynchronously return HTTP responses of any content type (i.e. HTML, JSON, binary).  To see a JSON response produced by a Scala controller, click the "Get JSON Message" button.  This uses AJAX via jQuery to get data from the server and then display that on the web page.
+    </p>
+</div>
+<div>
+    <h2> Code Overview</h2>
+
+    <p>A Play application has very few required files.  This example tries to illustrate a number of key concepts in Play so it has a handful of files to explain.  The <a href="#code/app" class="shortcut">app</a> directory contains the application's source code, including Java, Scala, server-side templates, and server-side compiled assets for the browser (e.g. JavaScript, CoffeeScript, LESS).  The <a href="#code/conf" class="shortcut">conf</a> directory contains the <a href="#code/conf/application.conf" class="shortcut">application.conf</a> config file and the <a href="#code/conf/routes" class="shortcut">routes</a> file</a>.  The <a href="#code/project" class="shortcut">project</a> directory contains the SBT build information for the app.  The default place for static assets (e.g. images, HTML, CSS, JavaScript) is the <a href="#code/public" class="shortcut">public</a> directory.  Unit, functional, and integration tests (Java and Scala) go in the <a href="#code/test" class="shortcut">test</a> directory.</p>
+</div>
+<div>
+    <h2> HTTP Routing</h2>
+
+    <p>
+        The <a href="#code/conf/routes" class="shortcut">routes</a> file contains mappings between HTTP request verbs &amp; paths and the code that controller method that handles the requests.  Route paths can be parametrized to support RESTful style URLs.  The following mapping will handle HTTP GET requests to "/" using the <strong>controllers.MainController.index</strong> method:
+        <pre><code>GET   /    controllers.MainController.index</code></pre>
+        You can try out the routing by first making a request to an unmatched route, like: <a href="http://localhost:9000/foo" target="_blank">http://localhost:9000/foo</a><br/>
+        This should produce an error because there isn't a route that matches the request.
+        Then edit the <a href="#code/conf/routes" class="shortcut">routes</a> to include a new route:
+        <pre><code>GET   /foo    controllers.MainController.index</code></pre>
+        Now retry the request and you should see the default index page.<br/>
+        By default the routes are compiled by Play so that they can be used in a type-safe way.  This prevents issues caused by incorrect URL usages.
+        <!-- todo: Learn more -->
+    </p>
+</div>
+<div>
+    <h2> Controllers</h2>
+
+    <p>
+        HTTP GET requests to <a href="http://localhost:9000/" target="_blank">http://localhost:9000/</a> are handled by the index method defined in the <a href="#code/app/controllers/MainController.java" class="shortcut">MainController.java</a> file.  This static method returns a <strong>Result</strong> which in this case consists of a server-side rendered template and an HTTP 200 response which is represented by the <strong>ok</strong> method call.  You can also use non-static methods along with Dependency Injection frameworks like Spring, Guice, and CDI. <!-- todo:  (<a href="http://TODO" target="_blank">Learn More...</a>) --><br/>
+        You can change the "Hello from Java" string in <a href="#code/app/controllers/MainController.java" class="shortcut">MainController.java</a> a different value, like "Hello from Play", then save the file and reload <a href="http://localhost:9000/" target="_blank">the index page</a> in your browser.  Play will automatically recompile the controller and you should immediately see your changes.<br/>
+        If your changes result in a compile error you will see the error in your browser (after a refresh) and in the <a href="#compile" class="shortcut">Compile Plugin</a>.  Try it by removing one of the double-quotes in the <strong>index</strong> method's string, save the file, and reload the index page.  Fix the error before you continue.<br/>
+        There is also a Scala controller which provides an example JSON service.  (Note: Play also has built-in JSON support in Java controllers.)  You can see the JSON by opening <a href="http://localhost:9000/message" target="_blank">http://localhost:9000/message</a> in your browser.  This route is also mapped in the <a href="#code/conf/routes" class="shortcut">routes</a> file but this time the request is handled by the <a href="#code/app/controllers/MessageController.scala" class="shortcut">MessageController.scala</a> file's <strong>getMessage</strong> function.  This controller returns an <strong>Action</strong> which is responsible for producing a HTTP response.  In this case the response is a <strong>case class</strong> which is serialized to JSON.  You will also notice the <strong>MessageController</strong> contains a function called <strong>javascriptRoutes</strong> which provides a mechanism for using the type-safe routes in JavaScript.
+        <!-- todo: Learn more -->
+    </p>
+</div>
+<div>
+    <h2> Templates</h2>
+
+    <p>
+        The <strong>MainController.index</strong> method uses a template which is compiled by Play into a function.  The source is in the <a href="#code/app/views/index.scala.html" class="shortcut">index.scala.html</a> file and is available by calling the <strong>views.html.index.render</strong> function.  This template takes a parameter of a <strong>String</strong> so the compiled function also takes a <strong>String</strong> parameter.  The default templating language in Play is Scala, but a number of other templating languages (like Java, Groovy, and Dust) can also be plugged in.<br/>
+        The <a href="#code/app/views/index.scala.html" class="shortcut">index template</a> uses the <a href="#code/app/views/main.scala.html" class="shortcut">main template</a> by calling the <strong>main</strong> function with the required parameters.<br/>
+        Notice that the templates do not use hard-coded URLs and instead use Play's reverse routing, like:
+        <pre><code>@routes.Assets.at("images/favicon.png")</code></pre>
+        This provides a type-safe way to specify URLs in an application.  If the URL to a file changes, then automatically, the new value will be used throughout all of the URL references.  You can use the reverse router anywhere in your code, like redirects in controllers.<br/>
+        Like controllers (and all source code in Play) you can make changes to templates which triggers a recompile.  Then simply refresh the page to see the changes.  Try it out by making a change to the <a href="#code/app/views/index.scala.html" class="shortcut">index template</a>, saving the file, and then refreshing the <a href="http://localhost:9000/" target="_blank">index page</a> in your browser.
+        <!-- todo: Learn more -->
+    </p>
+</div>
+<div>
+    <h2> Static Assets</h2>
+
+    <p>
+        This application has a route to handle loading static assets from the <a href="#code/public" class="shortcut">public</a> directory:
+        <pre><code>GET /assets/*file controllers.Assets.at(path="/public", file)</code></pre>
+        A request to <a href="http://localhost:9000/assets/images/favicon.png" target="_blank">http://localhost:9000/assets/images/favicon.png</a> will use this route to find the <a href="#code/public/images/favicon.png" class="shortcut">favicon.png</a> file in the <strong>public/images</strong> directory.<br/>
+        You can put any static assets into the public directory and have them accessible in this way.
+        <!-- todo: Learn more -->
+    </p>
+</div>
+<div>
+    <h2> Asset Compiler</h2>
+
+    <p>
+        Modern web applications often use compilers to generate static assets for the browser.  Play has a built-in asset compiler which can automatically syntax check &amp; minify JavaScript, compile CoffeeScript to JavaScript, and compile LESS to CSS.  You can also plug in other compilers into the Play's asset compiler.<br/>
+        This application contains two example uses of the asset compiler.  The <a href="#code/app/assets/javascripts/index.js" class="shortcut">index.js</a> file will automatically be syntax checked and minified.  The minified version is can be referenced in a template with:
+        <pre><code>&lt;script type='text/javascript'
+src='@routes.Assets.at("javascripts/index.min.js")'&gt;
+&lt;/script&gt;</code></pre>
+        You can also put CoffeeScript files with a <strong>.coffee</strong> extension in the <a href="#code/app/assets/javascripts" class="shortcut">app/assets/javascripts</a> directory to have them automatically compiled and minified.<br/>
+        The <a href="#code/app/assets/stylesheets/index.less" class="shortcut">index.less</a> file will be compiled into both a <strong>index.css</strong> and a <strong>index.min.css</strong> file.
+        <!-- todo: Learn more -->
+    </p>
+</div>
+<div>
+    <h2> Test the App</h2>
+
+    <p>
+        This application includes a number of tests which are automatically run after each successful compile.  You can see the test results in the <a href="#test" class="shortcut">Test plugin</a>.  Due to changes that you may have made to your application source code, some of the tests might now be failing.  The source for the tests is located in the <a href="#code/test" class="shortcut">test</a> directory and contains both Java and Scala tests.  The <a href="#code/test/MainControllerTest.java" class="shortcut">test/MainControllerTest.java</a> Java class contains a number of unit and functional tests for the <strong>MainController</strong>.  The <a href="#code/test/IntegrationTest.java" class="shortcut">IntegrationTest.java</a> file contains an test which uses Solenium to test the actual UI in a browser.  The default testing framework for Java in Play is JUnit, but you can plug any testing framework in.<br/>
+        The <a href="#code/test/MessageControllerSpec.scala" class="shortcut">MessageControllerSpec.scala</a> file contains a functional test for the <strong>MessageController</strong>.<br/>
+        If you modify a test and save the changes, then the tests will automatically be re-run.
+        <!-- todo: Learn more -->
+    </p>
+</div>
+<div>
+    <h2> SBT Build</h2>
+
+    <p>
+        SBT is the build system underneath Play applications.  It is responsible for resolving dependencies, compiling the project, running the tests, etc.  The primary build definition file is the <a href="#code/project/Build.scala" class="shortcut">Build.scala</a> file.  In that file you will see a comma-seperated list of dependencies which can be modified to suit your needs.  Play includes a number of libraries which can selectively be turned on/off.  For instance if you want to use JPA with Play, uncomment the <strong>javaJpa</strong> dependency.  You can also add your own dependencies in the SBT form:
+        <pre><code>"group" % "artifact" % "version"</code></pre>
+        <!-- todo: Learn more -->
+    </p>
+</div>
+<div>
+    <h2> Further Learning</h2>
+
+    <p>
+        The <a href="http://www.playframework.com/documentation" target="_blank">Play Documentation</a> contains much more exhaustive details and also covers a number of other topics which haven't been addressed in this tutorial.<br/>
+        <a href="http://stackoverflow.com" target="_blank">StackOverflow</a> is a great place ask questions about Play.<br/>
+        <a href="http://groups.google.com/group/play-framework" target="_blank">The play-framework</a> Google Group is a great place to discuss Play.<br/>
+    </p>
+</div>
+</body>
+</html>
